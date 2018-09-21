@@ -608,7 +608,8 @@ public class Parser {
         FormalParameterSequence fpsAST = parseFormalParameterSequence();
         accept(Token.RPAREN);
         accept(Token.IS);
-        Command cAST = parseSingleCommand();
+        Command cAST = parseCommand(); //  Cambiado el single-Command por Command////////////////////////////////////////////
+        accept(Token.END);//agregado el accept del token END ///////////////////////////////////////////////////////////////
         finish(declarationPos);
         declarationAST = new ProcDeclaration(iAST, fpsAST, cAST, declarationPos);
       }
