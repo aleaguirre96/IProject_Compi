@@ -642,6 +642,8 @@ public class Parser {
         declarationAST = new TypeDeclaration(iAST, tAST, declarationPos);
       }
       break;
+      
+      
 
     default:
       syntacticError("\"%\" cannot start a declaration",

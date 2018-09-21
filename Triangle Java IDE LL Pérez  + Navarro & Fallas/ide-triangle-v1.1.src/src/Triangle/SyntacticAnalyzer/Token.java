@@ -68,42 +68,56 @@ final class Token extends Object {
 
     // reserved words - must be in alphabetical order...
     ARRAY		= 4,
-    BEGIN		= 5,
+    CASE                = 5,   // AGREGADO////////////////////////
     CONST		= 6,
     DO			= 7,
     ELSE		= 8,
-    END			= 9,
-    FUNC		= 10,
-    IF			= 11,
-    IN			= 12,
-    LET			= 13,
-    OF			= 14,
-    PROC		= 15,
-    RECORD		= 16,
-    THEN		= 17,
-    TYPE		= 18,
-    VAR			= 19,
-    WHILE		= 20,
+    ELSFIF              = 9,   // AGREGADO////////////////////////
+    END			= 10,
+    FOR                 = 11,   // AGREGADO////////////////////////
+    FROM                = 12,   // AGREGADO////////////////////////
+    FUNC		= 13,
+    IF			= 14,
+    IN			= 15,
+    LET			= 16,
+    LOCAL               = 17,   // AGREGADO////////////////////////
+    NIL                 = 18,   // AGREGADO////////////////////////
+    OF			= 19,
+    PROC		= 20,
+    RECORD		= 21,
+    RECURSIVE           = 22,   // AGREGADO////////////////////////
+    REPEAT              = 23,   // AGREGADO////////////////////////
+    SELECT              = 24,   // AGREGADO////////////////////////
+    THEN		= 25,
+    TO                  = 26,   // AGREGADO////////////////////////
+    TYPE		= 27,
+    UNTIL               = 28,   // AGREGADO////////////////////////
+    VAR			= 29,
+    WHILE		= 30,
 
     // punctuation...
-    DOT			= 21,
-    COLON		= 22,
-    SEMICOLON	= 23,
-    COMMA		= 24,
-    BECOMES		= 25,
-    IS			= 26,
+    DOT			= 31,
+    COLON		= 32,
+    SEMICOLON           = 33,
+    COMMA		= 34,
+    BECOMES		= 35,
+    IS			= 36,
 
     // brackets...
-    LPAREN		= 27,
-    RPAREN		= 28,
-    LBRACKET	= 29,
-    RBRACKET	= 30,
-    LCURLY		= 31,
-    RCURLY		= 32,
+    LPAREN		= 37,
+    RPAREN		= 38,
+    LBRACKET            = 39,
+    RBRACKET            = 40,
+    LCURLY		= 41,
+    RCURLY		= 42,
 
     // special tokens...
-    EOT			= 33,
-    ERROR		= 34;
+    EOT			= 43,
+    ERROR		= 44;
+  
+  // Alternatives
+  
+  
 
   private static String[] tokenTable = new String[] {
     "<int>",
