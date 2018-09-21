@@ -308,6 +308,7 @@ public class Parser {
     case Token.ELSE:
     case Token.IN:
     case Token.EOT:
+    case Token.NIL:
 
       finish(commandPos);
       commandAST = new EmptyCommand(commandPos);

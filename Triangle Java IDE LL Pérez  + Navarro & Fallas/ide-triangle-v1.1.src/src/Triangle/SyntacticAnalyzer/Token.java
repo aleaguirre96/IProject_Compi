@@ -97,25 +97,31 @@ final class Token extends Object {
 
     // punctuation...
     DOT			= 31,
-    COLON		= 32,
-    SEMICOLON           = 33,
-    COMMA		= 34,
-    BECOMES		= 35,
-    IS			= 36,
+    DDOT                = 32,
+    COLON		= 33,
+    SEMICOLON           = 34,
+    COMMA		= 35,
+    BECOMES		= 36,
+    IS			= 37,
 
     // brackets...
-    LPAREN		= 37,
-    RPAREN		= 38,
-    LBRACKET            = 39,
-    RBRACKET            = 40,
-    LCURLY		= 41,
-    RCURLY		= 42,
+    LPAREN		= 38,
+    RPAREN		= 39,
+    LBRACKET            = 40,
+    RBRACKET            = 41,
+    LCURLY		= 42,
+    RCURLY		= 43,
 
     // special tokens...
-    EOT			= 43,
-    ERROR		= 44;
+    EOT			= 44,
+    ERROR		= 45,
   
-  // Alternatives
+  // Alternatives // AGREGADO////////////////////////
+  
+  LITERALSTICK            = 46;
+  
+         
+  
   
   
 
@@ -126,19 +132,30 @@ final class Token extends Object {
     "<operator>",
     "array",
     "begin",
+    "case", // AGREGADO////////////////////////
     "const",
     "do",
     "else",
+    "elsif", // AGREGADO////////////////////////
     "end",
+    "for", // AGREGADO////////////////////////
+    "from", // AGREGADO////////////////////////
     "func",
     "if",
     "in",
     "let",
+    "local",
+    "nil",
     "of",
     "proc",
     "record",
+    "recursive", // AGREGADO////////////////////////
+    "repeat", // AGREGADO////////////////////////
+    "select", // AGREGADO////////////////////////
     "then",
+    "to", // AGREGADO////////////////////////
     "type",
+    "until", // AGREGADO////////////////////////
     "var",
     "while",
     ".",
@@ -153,6 +170,8 @@ final class Token extends Object {
     "]",
     "{",
     "}",
+    "..",
+    "|",
     "",
     "<error>"
   };
