@@ -589,8 +589,21 @@ public class Parser {
         declarationAST = new ConstDeclaration(iAST, eAST, declarationPos);
       }
       break;
-
-    case Token.VAR:
+/*
+    case Token.VAR: //Este es el original
+      {
+        acceptIt();
+        Identifier iAST = parseIdentifier();
+        accept(Token.COLON);
+        TypeDenoter tAST = parseTypeDenoter();
+        finish(declarationPos);
+        declarationAST = new VarDeclaration(iAST, tAST, declarationPos);
+      }
+      break;*/
+      
+      
+      
+      case Token.VAR:   ///////////// Modificado por nosotros
       {
         acceptIt();
         Identifier iAST = parseIdentifier();
@@ -600,6 +613,7 @@ public class Parser {
         declarationAST = new VarDeclaration(iAST, tAST, declarationPos);
       }
       break;
+      
 
     case Token.PROC:
       {
