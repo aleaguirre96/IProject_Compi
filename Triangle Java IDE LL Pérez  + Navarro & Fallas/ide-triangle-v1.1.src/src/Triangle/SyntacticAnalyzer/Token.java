@@ -145,7 +145,7 @@ final class Token extends Object {
     "in",
     "let",
     "local",
-    "nil",
+    "nil", //AGREGADO
     "of",
     "proc",
     "record",
