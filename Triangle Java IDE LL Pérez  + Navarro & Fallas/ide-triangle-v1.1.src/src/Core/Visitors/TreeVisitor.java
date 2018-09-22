@@ -42,6 +42,7 @@ import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
 import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
 import Triangle.AbstractSyntaxTrees.MultipleFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleRecordAggregate;
+import Triangle.AbstractSyntaxTrees.NILCommand;
 import Triangle.AbstractSyntaxTrees.Operator;
 import Triangle.AbstractSyntaxTrees.ProcActualParameter;
 import Triangle.AbstractSyntaxTrees.ProcDeclaration;
@@ -78,7 +79,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
  *
  * Generates DefaultMutableTreeNodes, used to draw a JTree.
  *
- * @author Luis Leopoldo Pérez <luiperpe@ns.isi.ulatina.ac.cr>
+ * @author Luis Leopoldo Pï¿½rez <luiperpe@ns.isi.ulatina.ac.cr>
  */
 public class TreeVisitor implements Visitor {
       
@@ -100,6 +101,11 @@ public class TreeVisitor implements Visitor {
     
     public Object visitEmptyCommand(EmptyCommand ast, Object o) {
         return(createNullary("Empty Command"));
+    }
+    
+    //Se agrega al Tree Visitor
+    public Object visitNILCommand(NILCommand ast, Object o) {
+        return(createNullary("Nil Command"));
     }
     
     public Object visitIfCommand(IfCommand ast, Object obj) {

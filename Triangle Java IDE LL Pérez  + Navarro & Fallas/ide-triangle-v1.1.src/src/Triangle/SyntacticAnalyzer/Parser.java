@@ -54,6 +54,7 @@ import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
 import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
 import Triangle.AbstractSyntaxTrees.MultipleFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleRecordAggregate;
+import Triangle.AbstractSyntaxTrees.NILCommand;
 import Triangle.AbstractSyntaxTrees.Operator;
 import Triangle.AbstractSyntaxTrees.ProcActualParameter;
 import Triangle.AbstractSyntaxTrees.ProcDeclaration;
@@ -293,6 +294,15 @@ public class Parser {
           commandAST = new AssignCommand(vAST, eAST, commandPos);
         }
       }
+      
+      // Aqui se agrega el nuevo comando en este caso el NIL
+   
+    case Token.NIL:
+    {
+      acceptIt();
+      finish(commandPos);
+      commandAST = new NILCommand(commandPos);   
+    }
       break;
       // Eliminada la alternativa BEGIN
       // Eliminada la alternativa LET
@@ -331,7 +341,6 @@ public class Parser {
     case Token.ELSE:
     case Token.IN:
     case Token.EOT:
-    case Token.NIL:
 
       finish(commandPos);
       commandAST = new EmptyCommand(commandPos);

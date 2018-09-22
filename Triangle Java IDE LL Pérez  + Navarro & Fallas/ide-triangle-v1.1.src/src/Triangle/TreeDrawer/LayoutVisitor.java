@@ -54,6 +54,7 @@ import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
 import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
 import Triangle.AbstractSyntaxTrees.MultipleFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleRecordAggregate;
+import Triangle.AbstractSyntaxTrees.NILCommand;
 import Triangle.AbstractSyntaxTrees.Operator;
 import Triangle.AbstractSyntaxTrees.ProcActualParameter;
 import Triangle.AbstractSyntaxTrees.ProcDeclaration;
@@ -122,6 +123,10 @@ public class LayoutVisitor implements Visitor {
   public Object visitWhileCommand(WhileCommand ast, Object obj) {
     return layoutBinary("WhileCom.", ast.E, ast.C);
   }
+  
+  public Object visitNILCommand(NILCommand ast, Object o) {
+    return layoutNullary("NIL.");
+    }
 
 
   // Expressions
@@ -557,6 +562,8 @@ public class LayoutVisitor implements Visitor {
     return layoutBinary("RepeatWhile.", ast.E, ast.C);
   }
   
+
+    
 
     
 

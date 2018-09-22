@@ -42,6 +42,7 @@ import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
 import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
 import Triangle.AbstractSyntaxTrees.MultipleFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleRecordAggregate;
+import Triangle.AbstractSyntaxTrees.NILCommand;
 import Triangle.AbstractSyntaxTrees.Operator;
 import Triangle.AbstractSyntaxTrees.ProcActualParameter;
 import Triangle.AbstractSyntaxTrees.ProcDeclaration;
@@ -86,7 +87,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * Generates a DefaultTableModel, used to draw a Jable.
  *
- * @author Luis Leopoldo Pérez <luiperpe@ns.isi.ulatina.ac.cr>
+ * @author Luis Leopoldo Pï¿½rez <luiperpe@ns.isi.ulatina.ac.cr>
  */
 public class TableVisitor implements Visitor {
     
@@ -113,6 +114,11 @@ public class TableVisitor implements Visitor {
   public Object visitEmptyCommand(EmptyCommand ast, Object o) { 
       return(null);
   }
+  
+  //Se agrega a la tabla de lo que debe de recorrer el visitor
+  public Object visitNILCommand(NILCommand ast, Object o) {
+      return (null); 
+    }
   
   public Object visitIfCommand(IfCommand ast, Object o) { 
       ast.E.visit(this, null);
