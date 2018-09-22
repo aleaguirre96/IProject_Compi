@@ -125,6 +125,11 @@ public final class Checker implements Visitor {
   public Object visitEmptyCommand(EmptyCommand ast, Object o) {
     return null;
   }
+  
+  //Se agrega al checker
+  public Object visitNILCommand(NILCommand ast, Object o) {
+    return null;
+  }
 
   public Object visitIfCommand(IfCommand ast, Object o) {
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
@@ -953,8 +958,5 @@ public final class Checker implements Visitor {
 
   }
 
-    @Override
-    public Object visitNILCommand(NILCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
 }

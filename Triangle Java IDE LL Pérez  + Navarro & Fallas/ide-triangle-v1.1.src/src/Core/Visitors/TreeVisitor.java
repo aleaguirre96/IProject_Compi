@@ -102,6 +102,11 @@ public class TreeVisitor implements Visitor {
         return(createNullary("Empty Command"));
     }
     
+    //Se agrega al Tree Visitor
+    public Object visitNILCommand(NILCommand ast, Object o) {
+        return(createNullary("Nil Command"));
+    }
+    
     public Object visitIfCommand(IfCommand ast, Object obj) {
         return(createTernary("If Command", ast.E, ast.C1, ast.C2));
     }
@@ -444,8 +449,5 @@ public class TreeVisitor implements Visitor {
     }
     // </editor-fold>
 
-    @Override
-    public Object visitNILCommand(NILCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 }

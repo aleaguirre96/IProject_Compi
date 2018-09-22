@@ -114,7 +114,12 @@ public final class Encoder implements Visitor {
   public Object visitEmptyCommand(EmptyCommand ast, Object o) {
     return null;
   }
-
+  
+  //Se agrega al enconder
+  public Object visitNILCommand(NILCommand ast, Object o) {
+      return null;
+  }
+  
   public Object visitIfCommand(IfCommand ast, Object o) {
     Frame frame = (Frame) o;
     int jumpifAddr, jumpAddr;
@@ -1010,8 +1015,5 @@ public final class Encoder implements Visitor {
     }
   }
 
-    @Override
-    public Object visitNILCommand(NILCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  
 }

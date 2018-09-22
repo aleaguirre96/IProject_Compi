@@ -122,6 +122,10 @@ public class LayoutVisitor implements Visitor {
   public Object visitWhileCommand(WhileCommand ast, Object obj) {
     return layoutBinary("WhileCom.", ast.E, ast.C);
   }
+  
+  public Object visitNILCommand(NILCommand ast, Object o) {
+    return layoutNullary("NIL.");
+    }
 
 
   // Expressions
@@ -550,10 +554,7 @@ public class LayoutVisitor implements Visitor {
     return r;
   }
 
-    @Override
-    public Object visitNILCommand(NILCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
     
 

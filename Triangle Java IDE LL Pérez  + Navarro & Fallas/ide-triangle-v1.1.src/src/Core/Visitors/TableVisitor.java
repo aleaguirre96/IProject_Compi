@@ -114,6 +114,11 @@ public class TableVisitor implements Visitor {
       return(null);
   }
   
+  //Se agrega a la tabla de lo que debe de recorrer el visitor
+  public Object visitNILCommand(NILCommand ast, Object o) {
+      return (null); 
+    }
+  
   public Object visitIfCommand(IfCommand ast, Object o) { 
       ast.E.visit(this, null);
       ast.C1.visit(this, null);
@@ -639,8 +644,4 @@ public class TableVisitor implements Visitor {
     private DefaultTableModel model;
     // </editor-fold>
 
-    @Override
-    public Object visitNILCommand(NILCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
