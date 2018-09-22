@@ -77,6 +77,7 @@ import Triangle.AbstractSyntaxTrees.TypeDenoter;
 import Triangle.AbstractSyntaxTrees.UnaryExpression;
 import Triangle.AbstractSyntaxTrees.VarActualParameter;
 import Triangle.AbstractSyntaxTrees.VarDeclaration;
+import Triangle.AbstractSyntaxTrees.VarDeclarationInitialized;
 import Triangle.AbstractSyntaxTrees.VarFormalParameter;
 import Triangle.AbstractSyntaxTrees.Vname;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
@@ -607,10 +608,23 @@ public class Parser {
       {
         acceptIt();
         Identifier iAST = parseIdentifier();
-        accept(Token.COLON);
-        TypeDenoter tAST = parseTypeDenoter();
-        finish(declarationPos);
-        declarationAST = new VarDeclaration(iAST, tAST, declarationPos);
+        switch (currentToken.kind) { ///Se evalua que tipo de e
+            case Token.COLON:{  //Declaracion :
+                acceptIt();
+                TypeDenoter tAST = parseTypeDenoter();
+                finish(declarationPos);
+                declarationAST = new VarDeclaration(iAST, tAST, declarationPos);
+            }break;    
+            case Token.BECOMES:{ //Declaracion := //declaración de variable inicializada
+                acceptIt();
+                Expression eAST = parseExpression();//Expresion 
+                finish(declarationPos);
+                declarationAST = new VarDeclarationInitialized(iAST,eAST,declarationPos);
+            }break;
+            
+            
+        }
+
       }
       break;
       

@@ -84,6 +84,7 @@ import Triangle.AbstractSyntaxTrees.UnaryExpression;
 import Triangle.AbstractSyntaxTrees.UnaryOperatorDeclaration;
 import Triangle.AbstractSyntaxTrees.VarActualParameter;
 import Triangle.AbstractSyntaxTrees.VarDeclaration;
+import Triangle.AbstractSyntaxTrees.VarDeclarationInitialized;
 import Triangle.AbstractSyntaxTrees.VarFormalParameter;
 import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.Vname;
@@ -349,6 +350,18 @@ public final class Encoder implements Visitor {
     int extraSize;
 
     extraSize = ((Integer) ast.T.visit(this, null)).intValue();
+    emit(Machine.PUSHop, 0, 0, extraSize);
+    ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
+    writeTableDetails(ast);
+    return new Integer(extraSize);
+  }
+  
+  //Agregada por Jose
+    public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o) {
+    Frame frame = (Frame) o;
+    int extraSize;
+
+    extraSize = ((Integer) ast.E.visit(this, null)).intValue();
     emit(Machine.PUSHop, 0, 0, extraSize);
     ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
     writeTableDetails(ast);

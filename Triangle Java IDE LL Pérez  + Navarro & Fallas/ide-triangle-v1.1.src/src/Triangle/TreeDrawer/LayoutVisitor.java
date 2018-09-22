@@ -76,6 +76,7 @@ import Triangle.AbstractSyntaxTrees.UnaryExpression;
 import Triangle.AbstractSyntaxTrees.UnaryOperatorDeclaration;
 import Triangle.AbstractSyntaxTrees.VarActualParameter;
 import Triangle.AbstractSyntaxTrees.VarDeclaration;
+import Triangle.AbstractSyntaxTrees.VarDeclarationInitialized;
 import Triangle.AbstractSyntaxTrees.VarFormalParameter;
 import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
@@ -199,6 +200,11 @@ public class LayoutVisitor implements Visitor {
 
   public Object visitVarDeclaration(VarDeclaration ast, Object obj) {
     return layoutBinary("VarDecl.", ast.I, ast.T);
+  }
+  
+  //Annadido por Jose
+  public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o) { 
+       return layoutBinary("VarDecl.", ast.I, ast.E);
   }
 
 
@@ -542,5 +548,8 @@ public class LayoutVisitor implements Visitor {
 
     return r;
   }
+
+    
+
 
 }
