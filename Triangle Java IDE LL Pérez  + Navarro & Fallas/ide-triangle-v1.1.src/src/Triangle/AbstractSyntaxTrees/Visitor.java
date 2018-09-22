@@ -104,5 +104,10 @@ public interface Visitor {
 
   // Programs
   public abstract Object visitProgram(Program ast, Object o);
+  
+  
+  //Repeats
+  
+  public abstract Object visitRepeatWhile(RepeatWhile ast, Object o);
 
 }

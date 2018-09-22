@@ -49,6 +49,7 @@ import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
 import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
+import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
 import Triangle.AbstractSyntaxTrees.SimpleTypeDenoter;
@@ -442,4 +443,15 @@ public class TreeVisitor implements Visitor {
         return(t);             
     }
     // </editor-fold>
+
+    
+ 
+ /////////////////////////////////////////// Repeats agragados por el quipo ///////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    
+    @Override
+    public Object visitRepeatWhile(RepeatWhile ast, Object o) {
+        return(createBinary("RepeatWhile", ast.C,ast.E));
+    }
 }

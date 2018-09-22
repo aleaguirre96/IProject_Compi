@@ -61,6 +61,7 @@ import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
 import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
+import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
 import Triangle.AbstractSyntaxTrees.SimpleTypeDenoter;
@@ -548,6 +549,14 @@ public class LayoutVisitor implements Visitor {
 
     return r;
   }
+  
+  
+    /////////////////////////////////////////// Repeats agragados por el quipo ///////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  public Object visitRepeatWhile(RepeatWhile ast, Object obj) {
+    return layoutBinary("RepeatWhile.", ast.E, ast.C);
+  }
+  
 
     
 

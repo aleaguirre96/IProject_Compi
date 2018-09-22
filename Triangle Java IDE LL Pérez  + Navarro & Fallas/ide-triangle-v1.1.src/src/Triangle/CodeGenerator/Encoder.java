@@ -69,6 +69,7 @@ import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
 import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
+import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
 import Triangle.AbstractSyntaxTrees.SimpleTypeDenoter;
@@ -104,6 +105,7 @@ public final class Encoder implements Visitor {
   }
 
   public Object visitCallCommand(CallCommand ast, Object o) {
+    
     Frame frame = (Frame) o;
     Integer argsSize = (Integer) ast.APS.visit(this, frame);
     ast.I.visit(this, new Frame(frame.level, argsSize));
@@ -1008,4 +1010,21 @@ public final class Encoder implements Visitor {
       }
     }
   }
+
+  /////////////////////////////////////////// Repeats agragados por el quipo ///////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    public Object visitRepeatWhile(RepeatWhile ast, Object o) { // se utilizo como base el codigo de whileCommand
+     Frame frame = (Frame) o;
+    int jumpAddr, loopAddr;
+
+    jumpAddr = nextInstrAddr;
+    emit(Machine.JUMPop, 0, Machine.CBr, 0);
+    loopAddr = nextInstrAddr;
+    ast.C.visit(this, frame);
+    patch(jumpAddr, nextInstrAddr);
+    ast.E.visit(this, frame);
+    emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+    return null;
+    }
 }

@@ -62,6 +62,7 @@ import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordAggregate;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
+import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
 import Triangle.AbstractSyntaxTrees.SimpleTypeDenoter;
@@ -298,7 +299,28 @@ public class Parser {
       // Eliminada la alternativa IF
       //ELiminada la alternativa WHILE
 
+    /////////////////////////////////////////// tipos de repeat agregados por el equipo ///////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    case Token.REPEAT:{
+    acceptIt();
+        switch(currentToken.kind){    
+        case Token.WHILE:
+              {
+                acceptIt();
+                Expression eAST = parseExpression();
+                accept(Token.DO);
+                Command cAST = parseCommand();
+                accept(Token.END);
+                finish(commandPos);
+                commandAST = new RepeatWhile(eAST, cAST, commandPos); // aqui se agrega un metodo para representar el AST
+              }
+              break;
+        
+        
+        }
     
+    
+    }
 
     
 
