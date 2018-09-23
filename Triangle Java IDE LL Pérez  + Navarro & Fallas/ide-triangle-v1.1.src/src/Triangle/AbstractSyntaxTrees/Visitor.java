@@ -44,7 +44,9 @@ public interface Visitor {
   public abstract Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object o);
   public abstract Object visitConstDeclaration(ConstDeclaration ast, Object o);
   public abstract Object visitFuncDeclaration(FuncDeclaration ast, Object o);
+  public abstract Object visitLocalDeclaration(LocalDeclaration ast, Object o); //Se agregar la declaracion de Local
   public abstract Object visitProcDeclaration(ProcDeclaration ast, Object o);
+  public abstract Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o); //Se agrega la declaracion de recursividad
   public abstract Object visitSequentialDeclaration(SequentialDeclaration ast, Object o);
   public abstract Object visitTypeDeclaration(TypeDeclaration ast, Object o);
   public abstract Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o);
@@ -112,5 +114,6 @@ public interface Visitor {
   //Repeats
   
   public abstract Object visitRepeatWhile(RepeatWhile ast, Object o);
+
 
 }

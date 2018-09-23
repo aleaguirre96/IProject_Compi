@@ -58,6 +58,7 @@ import Triangle.AbstractSyntaxTrees.IntegerExpression;
 import Triangle.AbstractSyntaxTrees.IntegerLiteral;
 import Triangle.AbstractSyntaxTrees.LetCommand;
 import Triangle.AbstractSyntaxTrees.LetExpression;
+import Triangle.AbstractSyntaxTrees.LocalDeclaration;
 import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
 import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
@@ -71,6 +72,7 @@ import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
 import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
+import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
@@ -308,6 +310,17 @@ public final class Encoder implements Visitor {
     return new Integer(0);
   }
 
+  //Se agrega como se va a representar el local declaration
+    public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
+        Frame frame = (Frame) o;
+        int extraSize1, extraSize2;
+
+        extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
+        Frame frame1 = new Frame (frame, extraSize1);
+        extraSize2 = ((Integer) ast.D2.visit(this, frame1)).intValue();
+        return new Integer(extraSize1 + extraSize2);
+    }
+  
   public Object visitProcDeclaration(ProcDeclaration ast, Object o) {
     Frame frame = (Frame) o;
     int jumpAddr = nextInstrAddr;
@@ -327,6 +340,30 @@ public final class Encoder implements Visitor {
     }
     emit(Machine.RETURNop, 0, 0, argsSize);
     patch(jumpAddr, nextInstrAddr);
+    return new Integer(0);
+  }
+  
+  public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
+    Frame frame = (Frame) o;
+
+    // Se guarda la dirección del punto de entrada del rec
+    int recAddr = nextInstrAddr;
+    
+    // Se evalúa por primera vez la declaración, sin los saltos hacia
+    // adelante
+    ast.LRS.visit(this, frame);
+    nextInstrAddr  = recAddr;
+    
+    // Se sobreescribe la instrucción anterior, ahora con las direcciones
+    // de los saltos ya procesadas
+    ast.LRS.visit(this, frame);
+    nextInstrAddr  = recAddr;
+    
+    // Se sobreescribe nuevamente la instrucción anterior, ahora con
+    // las direcciones de los saltos corregidas
+    ast.LRS.visit(this, frame);
+    
+    // Retorna 0 porque los procedimientos y las funciones siempre retornan 0
     return new Integer(0);
   }
 
@@ -1058,6 +1095,10 @@ public final class Encoder implements Visitor {
     }
     
     ////////////////////////////////////////////////////
+
+    
+
+    
     
   
 }

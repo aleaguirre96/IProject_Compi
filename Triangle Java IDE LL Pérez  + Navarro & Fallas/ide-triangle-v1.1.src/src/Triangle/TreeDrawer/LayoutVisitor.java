@@ -50,6 +50,7 @@ import Triangle.AbstractSyntaxTrees.IntegerExpression;
 import Triangle.AbstractSyntaxTrees.IntegerLiteral;
 import Triangle.AbstractSyntaxTrees.LetCommand;
 import Triangle.AbstractSyntaxTrees.LetExpression;
+import Triangle.AbstractSyntaxTrees.LocalDeclaration;
 import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
 import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
@@ -63,6 +64,7 @@ import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
 import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
+import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
@@ -186,11 +188,21 @@ public class LayoutVisitor implements Visitor {
   public Object visitFuncDeclaration(FuncDeclaration ast, Object obj) {
     return layoutQuaternary("FuncDecl.", ast.I, ast.FPS, ast.T, ast.E);
   }
-
+  
+  //Se agrega como se va a dibujar el LoccalDeclaration
+  public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
+      return layoutBinary("LocalDec1.", ast.D1, ast.D2);
+  }
+  
   public Object visitProcDeclaration(ProcDeclaration ast, Object obj) {
     return layoutTernary("ProcDecl.", ast.I, ast.FPS, ast.C);
   }
 
+  //Se agreaga como se va a dibujar RecursiveDeclaration
+  public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
+      return layoutUnary("RecursiveDecl.", ast.LRS);
+  }
+ 
   public Object visitSequentialDeclaration(SequentialDeclaration ast, Object obj) {
     return layoutBinary("Seq.Decl.", ast.D1, ast.D2);
   }
@@ -573,6 +585,10 @@ public class LayoutVisitor implements Visitor {
   }
   
   //////////////////////////////////////////////
+
+    
+
+    
     
 
   

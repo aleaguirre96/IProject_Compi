@@ -38,6 +38,7 @@ import Triangle.AbstractSyntaxTrees.IntegerExpression;
 import Triangle.AbstractSyntaxTrees.IntegerLiteral;
 import Triangle.AbstractSyntaxTrees.LetCommand;
 import Triangle.AbstractSyntaxTrees.LetExpression;
+import Triangle.AbstractSyntaxTrees.LocalDeclaration;
 import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
 import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
@@ -51,6 +52,7 @@ import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
 import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
+import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
@@ -104,7 +106,10 @@ public class TreeVisitor implements Visitor {
         return(createNullary("Empty Command"));
     }
     
-
+    //Se agrega al Tree Visitor
+    public Object visitNILCommand(NILCommand ast, Object o) {
+        return(createNullary("Nil Command"));
+    }
     
     public Object visitIfCommand(IfCommand ast, Object obj) {
         return(createTernary("If Command", ast.E, ast.C1, ast.C2));
@@ -184,8 +189,18 @@ public class TreeVisitor implements Visitor {
         return(createQuaternary("Function Declaration", ast.I, ast.FPS, ast.T, ast.E));
     }
     
+    //Se agrega el LocalDeclaration
+    public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
+        return(createBinary("LocalDeclaration", ast.D1, ast.D2));    
+    }
+    
     public Object visitProcDeclaration(ProcDeclaration ast, Object obj) {
         return(createTernary("Procedure Declaration", ast.I, ast.FPS, ast.C));        
+    }
+    
+    //Se agrega en el Tree Visitor
+    public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
+       return(createUnary("Recursive Declaration", ast.LRS));
     }
     
     public Object visitSequentialDeclaration(SequentialDeclaration ast, Object obj) {
@@ -457,10 +472,6 @@ public class TreeVisitor implements Visitor {
         return(createBinary("RepeatWhile", ast.C,ast.E));
     }
     
-    //Se agrega al Tree Visitor
-    public Object visitNILCommand(NILCommand ast, Object o) {
-        return(createNullary("Nil Command"));
-    }
     
     public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object obj) {
         return(createBinary("Variable Declaration-Initialized", ast.I, ast.E));
@@ -470,5 +481,6 @@ public class TreeVisitor implements Visitor {
         
         return(createTernary("Array Type DDot Denoter", ast.IL1,ast.IL2, ast.T));
     }
+
     
 }

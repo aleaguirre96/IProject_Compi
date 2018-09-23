@@ -50,6 +50,7 @@ import Triangle.AbstractSyntaxTrees.IntegerExpression;
 import Triangle.AbstractSyntaxTrees.IntegerLiteral;
 import Triangle.AbstractSyntaxTrees.LetCommand;
 import Triangle.AbstractSyntaxTrees.LetExpression;
+import Triangle.AbstractSyntaxTrees.LocalDeclaration;
 import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
 import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
@@ -64,6 +65,7 @@ import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordAggregate;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
+import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
@@ -588,22 +590,80 @@ public class Parser {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+  /* Se modifica el parseDeclaration para que lea:
+    Declaration
+        ::= compound-Declaration
+        | Declaration ";" compound-Declaration
+  */
+  
   Declaration parseDeclaration() throws SyntaxError {
     Declaration declarationAST = null; // in case there's a syntactic error
 
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
-    declarationAST = parseSingleDeclaration();
-    while (currentToken.kind == Token.SEMICOLON) {
-      acceptIt();
-      Declaration d2AST = parseSingleDeclaration();
-      finish(declarationPos);
-      declarationAST = new SequentialDeclaration(declarationAST, d2AST,
+    declarationAST = parseCompoundDeclaration();
+    if (currentToken.kind == Token.SEMICOLON) {
+        acceptIt();
+        Declaration d2AST = parseCompoundDeclaration();
+        finish(declarationPos);
+        declarationAST = new SequentialDeclaration(declarationAST, d2AST,
         declarationPos);
     }
     return declarationAST;
   }
 
+   /*----------------------------------------------------------------------
+    Se crea la regla compound-Declaration que se lee:
+    ::= single-Declaration
+    | "recursive" Proc-Funcs "end"
+    | "local" Declaration "in" Declaration "end"
+  ----------------------------------------------------------------------*/
+  
+  Declaration parseCompoundDeclaration() throws SyntaxError {
+    Declaration declarationAST = null; // in case there's a syntactic error
+    
+    SourcePosition declarationPos = new SourcePosition();
+    start(declarationPos);
+    
+    switch(currentToken.kind){
+      case Token.CONST:
+      case Token.VAR:
+      case Token.PROC:
+      case Token.FUNC:
+      case Token.TYPE:
+        {
+          declarationAST = parseSingleDeclaration();
+        }
+        break;
+        
+      case Token.RECURSIVE:
+        {
+          acceptIt();
+          Declaration pfsDeclaration = parseProcFuncsDeclaration();
+          accept(Token.END);
+          finish(declarationPos);
+          declarationAST = new RecursiveDeclaration(pfsDeclaration, declarationPos);
+        }
+        break;
+      case Token.LOCAL:
+        {
+          acceptIt();
+          Declaration d1AST = parseDeclaration();
+          accept(Token.IN);
+          Declaration d2AST = parseDeclaration();
+          accept(Token.END);
+          finish(declarationPos);
+          declarationAST = new LocalDeclaration(d1AST, d2AST, declarationPos);
+        }
+        break;
+      default:
+      syntacticError("\"%\" cannot start a compound declaration",
+        currentToken.spelling);
+      break;
+    }
+    return declarationAST;
+  }
+  
   Declaration parseSingleDeclaration() throws SyntaxError {
     Declaration declarationAST = null; // in case there's a syntactic error
 
@@ -633,8 +693,6 @@ public class Parser {
         declarationAST = new VarDeclaration(iAST, tAST, declarationPos);
       }
       break;*/
-      
-      
       
       case Token.VAR:   ///////////// Modificado por nosotros
       {
@@ -715,6 +773,63 @@ public class Parser {
     return declarationAST;
   }
 
+  /*--------------------------------------------------------------------
+    Se agrega la regla:
+    ProcFunc ::= "proc" Identifier "(" Formal-Parameter-Sequence ")"
+                 "~" Command "end"
+                | "func" Identifier "(" Formal-Parameter-Sequence ")"
+                  ":" Type-denoter "~" Expression
+  ----------------------------------------------------------------------*/
+  
+  Declaration parseProcFuncDeclaration() throws SyntaxError{
+    Declaration declarationAST = null; // in case there's a syntactic error
+    SourcePosition declarationPos = new SourcePosition();
+    
+    start(declarationPos);
+    
+    switch(currentToken.kind){
+      case Token.PROC:
+      case Token.FUNC:
+        {
+          declarationAST = parseSingleDeclaration();
+        }
+        break;
+      default:
+      syntacticError("\"%\" cannot start neither a process nor a function declaration",
+        currentToken.spelling);
+      break;
+    }
+    
+    return declarationAST;
+  }
+  
+  /*--------------------------------------------------------------------
+    Se agrega la regla:
+    ProcFuncs ::= Proc-Func ("|" Proc-Func)+
+  ----------------------------------------------------------------------*/
+  
+  Declaration parseProcFuncsDeclaration() throws SyntaxError{
+    Declaration declarationAST = null; // in case there's a syntactic error
+    SourcePosition declarationPos = new SourcePosition();
+    
+    start(declarationPos);
+    
+    declarationAST = parseProcFuncDeclaration();
+    accept(Token.STICK);
+    Declaration pf2AST = parseProcFuncDeclaration();
+    
+    declarationAST = new SequentialDeclaration(declarationAST, pf2AST, declarationPos);
+    
+    while(currentToken.kind == Token.STICK){
+      acceptIt();
+      Declaration pfAuxAST = parseProcFuncDeclaration();
+      finish(declarationPos);
+      declarationAST = new SequentialDeclaration(declarationAST, pfAuxAST, declarationPos);
+    }
+    return declarationAST;
+  }
+  
+  
 ///////////////////////////////////////////////////////////////////////////////
 //
 // PARAMETERS

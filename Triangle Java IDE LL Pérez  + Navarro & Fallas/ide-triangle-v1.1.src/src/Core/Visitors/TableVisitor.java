@@ -38,6 +38,7 @@ import Triangle.AbstractSyntaxTrees.IntegerExpression;
 import Triangle.AbstractSyntaxTrees.IntegerLiteral;
 import Triangle.AbstractSyntaxTrees.LetCommand;
 import Triangle.AbstractSyntaxTrees.LetExpression;
+import Triangle.AbstractSyntaxTrees.LocalDeclaration;
 import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
 import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
@@ -51,6 +52,7 @@ import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
 import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
+import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
@@ -269,6 +271,14 @@ public class TableVisitor implements Visitor {
       return(null);
   }
   
+  //Se agrega el el Local
+  public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
+      ast.D1.visit(this, null);
+      ast.D2.visit(this, null);
+      
+      return(null);
+  }
+  
   public Object visitProcDeclaration(ProcDeclaration ast, Object o) { 
       try {
       addIdentifier(ast.I.spelling, "KnownRoutine", 
@@ -282,6 +292,13 @@ public class TableVisitor implements Visitor {
       ast.C.visit(this, null);
             
       return(null);
+  }
+  
+  
+  //Se agrega la declaracion recursiva
+  public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
+      ast.LRS.visit(this, null);
+      return null;
   }
   
   public Object visitSequentialDeclaration(SequentialDeclaration ast, Object o) {   
@@ -668,7 +685,7 @@ public class TableVisitor implements Visitor {
       
       return(null);
     }
-    
-    
-  
+
+   
+
 }
