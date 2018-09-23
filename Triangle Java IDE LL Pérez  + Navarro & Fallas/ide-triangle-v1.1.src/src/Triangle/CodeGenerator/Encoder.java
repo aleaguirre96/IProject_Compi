@@ -27,6 +27,7 @@ import Triangle.AbstractSyntaxTrees.AST;
 import Triangle.AbstractSyntaxTrees.AnyTypeDenoter;
 import Triangle.AbstractSyntaxTrees.ArrayExpression;
 import Triangle.AbstractSyntaxTrees.ArrayTypeDenoter;
+import Triangle.AbstractSyntaxTrees.ArrayTypeDenoterDDot;
 import Triangle.AbstractSyntaxTrees.AssignCommand;
 import Triangle.AbstractSyntaxTrees.BinaryExpression;
 import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
@@ -117,10 +118,7 @@ public final class Encoder implements Visitor {
     return null;
   }
   
-  //Se agrega al enconder
-  public Object visitNILCommand(NILCommand ast, Object o) {
-      return null;
-  }
+
   
   public Object visitIfCommand(IfCommand ast, Object o) {
     Frame frame = (Frame) o;
@@ -364,17 +362,7 @@ public final class Encoder implements Visitor {
     return new Integer(extraSize);
   }
   
-  //Agregada por Jose
-    public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o) {
-    Frame frame = (Frame) o;
-    int extraSize;
 
-    extraSize = ((Integer) ast.E.visit(this, null)).intValue();
-    emit(Machine.PUSHop, 0, 0, extraSize);
-    ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
-    writeTableDetails(ast);
-    return new Integer(extraSize);
-  }
 
 
   // Array Aggregates
@@ -552,6 +540,8 @@ public final class Encoder implements Visitor {
       typeSize = ast.entity.size;
     return new Integer(typeSize);
   }
+  
+
 
   public Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object o) {
     if (ast.entity == null) {
@@ -1033,4 +1023,41 @@ public final class Encoder implements Visitor {
     emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
     return null;
     }
+        
+    //Se agrega al enconder /////////////////////////////
+    public Object visitNILCommand(NILCommand ast, Object o) {
+        return null;
+    }
+    
+    
+    //Agregada por Jose ////////////////////////////////
+    public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o) {
+    Frame frame = (Frame) o;
+    int extraSize;
+
+    extraSize = ((Integer) ast.E.visit(this, null)).intValue();
+    emit(Machine.PUSHop, 0, 0, extraSize);
+    ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
+    writeTableDetails(ast);
+    return new Integer(extraSize);
+    }
+    
+    //
+    //Implementacion de visitArrayTypeDenoterDDot (Matriz)
+    //Tamano = (firstElement * elemtSiz) * (limited * elemtSiz)
+    public Object visitArrayTypeDenoterDDot(ArrayTypeDenoterDDot  ast, Object o){
+        int typeSize;
+        if(ast.entity == null){
+            int elemSize = ((Integer) ast.T.visit(this, null)).intValue();
+            typeSize = (Integer.parseInt(ast.IL1.spelling) * elemSize) * (Integer.parseInt(ast.IL2.spelling));
+            ast.entity = new TypeRepresentation(typeSize);
+            writeTableDetails(ast);
+        }else
+          typeSize = ast.entity.size;   
+        return new Integer(typeSize);
+    }
+    
+    ////////////////////////////////////////////////////
+    
+  
 }

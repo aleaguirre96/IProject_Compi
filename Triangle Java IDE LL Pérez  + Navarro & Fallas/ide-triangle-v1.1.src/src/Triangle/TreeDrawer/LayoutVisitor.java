@@ -20,6 +20,7 @@ import Triangle.AbstractSyntaxTrees.AST;
 import Triangle.AbstractSyntaxTrees.AnyTypeDenoter;
 import Triangle.AbstractSyntaxTrees.ArrayExpression;
 import Triangle.AbstractSyntaxTrees.ArrayTypeDenoter;
+import Triangle.AbstractSyntaxTrees.ArrayTypeDenoterDDot;
 import Triangle.AbstractSyntaxTrees.AssignCommand;
 import Triangle.AbstractSyntaxTrees.BinaryExpression;
 import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
@@ -124,9 +125,7 @@ public class LayoutVisitor implements Visitor {
     return layoutBinary("WhileCom.", ast.E, ast.C);
   }
   
-  public Object visitNILCommand(NILCommand ast, Object o) {
-    return layoutNullary("NIL.");
-    }
+
 
 
   // Expressions
@@ -208,10 +207,6 @@ public class LayoutVisitor implements Visitor {
     return layoutBinary("VarDecl.", ast.I, ast.T);
   }
   
-  //Annadido por Jose
-  public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o) { 
-       return layoutBinary("VarDecl.", ast.I, ast.E);
-  }
 
 
   // Array Aggregates
@@ -562,7 +557,22 @@ public class LayoutVisitor implements Visitor {
     return layoutBinary("RepeatWhile.", ast.E, ast.C);
   }
   
-
+  public Object visitNILCommand(NILCommand ast, Object o) {
+    return layoutNullary("NIL.");
+  }
+    
+    
+  
+  //Annadido por Jose
+  public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o) { 
+       return layoutBinary("VarDecl.", ast.I, ast.E);
+  }
+  
+  public Object visitArrayTypeDenoterDDot(ArrayTypeDenoterDDot ast, Object o){
+       return layoutTernary("ArrayTypeDDot.", ast.IL1,ast.IL2, ast.T);
+  }
+  
+  //////////////////////////////////////////////
     
 
   

@@ -20,6 +20,7 @@ import Triangle.AbstractSyntaxTrees.ActualParameterSequence;
 import Triangle.AbstractSyntaxTrees.ArrayAggregate;
 import Triangle.AbstractSyntaxTrees.ArrayExpression;
 import Triangle.AbstractSyntaxTrees.ArrayTypeDenoter;
+import Triangle.AbstractSyntaxTrees.ArrayTypeDenoterDDot;
 import Triangle.AbstractSyntaxTrees.AssignCommand;
 import Triangle.AbstractSyntaxTrees.BinaryExpression;
 import Triangle.AbstractSyntaxTrees.CallCommand;
@@ -652,10 +653,10 @@ public class Parser {
                 finish(declarationPos);
                 declarationAST = new VarDeclarationInitialized(iAST,eAST,declarationPos);
             }break;
-            
-            
+            default:
+                syntacticError("\"%\" cannot start a VAR declaration",currentToken.spelling);
+                break;     
         }
-
       }
       break;
       
@@ -940,7 +941,7 @@ public class Parser {
       }
       break;
 
-    case Token.ARRAY:
+    /*case Token.ARRAY:
       {
         acceptIt();
         IntegerLiteral ilAST = parseIntegerLiteral();
@@ -949,7 +950,33 @@ public class Parser {
         finish(typePos);
         typeAST = new ArrayTypeDenoter(ilAST, tAST, typePos);
       }
-      break;
+      break;*/
+
+    
+    //Annadido por jose, se modifica la regla de los tipos de arreglo
+    case Token.ARRAY:{
+        acceptIt();
+        IntegerLiteral ilAST = parseIntegerLiteral();
+        switch (currentToken.kind) { ///Se evalua que tipo de e
+            case Token.DDOT:{  // [".."]  aparece 0 o una vez
+                acceptIt(); //acepta ".."
+                IntegerLiteral ilAST2 = parseIntegerLiteral();
+                accept(Token.OF); //acepta "of"
+                TypeDenoter tAST = parseTypeDenoter();
+                finish(typePos);
+                typeAST = new ArrayTypeDenoterDDot(ilAST,ilAST2,tAST,typePos);//Se llama a su respectivo arbol syntax
+            }break;    
+            case Token.OF:{ //Declaracion con of
+                acceptIt(); //acepta "of"
+                TypeDenoter tAST = parseTypeDenoter();
+                finish(typePos);
+                typeAST = new ArrayTypeDenoter(ilAST, tAST, typePos);
+            }break;
+            default:
+                syntacticError("\"%\" cannot start a Array declaration",currentToken.spelling);
+                break;
+            }
+    }break;  
 
     case Token.RECORD:
       {

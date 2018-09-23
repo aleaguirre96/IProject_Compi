@@ -97,7 +97,7 @@ final class Token extends Object {
 
     // punctuation...
     DOT			= 31,
-    DDOT                = 32,
+    DDOT                = 32, //Agregado
     COLON		= 33,
     SEMICOLON           = 34,
     COMMA		= 35,
@@ -118,7 +118,7 @@ final class Token extends Object {
   
   // Alternatives // AGREGADO////////////////////////
   
-  LITERALSTICK            = 46;
+    STICK            = 46;
   
          
   
@@ -170,8 +170,8 @@ final class Token extends Object {
     "]",
     "{",
     "}",
-    "..",
-    "|",
+    "..", //Agregado
+    "|",  //Agregado
     "",
     "<error>"
   };

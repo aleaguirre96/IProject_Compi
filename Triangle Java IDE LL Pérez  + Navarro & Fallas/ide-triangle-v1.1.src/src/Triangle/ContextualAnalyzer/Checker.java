@@ -19,6 +19,7 @@ import Triangle.StdEnvironment;
 import Triangle.AbstractSyntaxTrees.AnyTypeDenoter;
 import Triangle.AbstractSyntaxTrees.ArrayExpression;
 import Triangle.AbstractSyntaxTrees.ArrayTypeDenoter;
+import Triangle.AbstractSyntaxTrees.ArrayTypeDenoterDDot;
 import Triangle.AbstractSyntaxTrees.AssignCommand;
 import Triangle.AbstractSyntaxTrees.BinaryExpression;
 import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
@@ -127,10 +128,7 @@ public final class Checker implements Visitor {
     return null;
   }
   
-  //Se agrega al checker
-  public Object visitNILCommand(NILCommand ast, Object o) {
-    return null;
-  }
+
 
   public Object visitIfCommand(IfCommand ast, Object o) {
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
@@ -362,16 +360,7 @@ public final class Checker implements Visitor {
     return null;
   }
   
-  //Agregada por Jose
-  public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o) {
-    ast.E = (Expression) ast.E.visit(this, null);
-    idTable.enter (ast.I.spelling, ast);
-    if (ast.duplicated)
-      reporter.reportError ("identifier \"%\" already declared",
-                            ast.I.spelling, ast.position);
 
-    return null;
-  }
 
   // Array Aggregates
 
@@ -959,6 +948,9 @@ public final class Checker implements Visitor {
 
   }
 
+  
+  
+  //Annadidas por el equipo ///////////////////////////////////////////////////////////
     @Override
     public Object visitRepeatWhile(RepeatWhile ast, Object o) {
         TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
@@ -966,5 +958,30 @@ public final class Checker implements Visitor {
       reporter.reportError("Boolean expression expected here", "", ast.E.position);
     ast.C.visit(this, null);
     return null;
+    }
+    
+   //Se agrega al checker
+    public Object visitNILCommand(NILCommand ast, Object o) {
+      return null;
+    }
+   
+     //Agregada por Jose
+    public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o) {
+        ast.E = (Expression) ast.E.visit(this, null);
+        idTable.enter (ast.I.spelling, ast);
+    if (ast.duplicated)
+        reporter.reportError ("identifier \"%\" already declared",
+                             ast.I.spelling, ast.position);
+
+    return null;
+    }
+    
+    public Object visitArrayTypeDenoterDDot(ArrayTypeDenoterDDot ast,Object o){
+        ast.T = (TypeDenoter) ast.T.visit(this, null);
+    if ((Integer.valueOf(ast.IL1.spelling)) <= 0 || 
+        (Integer.valueOf(ast.IL1.spelling)) > Integer.valueOf(ast.IL2.spelling)   )
+      reporter.reportError ("arrays must not be empty AND delimiter "
+                          + "have be higher than the first value","", ast.IL1.position);
+    return ast;
     }
 }

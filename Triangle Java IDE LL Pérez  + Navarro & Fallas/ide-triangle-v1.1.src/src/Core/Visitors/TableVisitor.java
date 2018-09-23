@@ -8,6 +8,7 @@ package Core.Visitors;
 import Triangle.AbstractSyntaxTrees.AnyTypeDenoter;
 import Triangle.AbstractSyntaxTrees.ArrayExpression;
 import Triangle.AbstractSyntaxTrees.ArrayTypeDenoter;
+import Triangle.AbstractSyntaxTrees.ArrayTypeDenoterDDot;
 import Triangle.AbstractSyntaxTrees.AssignCommand;
 import Triangle.AbstractSyntaxTrees.BinaryExpression;
 import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
@@ -115,10 +116,7 @@ public class TableVisitor implements Visitor {
       return(null);
   }
   
-  //Se agrega a la tabla de lo que debe de recorrer el visitor
-  public Object visitNILCommand(NILCommand ast, Object o) {
-      return (null); 
-    }
+
   
   public Object visitIfCommand(IfCommand ast, Object o) { 
       ast.E.visit(this, null);
@@ -316,20 +314,7 @@ public class TableVisitor implements Visitor {
       ast.T.visit(this, null);
       return(null);
   }
-  //Agregada por Jose
-  public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o) {      
-      try {
-      addIdentifier(ast.I.spelling, 
-              "KnownAddress", 
-              (ast.entity!=null?ast.entity.size:0), 
-              ((KnownAddress)ast.entity).address.level, 
-              ((KnownAddress)ast.entity).address.displacement, 
-              -1);
-      } catch (NullPointerException e) { }
-      
-      ast.E.visit(this, null);
-      return(null);
-  }
+
   
   // </editor-fold>
 
@@ -655,4 +640,35 @@ public class TableVisitor implements Visitor {
         ast.E.visit(this, null);
         return(null);
     }
+    
+      //Se agrega a la tabla de lo que debe de recorrer el visitor
+    public Object visitNILCommand(NILCommand ast, Object o) {
+      return (null); 
+    }
+  
+    //Agregada por Jose
+    public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o) {      
+      try {
+      addIdentifier(ast.I.spelling, 
+              "KnownAddress", 
+              (ast.entity!=null?ast.entity.size:0), 
+              ((KnownAddress)ast.entity).address.level, 
+              ((KnownAddress)ast.entity).address.displacement, 
+              -1);
+      } catch (NullPointerException e) { }
+      
+      ast.E.visit(this, null);
+      return(null);
+    }
+    
+    public Object visitArrayTypeDenoterDDot(ArrayTypeDenoterDDot ast,Object o){
+      ast.IL1.visit(this, null);
+      ast.IL2.visit(this, null);
+      ast.T.visit(this, null);
+      
+      return(null);
+    }
+    
+    
+  
 }

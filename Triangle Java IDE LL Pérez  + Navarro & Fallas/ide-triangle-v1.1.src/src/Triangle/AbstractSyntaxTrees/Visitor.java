@@ -82,6 +82,8 @@ public interface Visitor {
   // Type Denoters
   public abstract Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object o);
   public abstract Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object o);
+  //Array tipo ".."
+  public abstract Object visitArrayTypeDenoterDDot(ArrayTypeDenoterDDot ast, Object o);
   public abstract Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object o);
   public abstract Object visitCharTypeDenoter(CharTypeDenoter ast, Object o);
   public abstract Object visitErrorTypeDenoter(ErrorTypeDenoter ast, Object o);

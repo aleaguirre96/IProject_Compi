@@ -8,6 +8,7 @@ import Triangle.AbstractSyntaxTrees.AST;
 import Triangle.AbstractSyntaxTrees.AnyTypeDenoter;
 import Triangle.AbstractSyntaxTrees.ArrayExpression;
 import Triangle.AbstractSyntaxTrees.ArrayTypeDenoter;
+import Triangle.AbstractSyntaxTrees.ArrayTypeDenoterDDot;
 import Triangle.AbstractSyntaxTrees.AssignCommand;
 import Triangle.AbstractSyntaxTrees.BinaryExpression;
 import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
@@ -103,10 +104,7 @@ public class TreeVisitor implements Visitor {
         return(createNullary("Empty Command"));
     }
     
-    //Se agrega al Tree Visitor
-    public Object visitNILCommand(NILCommand ast, Object o) {
-        return(createNullary("Nil Command"));
-    }
+
     
     public Object visitIfCommand(IfCommand ast, Object obj) {
         return(createTernary("If Command", ast.E, ast.C1, ast.C2));
@@ -206,9 +204,7 @@ public class TreeVisitor implements Visitor {
         return(createBinary("Variable Declaration", ast.I, ast.T));
     }
     
-    public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object obj) {
-        return(createBinary("Variable Declaration-Initialized", ast.I, ast.E));
-    }
+
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc=" Aggregates ">
@@ -460,4 +456,19 @@ public class TreeVisitor implements Visitor {
     public Object visitRepeatWhile(RepeatWhile ast, Object o) {
         return(createBinary("RepeatWhile", ast.C,ast.E));
     }
+    
+    //Se agrega al Tree Visitor
+    public Object visitNILCommand(NILCommand ast, Object o) {
+        return(createNullary("Nil Command"));
+    }
+    
+    public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object obj) {
+        return(createBinary("Variable Declaration-Initialized", ast.I, ast.E));
+    }
+    
+    public Object visitArrayTypeDenoterDDot(ArrayTypeDenoterDDot ast,Object o) {
+        
+        return(createTernary("Array Type DDot Denoter", ast.IL1,ast.IL2, ast.T));
+    }
+    
 }
