@@ -12,6 +12,8 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
  * @author jose
  */
 
+//Arbol abstracto sintactico para declaracion de varibles 
+//inicializadas
 
 public class VarDeclarationInitialized extends Declaration{
     
@@ -21,9 +23,11 @@ public class VarDeclarationInitialized extends Declaration{
   public VarDeclarationInitialized (Identifier iAST, Expression eAST,
                          SourcePosition thePosition) {
     super (thePosition);
-    I = iAST;
+    I = iAST; //Identificador de la variable
     E = eAST; //Expresion de declaracion
   }
+  
+  //Metodo para recorrer el arblo
     @Override
     public Object visit(Visitor v, Object o) {
         return v.visitVarDeclarationInitialized(this, o); //To change body of generated methods, choose Tools | Templates.
