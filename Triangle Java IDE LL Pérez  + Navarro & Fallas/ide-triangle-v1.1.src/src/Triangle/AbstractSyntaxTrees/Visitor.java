@@ -30,6 +30,7 @@ public interface Visitor {
   public abstract Object visitRepeatUntil(RepeatUntil ast, Object o); /////// Se agrega el RepeatUntil al visitor
   public abstract Object visitRepeatDoWhile(RepeatDoWhile ast, Object o); /////// Se agrega el RepeatDoWhile al visitor
   public abstract Object visitRepeatDoUntil(RepeatDoUntil ast, Object o); /////// Se agrega el RepeatDoUntil al visitor
+  public abstract Object visitRepeatFor(RepeatFor ast, Object o); /////// Se agrega el RepeatDoUntil al visitor
   // Expressions
   public abstract Object visitArrayExpression(ArrayExpression ast, Object o);
   public abstract Object visitBinaryExpression(BinaryExpression ast, Object o);

@@ -55,6 +55,7 @@ import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
 import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.RepeatDoUntil;
 import Triangle.AbstractSyntaxTrees.RepeatDoWhile;
+import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
@@ -678,6 +679,14 @@ public class TableVisitor implements Visitor {
      public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) {
         ast.C.visit(this, null);
         ast.E.visit(this, null);
+        return(null);
+    }
+     
+     public Object visitRepeatFor(RepeatFor ast, Object o) {
+        ast.C.visit(this, null);
+        ast.E1.visit(this, null);
+        ast.E2.visit(this, null);
+        ast.I.visit(this, null);
         return(null);
     }
     
