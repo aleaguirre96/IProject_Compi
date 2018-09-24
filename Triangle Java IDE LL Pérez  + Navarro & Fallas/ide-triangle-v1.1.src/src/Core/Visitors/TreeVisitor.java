@@ -53,6 +53,9 @@ import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
 import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
+import Triangle.AbstractSyntaxTrees.RepeatDoUntil;
+import Triangle.AbstractSyntaxTrees.RepeatDoWhile;
+import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
@@ -472,6 +475,22 @@ public class TreeVisitor implements Visitor {
         return(createBinary("RepeatWhile", ast.C,ast.E));
     }
     
+    @Override
+    public Object visitRepeatUntil(RepeatUntil ast, Object o) {
+        return(createBinary("RepeatUntil", ast.C,ast.E));
+    }
+    
+     @Override
+    public Object visitRepeatDoWhile(RepeatDoWhile ast, Object o) {
+        return(createBinary("RepeatUntil", ast.C,ast.E));
+    }
+    
+    
+    @Override
+    public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) {
+        return(createBinary("RepeatUntil", ast.C,ast.E));
+    }
+    
     
   //Metodo visitor para el caso "var" Identifier ":=" Expression
     public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object obj) {
@@ -482,6 +501,10 @@ public class TreeVisitor implements Visitor {
         
         return(createTernary("Array Type DDot Denoter", ast.IL1,ast.IL2, ast.T));
     }
+
+    
+
+    
 
     
 }

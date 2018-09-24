@@ -25,8 +25,11 @@ public interface Visitor {
   public abstract Object visitNILCommand(NILCommand ast, Object o); //Se agrega el NILcommand al visitor
   public abstract Object visitSequentialCommand(SequentialCommand ast, Object o);
   public abstract Object visitWhileCommand(WhileCommand ast, Object o);
-
-
+   //Repeats (parte de commands agregados por el equipo)
+  public abstract Object visitRepeatWhile(RepeatWhile ast, Object o);/////// Se agrega el RepeatWhile al visitor
+  public abstract Object visitRepeatUntil(RepeatUntil ast, Object o); /////// Se agrega el RepeatUntil al visitor
+  public abstract Object visitRepeatDoWhile(RepeatDoWhile ast, Object o); /////// Se agrega el RepeatDoWhile al visitor
+  public abstract Object visitRepeatDoUntil(RepeatDoUntil ast, Object o); /////// Se agrega el RepeatDoUntil al visitor
   // Expressions
   public abstract Object visitArrayExpression(ArrayExpression ast, Object o);
   public abstract Object visitBinaryExpression(BinaryExpression ast, Object o);
@@ -111,9 +114,7 @@ public interface Visitor {
   public abstract Object visitProgram(Program ast, Object o);
   
   
-  //Repeats
-  
-  public abstract Object visitRepeatWhile(RepeatWhile ast, Object o);
+ 
 
 
 }

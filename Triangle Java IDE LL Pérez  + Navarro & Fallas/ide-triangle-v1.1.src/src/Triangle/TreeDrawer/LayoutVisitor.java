@@ -65,6 +65,9 @@ import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
 import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
+import Triangle.AbstractSyntaxTrees.RepeatDoUntil;
+import Triangle.AbstractSyntaxTrees.RepeatDoWhile;
+import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
@@ -569,9 +572,24 @@ public class LayoutVisitor implements Visitor {
     return layoutBinary("RepeatWhile.", ast.E, ast.C);
   }
   
+   
+    public Object visitRepeatUntil(RepeatUntil ast, Object o) {
+        return layoutBinary("RepeatUntil.", ast.E, ast.C);
+    }
+    
+    public Object visitRepeatDoWhile(RepeatDoWhile ast, Object o) {
+        return layoutBinary("RepeatUntil.", ast.E, ast.C);
+    }
+    
+    public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) {
+        return layoutBinary("RepeatUntil.", ast.E, ast.C);
+    }
+  
   public Object visitNILCommand(NILCommand ast, Object o) {
     return layoutNullary("NIL.");
   }
+  
+  
     
     
   
@@ -586,6 +604,8 @@ public class LayoutVisitor implements Visitor {
   }
   
   //////////////////////////////////////////////
+
+   
 
     
 

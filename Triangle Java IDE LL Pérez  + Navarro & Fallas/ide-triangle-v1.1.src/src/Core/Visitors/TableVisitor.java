@@ -53,6 +53,9 @@ import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
 import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
+import Triangle.AbstractSyntaxTrees.RepeatDoUntil;
+import Triangle.AbstractSyntaxTrees.RepeatDoWhile;
+import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
@@ -651,12 +654,35 @@ public class TableVisitor implements Visitor {
   /////////////////////////////////////////// Repeats agragados por el quipo ///////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    @Override
+    @Override // preguntar si es necesario 
     public Object visitRepeatWhile(RepeatWhile ast, Object o) {
         ast.C.visit(this, null);
         ast.E.visit(this, null);
         return(null);
     }
+    
+     
+    public Object visitRepeatUntil(RepeatUntil ast, Object o) {
+        ast.C.visit(this, null);
+        ast.E.visit(this, null);
+        return(null);
+    }
+    
+    public Object visitRepeatDoWhile(RepeatDoWhile ast, Object o) {
+        ast.C.visit(this, null);
+        ast.E.visit(this, null);
+        return(null);
+    }
+    
+    
+     public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) {
+        ast.C.visit(this, null);
+        ast.E.visit(this, null);
+        return(null);
+    }
+    
+    
+    
     
       //Se agrega a la tabla de lo que debe de recorrer el visitor
     public Object visitNILCommand(NILCommand ast, Object o) {
@@ -686,6 +712,8 @@ public class TableVisitor implements Visitor {
       
       return(null);
     }
+
+   
 
    
 
