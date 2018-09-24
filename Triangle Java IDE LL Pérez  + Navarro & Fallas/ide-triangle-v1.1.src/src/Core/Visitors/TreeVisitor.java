@@ -81,7 +81,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * visit an entire AST. 
  *
  * Generates DefaultMutableTreeNodes, used to draw a JTree.
- *
+ * 
  * @author Luis Leopoldo P�rez <luiperpe@ns.isi.ulatina.ac.cr>
  */
 public class TreeVisitor implements Visitor {
