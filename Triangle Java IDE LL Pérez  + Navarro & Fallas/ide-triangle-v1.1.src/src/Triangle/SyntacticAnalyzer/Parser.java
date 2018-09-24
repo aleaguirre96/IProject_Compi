@@ -626,14 +626,15 @@ public class Parser {
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
     
-    switch(currentToken.kind){
+    switch(currentToken.kind){ 
+      //const, var,proc, fun, type => single-Declaration
       case Token.CONST:
       case Token.VAR:
       case Token.PROC:
       case Token.FUNC:
       case Token.TYPE:
         {
-          declarationAST = parseSingleDeclaration();
+          declarationAST = parseSingleDeclaration();//parseSingleDeclaration se encarga de acceptarlo
         }
         break;
         
@@ -672,7 +673,6 @@ public class Parser {
     start(declarationPos);
 
     switch (currentToken.kind) {
-
     case Token.CONST:
       {
         acceptIt();
@@ -793,7 +793,10 @@ public class Parser {
     start(declarationPos);
     
     switch(currentToken.kind){
-      case Token.PROC:
+      case Token.PROC:{
+          declarationAST = parseSingleDeclaration();
+      }break;
+          
       case Token.FUNC:
         {
           declarationAST = parseSingleDeclaration();
