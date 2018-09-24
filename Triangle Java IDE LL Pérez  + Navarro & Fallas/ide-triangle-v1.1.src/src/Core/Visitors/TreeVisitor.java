@@ -55,6 +55,7 @@ import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
 import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.RepeatDoUntil;
 import Triangle.AbstractSyntaxTrees.RepeatDoWhile;
+import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
@@ -491,6 +492,11 @@ public class TreeVisitor implements Visitor {
         return(createBinary("RepeatUntil", ast.C,ast.E));
     }
     
+    @Override
+    public Object visitRepeatFor(RepeatFor ast, Object o) {
+        return(createQuaternary("RepeatFor", ast.C,ast.E1,ast.E2,ast.I));
+    }
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
   //Metodo visitor para el caso "var" Identifier ":=" Expression
     public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object obj) {

@@ -67,6 +67,7 @@ import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
 import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.RepeatDoUntil;
 import Triangle.AbstractSyntaxTrees.RepeatDoWhile;
+import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
@@ -583,6 +584,10 @@ public class LayoutVisitor implements Visitor {
     
     public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) {
         return layoutBinary("RepeatUntil.", ast.E, ast.C);
+    }
+    
+    public Object visitRepeatFor(RepeatFor ast, Object o) {
+        return layoutQuaternary("RepeatFor.", ast.I, ast.E1, ast.E2, ast.C); ///// Aqui se utiliza quaternary en lugar de binary
     }
   
   public Object visitNILCommand(NILCommand ast, Object o) {

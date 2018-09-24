@@ -68,6 +68,7 @@ import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
 import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.RepeatDoUntil;
 import Triangle.AbstractSyntaxTrees.RepeatDoWhile;
+import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
@@ -345,35 +346,51 @@ public class Parser {
         break;
         
         case Token.DO:{ /////////"repeat" "do" Command "while" Expression "end"
-            acceptIt();
-            Command cAST = parseCommand();
-            switch(currentToken.kind){
-                case Token.WHILE:{
-                     acceptIt();
-                     Expression eAST = parseExpression();
-                     accept(Token.END);
-                     finish(commandPos);
-                     commandAST = new RepeatDoWhile(eAST, cAST, commandPos); // aqui se agrega un metodo para representar el AST
-                }
-                break;
+                 acceptIt();
+                 Command cAST = parseCommand();
+                 switch(currentToken.kind){
+                     case Token.WHILE:{
+                           acceptIt();
+                            Expression eAST = parseExpression();
+                             accept(Token.END);
+                            finish(commandPos);
+                             commandAST = new RepeatDoWhile(eAST, cAST, commandPos); // aqui se agrega un metodo para representar el AST
+                        }
+                        break;
                 
-                case Token.UNTIL:{   ////////////"repeat" "do" Command "until" Expression "end"
-                     acceptIt();
-                     Expression eAST = parseExpression();
-                     accept(Token.END);
-                     finish(commandPos);
-                     commandAST = new RepeatDoUntil(eAST, cAST, commandPos); // aqui se agrega un metodo para representar el AST
+                        case Token.UNTIL:{   ////////////"repeat" "do" Command "until" Expression "end"
+                            acceptIt();
+                            Expression eAST = parseExpression();
+                            accept(Token.END);
+                            finish(commandPos);
+                            commandAST = new RepeatDoUntil(eAST, cAST, commandPos); // aqui se agrega un metodo para representar el AST
                 
-                }
-                break;
+                        }
+                        break;
                 
-                default:
-                    syntacticError("\"%\" cannot start a Docommand",currentToken.spelling);
-                break;
-            }
-            }
-        break;
+                
+                        default:
+                            syntacticError("\"%\" cannot start a Docommand",currentToken.spelling);
+                        break;
+                        }
+                    }
+                    break;
+        
+        case Token.FOR:{  /////// "repeat" "for" Identifier "from" Expression "to" Expression "do" Command "end"
+                acceptIt();
+                Identifier iAST = parseIdentifier();
+                accept(Token.FROM);
+                Expression e1AST = parseExpression();
+                accept(Token.TO);
+                Expression e2AST = parseExpression();
+                accept(Token.DO);
+                Command cAST = parseCommand();
+                accept(Token.END);
+                finish(commandPos);
+                commandAST = new RepeatFor(iAST, e1AST, e2AST, cAST, commandPos);
         }
+        }
+        
     
     
     }

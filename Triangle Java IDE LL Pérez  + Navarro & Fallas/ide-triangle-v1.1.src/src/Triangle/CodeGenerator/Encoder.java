@@ -75,6 +75,7 @@ import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
 import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.RepeatDoUntil;
 import Triangle.AbstractSyntaxTrees.RepeatDoWhile;
+import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
@@ -1113,6 +1114,11 @@ public final class Encoder implements Visitor {
 
     @Override
     public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitRepeatFor(RepeatFor ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
