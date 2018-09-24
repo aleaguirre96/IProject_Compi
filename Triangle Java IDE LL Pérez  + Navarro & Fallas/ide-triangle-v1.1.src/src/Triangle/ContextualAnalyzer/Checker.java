@@ -967,7 +967,7 @@ public final class Checker implements Visitor {
       return null;
     }
    
-     //Agregada por Jose
+     //Metodo visitor para el caso "var" Identifier ":=" Expression
     public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o) {
         ast.E = (Expression) ast.E.visit(this, null);
         idTable.enter (ast.I.spelling, ast);
@@ -977,7 +977,7 @@ public final class Checker implements Visitor {
 
     return null;
     }
-    
+    //Metodo visitor para el caso "array" Integer-Literal [".." Integer-Literal] "of" Type-denoter
     public Object visitArrayTypeDenoterDDot(ArrayTypeDenoterDDot ast,Object o){
         ast.T = (TypeDenoter) ast.T.visit(this, null);
     if ((Integer.valueOf(ast.IL1.spelling)) <= 0 || 

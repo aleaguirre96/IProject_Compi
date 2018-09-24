@@ -278,6 +278,7 @@ public class Parser {
 
     switch (currentToken.kind) {
 
+
     case Token.IDENTIFIER:
       {
         Identifier iAST = parseIdentifier();
@@ -694,6 +695,8 @@ public class Parser {
       }
       break;*/
       
+      //Se annada la funcionalidad de poder declarar variables de la forma
+      //"var" Identifier ":=" Expression
       case Token.VAR:   ///////////// Modificado por nosotros
       {
         acceptIt();
@@ -718,6 +721,8 @@ public class Parser {
       }
       break;
       
+    /*Se modificar la opción referente a proc para que se lea:
+        | "proc" Identifier "(" Formal-Parameter-Sequence ")""~" Command "end"*/
 
     case Token.PROC:
       {
@@ -1068,7 +1073,10 @@ public class Parser {
       break;*/
 
     
-    //Annadido por jose, se modifica la regla de los tipos de arreglo
+    /*
+      Modificar la regla concerniente a tipos-de-arreglos:
+      | "array" Integer-Literal [".." Integer-Literal] "of" Type-denoter
+      */
     case Token.ARRAY:{
         acceptIt();
         IntegerLiteral ilAST = parseIntegerLiteral();

@@ -663,7 +663,8 @@ public class TableVisitor implements Visitor {
       return (null); 
     }
   
-    //Agregada por Jose
+    
+  //Metodo visitor para el caso "var" Identifier ":=" Expression
     public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o) {      
       try {
       addIdentifier(ast.I.spelling, 
@@ -677,7 +678,7 @@ public class TableVisitor implements Visitor {
       ast.E.visit(this, null);
       return(null);
     }
-    
+     //Metodo visitor para el caso "array" Integer-Literal [".." Integer-Literal] "of" Type-denoter
     public Object visitArrayTypeDenoterDDot(ArrayTypeDenoterDDot ast,Object o){
       ast.IL1.visit(this, null);
       ast.IL2.visit(this, null);

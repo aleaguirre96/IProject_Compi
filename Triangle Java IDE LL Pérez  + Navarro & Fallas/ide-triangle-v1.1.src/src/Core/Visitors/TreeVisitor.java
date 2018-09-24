@@ -473,10 +473,11 @@ public class TreeVisitor implements Visitor {
     }
     
     
+  //Metodo visitor para el caso "var" Identifier ":=" Expression
     public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object obj) {
         return(createBinary("Variable Declaration-Initialized", ast.I, ast.E));
     }
-    
+     //Metodo visitor para el caso "array" Integer-Literal [".." Integer-Literal] "of" Type-denoter
     public Object visitArrayTypeDenoterDDot(ArrayTypeDenoterDDot ast,Object o) {
         
         return(createTernary("Array Type DDot Denoter", ast.IL1,ast.IL2, ast.T));

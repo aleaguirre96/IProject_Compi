@@ -1067,7 +1067,8 @@ public final class Encoder implements Visitor {
     }
     
     
-    //Agregada por Jose ////////////////////////////////
+    
+  //Metodo visitor para el caso "var" Identifier ":=" Expression
     public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o) {
     Frame frame = (Frame) o;
     int extraSize;
@@ -1082,6 +1083,7 @@ public final class Encoder implements Visitor {
     //
     //Implementacion de visitArrayTypeDenoterDDot (Matriz)
     //Tamano = (firstElement * elemtSiz) * (limited * elemtSiz)
+    //Metodo visitor para el caso "array" Integer-Literal [".." Integer-Literal] "of" Type-denoter
     public Object visitArrayTypeDenoterDDot(ArrayTypeDenoterDDot  ast, Object o){
         int typeSize;
         if(ast.entity == null){

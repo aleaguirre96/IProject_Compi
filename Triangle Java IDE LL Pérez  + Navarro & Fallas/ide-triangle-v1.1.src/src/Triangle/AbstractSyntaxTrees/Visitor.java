@@ -51,7 +51,7 @@ public interface Visitor {
   public abstract Object visitTypeDeclaration(TypeDeclaration ast, Object o);
   public abstract Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o);
   public abstract Object visitVarDeclaration(VarDeclaration ast, Object o);
-  public abstract Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o);//Annadido Por nosostro
+  public abstract Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o);//Metodo visitor para el caso "var" Identifier ":=" Expression
 
   // Array Aggregates
   public abstract Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object o);
@@ -84,7 +84,7 @@ public interface Visitor {
   // Type Denoters
   public abstract Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object o);
   public abstract Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object o);
-  //Array tipo ".."
+  //Metodo visitor para el caso "array" Integer-Literal [".." Integer-Literal] "of" Type-denoter
   public abstract Object visitArrayTypeDenoterDDot(ArrayTypeDenoterDDot ast, Object o);
   public abstract Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object o);
   public abstract Object visitCharTypeDenoter(CharTypeDenoter ast, Object o);

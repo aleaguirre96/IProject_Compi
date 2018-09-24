@@ -575,11 +575,12 @@ public class LayoutVisitor implements Visitor {
     
     
   
-  //Annadido por Jose
+  //Metodo visitor para el caso "var" Identifier ":=" Expression
   public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o) { 
        return layoutBinary("VarDecl.", ast.I, ast.E);
   }
   
+  //Metodo visitor para el caso "array" Integer-Literal [".." Integer-Literal] "of" Type-denoter
   public Object visitArrayTypeDenoterDDot(ArrayTypeDenoterDDot ast, Object o){
        return layoutTernary("ArrayTypeDDot.", ast.IL1,ast.IL2, ast.T);
   }
