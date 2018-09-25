@@ -422,29 +422,19 @@ public class Parser {
     
     case Token.IF:{///////////////////////// PREGUNTAR 
         acceptIt();
-        Expression e1AST = parseExpression();
+        Expression eAST = parseExpression();
         accept(Token.THEN);
         Command c1AST = parseCommand();
-        while (currentToken.kind == Token.ELSIF) {
-            acceptIt();
-            Expression e2AST = parseExpression();
-            accept(Token.THEN);
-            Command c2AST = parseCommand();
-            commandAST = new IfCommand(e1AST,e2AST,c1AST,c2AST,commandPos);
-    }
-        accept(Token.ELSE);
-        Command c2AST = parseCommand();
+        Command c2AST = parseElsifCommand(); // Aqui se llama a la funcion auxiliar para procesar ("elsif" Expression "then" Command)*"else" Command "end" y que devuelva un command para poder crear el AST correctamente
         accept(Token.END);
         finish(commandPos);
-        
-        //return commandAST;
-    
+        commandAST = new IfCommand(eAST,c1AST,c2AST,commandPos);
     }break;
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////// "select" Expression "from" Cases "end"  //////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+    /*
     case Token.SELECT:{
         acceptIt();
         Expression eAST = parseExpression();
@@ -453,7 +443,7 @@ public class Parser {
     
     
     }break;
-    
+    */
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -479,6 +469,47 @@ public class Parser {
 
     return commandAST;
   }
+  
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////// metodo auxiliar para el caso IF de single-command  ///////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //Aqui se procesa  - ("elsif" Expression "then" Command)*"else" Command "end" - perteneciente al caso IF de single-command ////
+  
+  Command parseElsifCommand() throws SyntaxError {
+    Command commandAST = null; 
+    SourcePosition commandPos = new SourcePosition();
+    start(commandPos);
+    switch(currentToken.kind){
+      case Token.ELSIF:
+        {
+          acceptIt();
+          Expression eAST = parseExpression();
+          accept(Token.THEN);
+          Command cAST = parseCommand();
+          finish(commandPos);
+          commandAST = new IfCommand(eAST, cAST, parseElsifCommand(), commandPos); // Se utiliza parseElsif porque debe llamarse recursivamente a si mismo (y devuelve un command)
+        }
+        break;
+        
+        case Token.ELSE:
+        {
+          acceptIt();
+          Command elseAST = parseCommand();          
+          finish(commandPos);
+          commandAST = elseAST;
+        }
+        break;
+      default: // error tomado del metodo parseSingleCommand
+      syntacticError("\"%\" cannot start a command",
+        currentToken.spelling);
+      break;
+    }
+    return commandAST; //// Lo que se devulve aqui es lo que se toma para procesar el IF de single-command y crear el AST correctamente
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 //
