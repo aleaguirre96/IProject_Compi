@@ -72,7 +72,7 @@ final class Token extends Object {
     CONST		= 6,
     DO			= 7,
     ELSE		= 8,
-    ELSFIF              = 9,   // AGREGADO////////////////////////
+    ELSIF              = 9,   // AGREGADO////////////////////////
     END			= 10,
     FOR                 = 11,   // AGREGADO////////////////////////
     FROM                = 12,   // AGREGADO////////////////////////
