@@ -427,19 +427,7 @@ public class Parser {
         Expression eAST = parseExpression();
         accept(Token.THEN);
         Command c1AST = parseCommand();
-<<<<<<< Updated upstream
         Command c2AST = parseElsifCommand(); // Aqui se llama a la funcion auxiliar para procesar ("elsif" Expression "then" Command)*"else" Command "end" y que devuelva un command para poder crear el AST correctamente
-=======
-        while (currentToken.kind == Token.ELSIF) {
-            acceptIt();
-            Expression e2AST = parseExpression();
-            accept(Token.THEN);
-            Command c2AST = parseCommand();
-            //commandAST = new IfCommand(e1AST,e2AST,c1AST,c2AST,commandPos);
-    }
-        accept(Token.ELSE);
-        Command c2AST = parseCommand();
->>>>>>> Stashed changes
         accept(Token.END);
         finish(commandPos);
         commandAST = new IfCommand(eAST,c1AST,c2AST,commandPos);
