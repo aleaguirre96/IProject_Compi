@@ -603,11 +603,11 @@ public class Parser {
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
     declarationAST = parseCompoundDeclaration();
-    if (currentToken.kind == Token.SEMICOLON) {
-        acceptIt();
-        Declaration d2AST = parseCompoundDeclaration();
-        finish(declarationPos);
-        declarationAST = new SequentialDeclaration(declarationAST, d2AST,
+    while (currentToken.kind == Token.SEMICOLON) {
+      acceptIt();
+      Declaration d2AST = parseCompoundDeclaration();
+      finish(declarationPos);
+      declarationAST = new SequentialDeclaration(declarationAST, d2AST,
         declarationPos);
     }
     return declarationAST;
@@ -732,8 +732,8 @@ public class Parser {
         FormalParameterSequence fpsAST = parseFormalParameterSequence();
         accept(Token.RPAREN);
         accept(Token.IS);
-        Command cAST = parseCommand(); //  Cambiado el single-Command por Command////////////////////////////////////////////
-        accept(Token.END);//agregado el accept del token END ///////////////////////////////////////////////////////////////
+        Command cAST = parseCommand();                                              //  Cambiado el single-Command por Command////////////////////////////////////////////
+        accept(Token.END);                                                          //agregado el accept del token END ///////////////////////////////////////////////////////////////
         finish(declarationPos);
         declarationAST = new ProcDeclaration(iAST, fpsAST, cAST, declarationPos);
       }
@@ -803,7 +803,8 @@ public class Parser {
         }
         break;
       default:
-      syntacticError("\"%\" cannot start neither a process nor a function declaration",
+      syntacticError("\"%\" cannot start neither a process nor a function "
+              + "declaration",
         currentToken.spelling);
       break;
     }
@@ -826,13 +827,15 @@ public class Parser {
     accept(Token.STICK);
     Declaration pf2AST = parseProcFuncDeclaration();
     
-    declarationAST = new SequentialDeclaration(declarationAST, pf2AST, declarationPos);
+    declarationAST = new SequentialDeclaration(declarationAST, pf2AST, 
+            declarationPos);
     
     while(currentToken.kind == Token.STICK){
       acceptIt();
       Declaration pfAuxAST = parseProcFuncDeclaration();
       finish(declarationPos);
-      declarationAST = new SequentialDeclaration(declarationAST, pfAuxAST, declarationPos);
+      declarationAST = new SequentialDeclaration(declarationAST, pfAuxAST, 
+              declarationPos);
     }
     return declarationAST;
   }
