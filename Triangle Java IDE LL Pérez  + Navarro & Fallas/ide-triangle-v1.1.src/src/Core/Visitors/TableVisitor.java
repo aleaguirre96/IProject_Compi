@@ -24,7 +24,7 @@ import Triangle.AbstractSyntaxTrees.ConstDeclaration;
 import Triangle.AbstractSyntaxTrees.ConstFormalParameter;
 import Triangle.AbstractSyntaxTrees.DotVname;
 import Triangle.AbstractSyntaxTrees.EmptyActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.EmptyCommand;
+// Eliminado import de EmptyCommand
 import Triangle.AbstractSyntaxTrees.EmptyExpression;
 import Triangle.AbstractSyntaxTrees.EmptyFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.ErrorTypeDenoter;
@@ -120,11 +120,12 @@ public class TableVisitor implements Visitor {
       return(null);
   }
   
-  public Object visitEmptyCommand(EmptyCommand ast, Object o) { 
-      return(null);
-  }
+  // Eliminado metodo de EmptyCommand
   
-
+  //Se agrega a la tabla de lo que debe de recorrer el visitor
+    public Object visitNILCommand(NILCommand ast, Object o) {
+      return (null); 
+    }
   
   public Object visitIfCommand(IfCommand ast, Object o) { 
       ast.E.visit(this, null);
@@ -154,6 +155,53 @@ public class TableVisitor implements Visitor {
       
       return(null);
   }
+  
+  /////////////////////////////////////////// Repeats agragados por el quipo ///////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+  
+    public Object visitRepeatWhile(RepeatWhile ast, Object o) {
+        ast.C.visit(this, null);
+        ast.E.visit(this, null);
+        return(null);
+    }
+    
+     
+    public Object visitRepeatUntil(RepeatUntil ast, Object o) {
+        ast.C.visit(this, null);
+        ast.E.visit(this, null);
+        return(null);
+    }
+    
+    public Object visitRepeatDoWhile(RepeatDoWhile ast, Object o) {
+        ast.C.visit(this, null);
+        ast.E.visit(this, null);
+        return(null);
+    }
+    
+    
+     public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) {
+        ast.C.visit(this, null);
+        ast.E.visit(this, null);
+        return(null);
+    }
+     
+     public Object visitRepeatFor(RepeatFor ast, Object o) {
+        ast.C.visit(this, null);
+        ast.E1.visit(this, null);
+        ast.E2.visit(this, null);
+        ast.I.visit(this, null);
+        return(null);
+    }
+    
+    
+    
+    
+    
+  
+  
+  
+  
   // </editor-fold>
 
   // <editor-fold defaultstate="collapsed" desc=" Expressions ">
@@ -654,51 +702,7 @@ public class TableVisitor implements Visitor {
     // </editor-fold>
 
     
-  /////////////////////////////////////////// Repeats agragados por el quipo ///////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    @Override // preguntar si es necesario 
-    public Object visitRepeatWhile(RepeatWhile ast, Object o) {
-        ast.C.visit(this, null);
-        ast.E.visit(this, null);
-        return(null);
-    }
-    
-     
-    public Object visitRepeatUntil(RepeatUntil ast, Object o) {
-        ast.C.visit(this, null);
-        ast.E.visit(this, null);
-        return(null);
-    }
-    
-    public Object visitRepeatDoWhile(RepeatDoWhile ast, Object o) {
-        ast.C.visit(this, null);
-        ast.E.visit(this, null);
-        return(null);
-    }
-    
-    
-     public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) {
-        ast.C.visit(this, null);
-        ast.E.visit(this, null);
-        return(null);
-    }
-     
-     public Object visitRepeatFor(RepeatFor ast, Object o) {
-        ast.C.visit(this, null);
-        ast.E1.visit(this, null);
-        ast.E2.visit(this, null);
-        ast.I.visit(this, null);
-        return(null);
-    }
-    
-    
-    
-    
-      //Se agrega a la tabla de lo que debe de recorrer el visitor
-    public Object visitNILCommand(NILCommand ast, Object o) {
-      return (null); 
-    }
+  
   
     
   //Metodo visitor para el caso "var" Identifier ":=" Expression

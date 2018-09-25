@@ -35,7 +35,7 @@ import Triangle.AbstractSyntaxTrees.ConstFormalParameter;
 import Triangle.AbstractSyntaxTrees.Declaration;
 import Triangle.AbstractSyntaxTrees.DotVname;
 import Triangle.AbstractSyntaxTrees.EmptyActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.EmptyCommand;
+///// eliminado el import del EmptyCommand
 import Triangle.AbstractSyntaxTrees.EmptyFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.Expression;
 import Triangle.AbstractSyntaxTrees.FieldTypeDenoter;
@@ -1032,8 +1032,8 @@ public class Parser {
     return commandAST;
   }
   /*--------------------------------------------------------------------
-  Se agrega la regla:
-  Case-Literals ::= Case-Literal ("|" Case-Literal)*
+  Se agrega la regla:                                                  
+  Case-Literals ::= Case-Literal ("|" Case-Literal)*                   
   --------------------------------------------------------------------*/
   Expression parseCaseLiterals()throws SyntaxError {
     Expression expressionAST = null; // in case there's a syntactic error

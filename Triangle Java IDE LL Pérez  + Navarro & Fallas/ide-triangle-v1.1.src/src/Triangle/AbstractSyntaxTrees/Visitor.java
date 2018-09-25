@@ -22,7 +22,7 @@ public interface Visitor {
   // Commands
   public abstract Object visitAssignCommand(AssignCommand ast, Object o);
   public abstract Object visitCallCommand(CallCommand ast, Object o);
-  public abstract Object visitEmptyCommand(EmptyCommand ast, Object o);
+  // eliminado metodo del EmptyCommand
   public abstract Object visitIfCommand(IfCommand ast, Object o);
   public abstract Object visitLetCommand(LetCommand ast, Object o);
   public abstract Object visitNILCommand(NILCommand ast, Object o); //Se agrega el NILcommand al visitor

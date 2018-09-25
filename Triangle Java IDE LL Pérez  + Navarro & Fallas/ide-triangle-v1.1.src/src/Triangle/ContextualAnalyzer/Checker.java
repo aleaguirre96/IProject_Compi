@@ -36,7 +36,7 @@ import Triangle.AbstractSyntaxTrees.ConstFormalParameter;
 import Triangle.AbstractSyntaxTrees.Declaration;
 import Triangle.AbstractSyntaxTrees.DotVname;
 import Triangle.AbstractSyntaxTrees.EmptyActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.EmptyCommand;
+// Eliminado import de EmptyCommand
 import Triangle.AbstractSyntaxTrees.EmptyExpression;
 import Triangle.AbstractSyntaxTrees.EmptyFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.ErrorTypeDenoter;
@@ -132,9 +132,7 @@ public final class Checker implements Visitor {
     return null;
   }
 
-  public Object visitEmptyCommand(EmptyCommand ast, Object o) {
-    return null;
-  }
+ // Eliminado import de EmptyCommand
   
 
 
@@ -850,7 +848,7 @@ public final class Checker implements Visitor {
     ProcDeclaration binding;
 
     binding = new ProcDeclaration(new Identifier(id, dummyPos), fps,
-                                  new EmptyCommand(dummyPos), dummyPos);
+                                  new NILCommand(dummyPos), dummyPos); // se cambio EmptyCommand por NILCommand para evitar un error
     idTable.enter(id, binding);
     return binding;
   }

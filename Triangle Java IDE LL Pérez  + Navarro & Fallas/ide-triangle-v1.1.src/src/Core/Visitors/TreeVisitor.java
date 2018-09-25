@@ -24,7 +24,7 @@ import Triangle.AbstractSyntaxTrees.ConstDeclaration;
 import Triangle.AbstractSyntaxTrees.ConstFormalParameter;
 import Triangle.AbstractSyntaxTrees.DotVname;
 import Triangle.AbstractSyntaxTrees.EmptyActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.EmptyCommand;
+// Eliminado import de EmptyCommand
 import Triangle.AbstractSyntaxTrees.EmptyExpression;
 import Triangle.AbstractSyntaxTrees.EmptyFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.ErrorTypeDenoter;
@@ -98,6 +98,10 @@ public class TreeVisitor implements Visitor {
     public TreeVisitor() {
     }
     
+    
+    
+    
+    
     // <editor-fold defaultstate="collapsed" desc=" Commands ">    
     // Commands  
     public Object visitAssignCommand(AssignCommand ast, Object o) {
@@ -108,9 +112,7 @@ public class TreeVisitor implements Visitor {
         return(createBinary("Call Command", ast.I, ast.APS));
     }
     
-    public Object visitEmptyCommand(EmptyCommand ast, Object o) {
-        return(createNullary("Empty Command"));
-    }
+    // Eliminado metodo de EmptyCommand
     
     //Se agrega al Tree Visitor
     public Object visitNILCommand(NILCommand ast, Object o) {
@@ -132,6 +134,35 @@ public class TreeVisitor implements Visitor {
     public Object visitWhileCommand(WhileCommand ast, Object obj) {
         return(createBinary("While Command", ast.E, ast.C));
     }
+    
+ /////////////////////////////////////////// Repeats agragados por el quipo ///////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    public Object visitRepeatWhile(RepeatWhile ast, Object o) {
+        return(createBinary("RepeatWhile", ast.C,ast.E));
+    }
+    
+    public Object visitRepeatUntil(RepeatUntil ast, Object o) {
+        return(createBinary("RepeatUntil", ast.C,ast.E));
+    }
+    
+    public Object visitRepeatDoWhile(RepeatDoWhile ast, Object o) {
+        return(createBinary("RepeatUntil", ast.C,ast.E));
+    }
+    
+    public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) {
+        return(createBinary("RepeatUntil", ast.C,ast.E));
+    }
+   
+    public Object visitRepeatFor(RepeatFor ast, Object o) {
+        return(createQuaternary("RepeatFor", ast.C,ast.E1,ast.E2,ast.I));
+    }
+    
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+    
+    
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc=" Expressions ">
@@ -469,36 +500,7 @@ public class TreeVisitor implements Visitor {
 
     
  
- /////////////////////////////////////////// Repeats agragados por el quipo ///////////////////////////////////////////
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    
-    @Override
-    public Object visitRepeatWhile(RepeatWhile ast, Object o) {
-        return(createBinary("RepeatWhile", ast.C,ast.E));
-    }
-    
-    @Override
-    public Object visitRepeatUntil(RepeatUntil ast, Object o) {
-        return(createBinary("RepeatUntil", ast.C,ast.E));
-    }
-    
-     @Override
-    public Object visitRepeatDoWhile(RepeatDoWhile ast, Object o) {
-        return(createBinary("RepeatUntil", ast.C,ast.E));
-    }
-    
-    
-    @Override
-    public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) {
-        return(createBinary("RepeatUntil", ast.C,ast.E));
-    }
-    
-    @Override
-    public Object visitRepeatFor(RepeatFor ast, Object o) {
-        return(createQuaternary("RepeatFor", ast.C,ast.E1,ast.E2,ast.I));
-    }
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
     
   //Metodo visitor para el caso "var" Identifier ":=" Expression
     public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object obj) {
@@ -506,16 +508,13 @@ public class TreeVisitor implements Visitor {
     }
      //Metodo visitor para el caso "array" Integer-Literal [".." Integer-Literal] "of" Type-denoter
     public Object visitArrayTypeDenoterDDot(ArrayTypeDenoterDDot ast,Object o) {
-        
         return(createTernary("Array Type DDot Denoter", ast.IL1,ast.IL2, ast.T));
     }
 
-    @Override
     public Object visitCase(CaseDeclaration ast, Object o) {
         return(createBinary("Sequential Expression", ast.expCase, ast.comandCase));
     }
 
-    @Override
     public Object visitSequentialExpression(SequentialExpression ast, Object o) {
         return(createBinary("Sequential Expression", ast.EXPR1, ast.EXPR2));
     }
