@@ -25,6 +25,7 @@ import Triangle.AbstractSyntaxTrees.AssignCommand;
 import Triangle.AbstractSyntaxTrees.BinaryExpression;
 import Triangle.AbstractSyntaxTrees.CallCommand;
 import Triangle.AbstractSyntaxTrees.CallExpression;
+import Triangle.AbstractSyntaxTrees.CaseDeclaration;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
 import Triangle.AbstractSyntaxTrees.Command;
@@ -34,7 +35,7 @@ import Triangle.AbstractSyntaxTrees.ConstFormalParameter;
 import Triangle.AbstractSyntaxTrees.Declaration;
 import Triangle.AbstractSyntaxTrees.DotVname;
 import Triangle.AbstractSyntaxTrees.EmptyActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.EmptyCommand;
+///// eliminado el import del EmptyCommand
 import Triangle.AbstractSyntaxTrees.EmptyFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.Expression;
 import Triangle.AbstractSyntaxTrees.FieldTypeDenoter;
@@ -73,6 +74,7 @@ import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
+import Triangle.AbstractSyntaxTrees.SequentialExpression;
 import Triangle.AbstractSyntaxTrees.SimpleTypeDenoter;
 import Triangle.AbstractSyntaxTrees.SimpleVname;
 import Triangle.AbstractSyntaxTrees.SingleActualParameterSequence;
@@ -379,7 +381,11 @@ public class Parser {
         case Token.FOR:{  /////// "repeat" "for" Identifier "from" Expression "to" Expression "do" Command "end"
                 acceptIt();
                 Identifier iAST = parseIdentifier();
+<<<<<<< HEAD
                 accept(Token.FROM);
+=======
+                accept(Token.FROM); 
+>>>>>>> master
                 Expression e1AST = parseExpression();
                 accept(Token.TO);
                 Expression e2AST = parseExpression();
@@ -388,17 +394,73 @@ public class Parser {
                 accept(Token.END);
                 finish(commandPos);
                 commandAST = new RepeatFor(iAST, e1AST, e2AST, cAST, commandPos);
+<<<<<<< HEAD
         }
         }
         
-    
-    
-    }
+=======
+            }
+            break;
+            }
+        }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+>>>>>>> master
     
-
     
-
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////agregar "let" Declaration "in" Command "end"  /////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    case Token.LET:{
+        acceptIt();
+        Declaration dAST = parseDeclaration();
+        accept(Token.IN);
+        Command cAST = parseCommand();
+        accept(Token.END);
+        finish(commandPos);
+        commandAST = new LetCommand(dAST, cAST, commandPos);
+    }break;
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    
+    /////////////////////////////////////////////////Agregar///////////////////////////////////////////////////////////////////////
+    ///"if" Expression "then" Command ("elsif" Expression "then" Command)*"else" Command "end"  ///////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    case Token.IF:{///////////////////////// PREGUNTAR 
+        acceptIt();
+        Expression eAST = parseExpression();
+        accept(Token.THEN);
+        Command c1AST = parseCommand();
+        Command c2AST = parseElsifCommand(); // Aqui se llama a la funcion auxiliar para procesar ("elsif" Expression "then" Command)*"else" Command "end" y que devuelva un command para poder crear el AST correctamente
+        accept(Token.END);
+        finish(commandPos);
+        commandAST = new IfCommand(eAST,c1AST,c2AST,commandPos);
+    }break;
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////// "select" Expression "from" Cases "end"  //////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+    case Token.SELECT:{
+        acceptIt();
+        Expression eAST = parseExpression();
+        accept(Token.FROM);
+        //Cases cAST = parseCases();
+        accept(Token.END);
+    }break;
+    */
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
     case Token.SEMICOLON:
     case Token.END:
     case Token.ELSE:
@@ -406,7 +468,7 @@ public class Parser {
     case Token.EOT:
 
       finish(commandPos);
-      commandAST = new EmptyCommand(commandPos);
+      commandAST = new NILCommand(commandPos); ////////////////////////////////////Cambiado EmptyCommand por NILCommand
       break;
 
     default:
@@ -418,6 +480,47 @@ public class Parser {
 
     return commandAST;
   }
+  
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////// metodo auxiliar para el caso IF de single-command  ///////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //Aqui se procesa  - ("elsif" Expression "then" Command)*"else" Command "end" - perteneciente al caso IF de single-command ////
+  
+  Command parseElsifCommand() throws SyntaxError {
+    Command commandAST = null; 
+    SourcePosition commandPos = new SourcePosition();
+    start(commandPos);
+    switch(currentToken.kind){
+      case Token.ELSIF:
+        {
+          acceptIt();
+          Expression eAST = parseExpression();
+          accept(Token.THEN);
+          Command cAST = parseCommand();
+          finish(commandPos);
+          commandAST = new IfCommand(eAST, cAST, parseElsifCommand(), commandPos); // Se utiliza parseElsif porque debe llamarse recursivamente a si mismo (y devuelve un command)
+        }
+        break;
+        
+        case Token.ELSE:
+        {
+          acceptIt();
+          Command elseAST = parseCommand();          
+          finish(commandPos);
+          commandAST = elseAST;
+        }
+        break;
+      default: // error tomado del metodo parseSingleCommand
+      syntacticError("\"%\" cannot start a command",
+        currentToken.spelling);
+      break;
+    }
+    return commandAST; //// Lo que se devulve aqui es lo que se toma para procesar el IF de single-command y crear el AST correctamente
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -662,11 +765,11 @@ public class Parser {
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
     declarationAST = parseCompoundDeclaration();
-    if (currentToken.kind == Token.SEMICOLON) {
-        acceptIt();
-        Declaration d2AST = parseCompoundDeclaration();
-        finish(declarationPos);
-        declarationAST = new SequentialDeclaration(declarationAST, d2AST,
+    while (currentToken.kind == Token.SEMICOLON) {
+      acceptIt();
+      Declaration d2AST = parseCompoundDeclaration();
+      finish(declarationPos);
+      declarationAST = new SequentialDeclaration(declarationAST, d2AST,
         declarationPos);
     }
     return declarationAST;
@@ -792,8 +895,8 @@ public class Parser {
         FormalParameterSequence fpsAST = parseFormalParameterSequence();
         accept(Token.RPAREN);
         accept(Token.IS);
-        Command cAST = parseCommand(); //  Cambiado el single-Command por Command////////////////////////////////////////////
-        accept(Token.END);//agregado el accept del token END ///////////////////////////////////////////////////////////////
+        Command cAST = parseCommand();                                              //  Cambiado el single-Command por Command////////////////////////////////////////////
+        accept(Token.END);                                                          //agregado el accept del token END ///////////////////////////////////////////////////////////////
         finish(declarationPos);
         declarationAST = new ProcDeclaration(iAST, fpsAST, cAST, declarationPos);
       }
@@ -863,7 +966,8 @@ public class Parser {
         }
         break;
       default:
-      syntacticError("\"%\" cannot start neither a process nor a function declaration",
+      syntacticError("\"%\" cannot start neither a process nor a function "
+              + "declaration",
         currentToken.spelling);
       break;
     }
@@ -886,17 +990,103 @@ public class Parser {
     accept(Token.STICK);
     Declaration pf2AST = parseProcFuncDeclaration();
     
-    declarationAST = new SequentialDeclaration(declarationAST, pf2AST, declarationPos);
+    declarationAST = new SequentialDeclaration(declarationAST, pf2AST, 
+            declarationPos);
     
     while(currentToken.kind == Token.STICK){
       acceptIt();
       Declaration pfAuxAST = parseProcFuncDeclaration();
       finish(declarationPos);
-      declarationAST = new SequentialDeclaration(declarationAST, pfAuxAST, declarationPos);
+      declarationAST = new SequentialDeclaration(declarationAST, pfAuxAST, 
+              declarationPos);
     }
     return declarationAST;
   }
   
+  /*--------------------------------------------------------------------
+ Se agrega la regla:
+  Cases::= Case+ [elseCase]
+  --------------------------------------------------------------------*/
+  Command parseCases() throws SyntaxError{
+     return null;
+  }
+  /*--------------------------------------------------------------------
+  Se agrega la regla:
+  Case::= "case" Case-Literals "then" Command
+  --------------------------------------------------------------------*/
+  Command parseCase() throws SyntaxError{
+      Command declarationAST = null;
+      SourcePosition parseCasePos = new SourcePosition();
+      start(parseCasePos);
+      accept(Token.CASE);
+      Expression caseLiterals =  parseCaseLiterals();
+      accept(Token.THEN);
+      Command commandAST = parseCommand();
+      finish(parseCasePos); 
+      declarationAST = new CaseDeclaration(caseLiterals,commandAST,parseCasePos);
+      return declarationAST;
+  }
+  /*--------------------------------------------------------------------
+  Se agrega la regla:
+  ElseCase::= "else" comand
+  --------------------------------------------------------------------*/
+  Command parseElseCase() throws SyntaxError{
+    Command commandAST = null; // in case there's a syntactic error
+
+    SourcePosition commandPos = new SourcePosition();
+    start(commandPos);
+    
+    accept(Token.ELSE);
+    commandAST = parseCommand();           
+    finish(commandPos);
+    return commandAST;
+  }
+  /*--------------------------------------------------------------------
+  Se agrega la regla:                                                  
+  Case-Literals ::= Case-Literal ("|" Case-Literal)*                   
+  --------------------------------------------------------------------*/
+  Expression parseCaseLiterals()throws SyntaxError {
+    Expression expressionAST = null; // in case there's a syntactic error
+    SourcePosition expresionPos = new SourcePosition();
+    start(expresionPos);
+    
+    expressionAST = parseCaseLiteral();
+    while (currentToken.kind == Token.STICK) {
+      acceptIt();
+      Expression nextExpressionAST =  parseCaseLiteral();
+      finish(expresionPos);
+      expressionAST = new SequentialExpression(expressionAST,nextExpressionAST,expresionPos);
+    }
+    return expressionAST;
+  }
+  /*--------------------------------------------------------------------
+  Se agrega la regla:
+   Case-Literal ::= Integer-Literal | Character-Literal
+  ----------------------------------------------------------------------*/
+  Expression parseCaseLiteral() throws SyntaxError{
+    Expression expresionAST = null; // in case there's a syntactic error
+    SourcePosition expresionPos = new SourcePosition();
+    
+    start(expresionPos);
+    
+    switch(currentToken.kind){
+        case Token.INTLITERAL:{
+          IntegerLiteral ilAST  = parseIntegerLiteral();
+          finish(expresionPos);
+          expresionAST = new IntegerExpression(ilAST,expresionPos);
+        }break;
+        case Token.CHARLITERAL:{
+          CharacterLiteral chAST  = parseCharacterLiteral();
+          finish(expresionPos);
+          expresionAST = new CharacterExpression(chAST,expresionPos);
+        }break;
+        default:
+        syntacticError("\"%\" It isn't a case literal",currentToken.spelling);
+        break;
+    }
+    
+    return expresionAST;
+  }
   
 ///////////////////////////////////////////////////////////////////////////////
 //

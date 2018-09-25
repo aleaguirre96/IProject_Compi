@@ -15,11 +15,14 @@
 package Triangle.AbstractSyntaxTrees;
 
 public interface Visitor {
+    
+  //Case
+  public abstract Object visitCase(CaseDeclaration ast, Object o);//Visitor para Case
 
   // Commands
   public abstract Object visitAssignCommand(AssignCommand ast, Object o);
   public abstract Object visitCallCommand(CallCommand ast, Object o);
-  public abstract Object visitEmptyCommand(EmptyCommand ast, Object o);
+  // eliminado metodo del EmptyCommand
   public abstract Object visitIfCommand(IfCommand ast, Object o);
   public abstract Object visitLetCommand(LetCommand ast, Object o);
   public abstract Object visitNILCommand(NILCommand ast, Object o); //Se agrega el NILcommand al visitor
@@ -43,6 +46,7 @@ public interface Visitor {
   public abstract Object visitRecordExpression(RecordExpression ast, Object o);
   public abstract Object visitUnaryExpression(UnaryExpression ast, Object o);
   public abstract Object visitVnameExpression(VnameExpression ast, Object o);
+  public abstract Object visitSequentialExpression(SequentialExpression ast, Object o);//Se agrega el SequentielExpresion para la regla parseCaseLiterals()
 
   // Declarations
   public abstract Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object o);

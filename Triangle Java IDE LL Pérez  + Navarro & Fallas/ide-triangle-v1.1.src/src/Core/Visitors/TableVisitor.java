@@ -15,6 +15,7 @@ import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
 import Triangle.AbstractSyntaxTrees.BoolTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CallCommand;
 import Triangle.AbstractSyntaxTrees.CallExpression;
+import Triangle.AbstractSyntaxTrees.CaseDeclaration;
 import Triangle.AbstractSyntaxTrees.CharTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
@@ -23,7 +24,7 @@ import Triangle.AbstractSyntaxTrees.ConstDeclaration;
 import Triangle.AbstractSyntaxTrees.ConstFormalParameter;
 import Triangle.AbstractSyntaxTrees.DotVname;
 import Triangle.AbstractSyntaxTrees.EmptyActualParameterSequence;
-import Triangle.AbstractSyntaxTrees.EmptyCommand;
+// Eliminado import de EmptyCommand
 import Triangle.AbstractSyntaxTrees.EmptyExpression;
 import Triangle.AbstractSyntaxTrees.EmptyFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.ErrorTypeDenoter;
@@ -60,6 +61,7 @@ import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
+import Triangle.AbstractSyntaxTrees.SequentialExpression;
 import Triangle.AbstractSyntaxTrees.SimpleTypeDenoter;
 import Triangle.AbstractSyntaxTrees.SimpleVname;
 import Triangle.AbstractSyntaxTrees.SingleActualParameterSequence;
@@ -118,11 +120,12 @@ public class TableVisitor implements Visitor {
       return(null);
   }
   
-  public Object visitEmptyCommand(EmptyCommand ast, Object o) { 
-      return(null);
-  }
+  // Eliminado metodo de EmptyCommand
   
-
+  //Se agrega a la tabla de lo que debe de recorrer el visitor
+    public Object visitNILCommand(NILCommand ast, Object o) {
+      return (null); 
+    }
   
   public Object visitIfCommand(IfCommand ast, Object o) { 
       ast.E.visit(this, null);
@@ -152,6 +155,53 @@ public class TableVisitor implements Visitor {
       
       return(null);
   }
+  
+  /////////////////////////////////////////// Repeats agragados por el quipo ///////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+  
+    public Object visitRepeatWhile(RepeatWhile ast, Object o) {
+        ast.C.visit(this, null);
+        ast.E.visit(this, null);
+        return(null);
+    }
+    
+     
+    public Object visitRepeatUntil(RepeatUntil ast, Object o) {
+        ast.C.visit(this, null);
+        ast.E.visit(this, null);
+        return(null);
+    }
+    
+    public Object visitRepeatDoWhile(RepeatDoWhile ast, Object o) {
+        ast.C.visit(this, null);
+        ast.E.visit(this, null);
+        return(null);
+    }
+    
+    
+     public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) {
+        ast.C.visit(this, null);
+        ast.E.visit(this, null);
+        return(null);
+    }
+     
+     public Object visitRepeatFor(RepeatFor ast, Object o) {
+        ast.C.visit(this, null);
+        ast.E1.visit(this, null);
+        ast.E2.visit(this, null);
+        ast.I.visit(this, null);
+        return(null);
+    }
+    
+    
+    
+    
+    
+  
+  
+  
+  
   // </editor-fold>
 
   // <editor-fold defaultstate="collapsed" desc=" Expressions ">
@@ -652,6 +702,7 @@ public class TableVisitor implements Visitor {
     // </editor-fold>
 
     
+<<<<<<< HEAD
   /////////////////////////////////////////// Repeats agragados por el quipo ///////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
@@ -697,6 +748,9 @@ public class TableVisitor implements Visitor {
     public Object visitNILCommand(NILCommand ast, Object o) {
       return (null); 
     }
+=======
+  
+>>>>>>> master
   
     
   //Metodo visitor para el caso "var" Identifier ":=" Expression
@@ -720,6 +774,20 @@ public class TableVisitor implements Visitor {
       ast.T.visit(this, null);
       
       return(null);
+    }
+
+    @Override
+    public Object visitCase(CaseDeclaration ast, Object o) {
+        ast.expCase.visit(this, null);
+        ast.comandCase.visit(this, null);
+        return(null);
+    }
+
+    @Override
+    public Object visitSequentialExpression(SequentialExpression ast, Object o) {
+        ast.EXPR1.visit(this, null);
+        ast.EXPR2.visit(this, null);
+        return(null);
     }
 
    
