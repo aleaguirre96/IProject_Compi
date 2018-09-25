@@ -381,7 +381,11 @@ public class Parser {
         case Token.FOR:{  /////// "repeat" "for" Identifier "from" Expression "to" Expression "do" Command "end"
                 acceptIt();
                 Identifier iAST = parseIdentifier();
+<<<<<<< HEAD
+                accept(Token.FROM);
+=======
                 accept(Token.FROM); 
+>>>>>>> master
                 Expression e1AST = parseExpression();
                 accept(Token.TO);
                 Expression e2AST = parseExpression();
@@ -390,6 +394,11 @@ public class Parser {
                 accept(Token.END);
                 finish(commandPos);
                 commandAST = new RepeatFor(iAST, e1AST, e2AST, cAST, commandPos);
+<<<<<<< HEAD
+        }
+        }
+        
+=======
             }
             break;
             }
@@ -397,6 +406,7 @@ public class Parser {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+>>>>>>> master
     
     
     
