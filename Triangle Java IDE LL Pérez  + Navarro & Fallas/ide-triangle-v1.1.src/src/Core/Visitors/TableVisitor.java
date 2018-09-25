@@ -15,6 +15,7 @@ import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
 import Triangle.AbstractSyntaxTrees.BoolTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CallCommand;
 import Triangle.AbstractSyntaxTrees.CallExpression;
+import Triangle.AbstractSyntaxTrees.CaseDeclaration;
 import Triangle.AbstractSyntaxTrees.CharTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
@@ -60,6 +61,7 @@ import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
+import Triangle.AbstractSyntaxTrees.SequentialExpression;
 import Triangle.AbstractSyntaxTrees.SimpleTypeDenoter;
 import Triangle.AbstractSyntaxTrees.SimpleVname;
 import Triangle.AbstractSyntaxTrees.SingleActualParameterSequence;
@@ -720,6 +722,20 @@ public class TableVisitor implements Visitor {
       ast.T.visit(this, null);
       
       return(null);
+    }
+
+    @Override
+    public Object visitCase(CaseDeclaration ast, Object o) {
+        ast.expCase.visit(this, null);
+        ast.comandCase.visit(this, null);
+        return(null);
+    }
+
+    @Override
+    public Object visitSequentialExpression(SequentialExpression ast, Object o) {
+        ast.EXPR1.visit(this, null);
+        ast.EXPR2.visit(this, null);
+        return(null);
     }
 
    
