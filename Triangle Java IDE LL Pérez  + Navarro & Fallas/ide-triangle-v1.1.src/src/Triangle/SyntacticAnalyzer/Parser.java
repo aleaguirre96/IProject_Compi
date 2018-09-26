@@ -381,11 +381,9 @@ public class Parser {
         case Token.FOR:{  /////// "repeat" "for" Identifier "from" Expression "to" Expression "do" Command "end"
                 acceptIt();
                 Identifier iAST = parseIdentifier();
-<<<<<<< HEAD
-                accept(Token.FROM);
-=======
+
                 accept(Token.FROM); 
->>>>>>> master
+
                 Expression e1AST = parseExpression();
                 accept(Token.TO);
                 Expression e2AST = parseExpression();
@@ -394,19 +392,13 @@ public class Parser {
                 accept(Token.END);
                 finish(commandPos);
                 commandAST = new RepeatFor(iAST, e1AST, e2AST, cAST, commandPos);
-<<<<<<< HEAD
-        }
-        }
-        
-=======
             }
             break;
             }
-        }
+        }break;
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
->>>>>>> master
     
     
     
@@ -871,7 +863,7 @@ public class Parser {
                 finish(declarationPos);
                 declarationAST = new VarDeclaration(iAST, tAST, declarationPos);
             }break;    
-            case Token.BECOMES:{ //Declaracion := //declaración de variable inicializada
+            case Token.BECOMES:{ //Declaracion := //declaraciï¿½n de variable inicializada
                 acceptIt();
                 Expression eAST = parseExpression();//Expresion 
                 finish(declarationPos);
@@ -884,7 +876,7 @@ public class Parser {
       }
       break;
       
-    /*Se modificar la opción referente a proc para que se lea:
+    /*Se modificar la opciï¿½n referente a proc para que se lea:
         | "proc" Identifier "(" Formal-Parameter-Sequence ")""~" Command "end"*/
 
     case Token.PROC:
@@ -1008,7 +1000,24 @@ public class Parser {
   Cases::= Case+ [elseCase]
   --------------------------------------------------------------------*/
   Command parseCases() throws SyntaxError{
-     return null;
+     Command commandAST = null;
+     SourcePosition parseCasePos = new SourcePosition();
+     start(parseCasePos);
+     Command commandCase = parseCase();
+     
+     while(currentToken.kind == Token.CASE){
+         Command commandCaseNext = parseCase();
+         finish(parseCasePos);
+         commandAST = new SequentialCommand(commandCase, commandCaseNext,parseCasePos);
+     }
+     
+     if(currentToken.kind == Token.CASE) {
+         
+        //declarationAST = 
+     }else{
+     }
+     
+     return commandAST; 
   }
   /*--------------------------------------------------------------------
   Se agrega la regla:

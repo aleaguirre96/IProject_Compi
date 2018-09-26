@@ -500,40 +500,7 @@ public class TreeVisitor implements Visitor {
 
     
  
-<<<<<<< HEAD
- /////////////////////////////////////////// Repeats agragados por el quipo ///////////////////////////////////////////
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    
-    @Override
-    public Object visitRepeatWhile(RepeatWhile ast, Object o) {
-        return(createBinary("RepeatWhile", ast.C,ast.E));
-    }
-    
-    @Override
-    public Object visitRepeatUntil(RepeatUntil ast, Object o) {
-        return(createBinary("RepeatUntil", ast.C,ast.E));
-    }
-    
-     @Override
-    public Object visitRepeatDoWhile(RepeatDoWhile ast, Object o) {
-        return(createBinary("RepeatUntil", ast.C,ast.E));
-    }
-    
-    
-    @Override
-    public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) {
-        return(createBinary("RepeatUntil", ast.C,ast.E));
-    }
-    
-    @Override
-    public Object visitRepeatFor(RepeatFor ast, Object o) {
-        return(createQuaternary("RepeatFor", ast.C,ast.E1,ast.E2,ast.I));
-    }
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-=======
- 
->>>>>>> master
+
     
   //Metodo visitor para el caso "var" Identifier ":=" Expression
     public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object obj) {
