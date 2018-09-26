@@ -25,7 +25,10 @@ import Triangle.AbstractSyntaxTrees.AssignCommand;
 import Triangle.AbstractSyntaxTrees.BinaryExpression;
 import Triangle.AbstractSyntaxTrees.CallCommand;
 import Triangle.AbstractSyntaxTrees.CallExpression;
+import Triangle.AbstractSyntaxTrees.Case;
 import Triangle.AbstractSyntaxTrees.CaseCommand;
+import Triangle.AbstractSyntaxTrees.CaseElseCommand;
+import Triangle.AbstractSyntaxTrees.CasesCommand;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
 import Triangle.AbstractSyntaxTrees.Command;
@@ -999,25 +1002,26 @@ public class Parser {
   --------------------------------------------------------------------*/
   Command parseCases() throws SyntaxError{
      Command commandAST = null;
+     Case caseCom = null;
+     
      SourcePosition parseCasePos = new SourcePosition();
      start(parseCasePos);
-     commandAST = parseCase();
-     
+     caseCom = parseCase();
      while(currentToken.kind == Token.CASE){
          CaseCommand commandCaseNext = parseCase();
          finish(parseCasePos);
-         commandAST = new SequentialCases((CaseCommand) commandAST, commandCaseNext,parseCasePos);
+         caseCom = new SequentialCases(caseCom, commandCaseNext,parseCasePos);
      }
      
-     /*[Caso else]
      if(currentToken.kind == Token.ELSE) {
-        Command elseCommand = parseElseCase();
+        CaseElseCommand elseCommand = parseElseCase();
         finish(parseCasePos);
-       
+        caseCom = new SequentialCases(caseCom,elseCommand,parseCasePos);
+        commandAST = new CasesCommand(caseCom,parseCasePos);
      }else{
         finish(parseCasePos);
-        commandAST = CasesCommand(commandAST,parseCasePos);
-     }*/
+        commandAST = new CasesCommand(caseCom,parseCasePos);
+     }
      
      return commandAST; 
   }
@@ -1041,16 +1045,17 @@ public class Parser {
   Se agrega la regla:
   ElseCase::= "else" comand
   --------------------------------------------------------------------*/
-  Command parseElseCase() throws SyntaxError{
-    Command commandAST = null; // in case there's a syntactic error
-
+  CaseElseCommand parseElseCase() throws SyntaxError{
+    CaseElseCommand commandCaseElseAST = null; // in case there's a syntactic error
+    Command commandElse = null;
     SourcePosition commandPos = new SourcePosition();
     start(commandPos);
     
     accept(Token.ELSE);
-    commandAST = parseCommand();           
+    commandElse = parseCommand();           
     finish(commandPos);
-    return commandAST;
+    commandCaseElseAST = new CaseElseCommand(commandElse,commandPos);
+    return commandCaseElseAST;
   }
   /*--------------------------------------------------------------------
   Se agrega la regla:                                                  

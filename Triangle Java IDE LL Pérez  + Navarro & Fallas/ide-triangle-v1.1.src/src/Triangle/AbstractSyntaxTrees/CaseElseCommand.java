@@ -11,20 +11,17 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
  *
  * @author jose
  */
-public class CaseCommand extends Case{
-    public Expression expCase;
-    public Command comandCase;
+public class CaseElseCommand extends Case{
 
-    public CaseCommand(Expression expresion, Command comando,SourcePosition thePosition) {
+    Command commandCaseElse;
+            
+    public CaseElseCommand(Command commandElse,SourcePosition thePosition) {
         super(thePosition);
-        expCase = expresion;
-        comandCase = comando;
+        commandCaseElse = commandElse;
     }
-    
 
-    @Override
     public Object visit(Visitor v, Object o) {
-        return v.visitCase(this,o);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

@@ -11,18 +11,17 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
  *
  * @author jose
  */
-public class SequentialCases extends Command{
-    CaseCommand commandC,commandCNext;
+public class SequentialCases extends Case{
+    Case commandC,commandCNext;
 
-    public SequentialCases(CaseCommand commandCase,CaseCommand commandCaseNext,SourcePosition thePosition) {
+    public SequentialCases(Case commandCase,Case commandCaseNext,SourcePosition thePosition) {
         super(thePosition);
         commandC = commandCase;
         commandCNext = commandCaseNext;
     }
 
-    @Override
     public Object visit(Visitor v, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return v.visitSequentialCases(this, o);
     }
     
 }

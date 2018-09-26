@@ -18,6 +18,7 @@ public interface Visitor {
     
   //Case
   public abstract Object visitCase(CaseCommand ast, Object o);//Visitor para Case
+  public abstract Object visitSequentialCases(SequentialCases ast,Object o);
 
   // Commands
   public abstract Object visitAssignCommand(AssignCommand ast, Object o);
