@@ -25,7 +25,7 @@ import Triangle.AbstractSyntaxTrees.AssignCommand;
 import Triangle.AbstractSyntaxTrees.BinaryExpression;
 import Triangle.AbstractSyntaxTrees.CallCommand;
 import Triangle.AbstractSyntaxTrees.CallExpression;
-import Triangle.AbstractSyntaxTrees.CaseDeclaration;
+import Triangle.AbstractSyntaxTrees.CaseCommand;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
 import Triangle.AbstractSyntaxTrees.Command;
@@ -72,6 +72,7 @@ import Triangle.AbstractSyntaxTrees.RepeatDoWhile;
 import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
+import Triangle.AbstractSyntaxTrees.SequentialCases;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
 import Triangle.AbstractSyntaxTrees.SequentialExpression;
@@ -1003,19 +1004,23 @@ public class Parser {
      Command commandAST = null;
      SourcePosition parseCasePos = new SourcePosition();
      start(parseCasePos);
-     Command commandCase = parseCase();
+     commandAST = parseCase();
      
      while(currentToken.kind == Token.CASE){
-         Command commandCaseNext = parseCase();
+         CaseCommand commandCaseNext = parseCase();
          finish(parseCasePos);
-         commandAST = new SequentialCommand(commandCase, commandCaseNext,parseCasePos);
+         commandAST = new SequentialCases((CaseCommand) commandAST, commandCaseNext,parseCasePos);
      }
      
-     if(currentToken.kind == Token.CASE) {
-         
-        //declarationAST = 
+     /*[Caso else]
+     if(currentToken.kind == Token.ELSE) {
+        Command elseCommand = parseElseCase();
+        finish(parseCasePos);
+       
      }else{
-     }
+        finish(parseCasePos);
+        commandAST = CasesCommand(commandAST,parseCasePos);
+     }*/
      
      return commandAST; 
   }
@@ -1023,8 +1028,8 @@ public class Parser {
   Se agrega la regla:
   Case::= "case" Case-Literals "then" Command
   --------------------------------------------------------------------*/
-  Command parseCase() throws SyntaxError{
-      Command declarationAST = null;
+  CaseCommand parseCase() throws SyntaxError{
+      CaseCommand declarationAST = null;
       SourcePosition parseCasePos = new SourcePosition();
       start(parseCasePos);
       accept(Token.CASE);
@@ -1032,7 +1037,7 @@ public class Parser {
       accept(Token.THEN);
       Command commandAST = parseCommand();
       finish(parseCasePos); 
-      declarationAST = new CaseDeclaration(caseLiterals,commandAST,parseCasePos);
+      declarationAST = new CaseCommand(caseLiterals,commandAST,parseCasePos);
       return declarationAST;
   }
   /*--------------------------------------------------------------------

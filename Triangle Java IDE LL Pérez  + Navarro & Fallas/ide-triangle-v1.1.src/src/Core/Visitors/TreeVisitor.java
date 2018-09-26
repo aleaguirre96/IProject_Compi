@@ -15,7 +15,7 @@ import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
 import Triangle.AbstractSyntaxTrees.BoolTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CallCommand;
 import Triangle.AbstractSyntaxTrees.CallExpression;
-import Triangle.AbstractSyntaxTrees.CaseDeclaration;
+import Triangle.AbstractSyntaxTrees.CaseCommand;
 import Triangle.AbstractSyntaxTrees.CharTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
@@ -511,7 +511,7 @@ public class TreeVisitor implements Visitor {
         return(createTernary("Array Type DDot Denoter", ast.IL1,ast.IL2, ast.T));
     }
 
-    public Object visitCase(CaseDeclaration ast, Object o) {
+    public Object visitCase(CaseCommand ast, Object o) {
         return(createBinary("Sequential Expression", ast.expCase, ast.comandCase));
     }
 

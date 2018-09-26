@@ -11,11 +11,11 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
  *
  * @author jose
  */
-public class CaseDeclaration extends Command{
+public class CaseCommand extends Command{
     public Expression expCase;
     public Command comandCase;
 
-    public CaseDeclaration(Expression expresion, Command comando,SourcePosition thePosition) {
+    public CaseCommand(Expression expresion, Command comando,SourcePosition thePosition) {
         super(thePosition);
         expCase = expresion;
         comandCase = comando;

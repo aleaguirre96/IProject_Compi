@@ -17,7 +17,7 @@ package Triangle.AbstractSyntaxTrees;
 public interface Visitor {
     
   //Case
-  public abstract Object visitCase(CaseDeclaration ast, Object o);//Visitor para Case
+  public abstract Object visitCase(CaseCommand ast, Object o);//Visitor para Case
 
   // Commands
   public abstract Object visitAssignCommand(AssignCommand ast, Object o);
