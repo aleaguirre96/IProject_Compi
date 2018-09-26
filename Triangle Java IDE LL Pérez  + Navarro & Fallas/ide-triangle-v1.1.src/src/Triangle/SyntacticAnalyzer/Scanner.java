@@ -129,8 +129,12 @@ public final class Scanner {
         return Token.ERROR;
 
     case '.':
-      takeIt();
-      return Token.DOT;
+        if (currentChar == '.'){
+            takeIt();
+            return Token.DDOT;
+        }
+        takeIt();
+        return Token.DOT;
 
     case ':':
       takeIt();
@@ -175,6 +179,11 @@ public final class Scanner {
     case '}':
       takeIt();
       return Token.RCURLY;
+        
+    case '|':
+        takeIt();
+        return Token.STICK;
+      
 
     case SourceFile.EOT:
       return Token.EOT;
