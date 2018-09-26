@@ -315,10 +315,11 @@ public class Parser {
       commandAST = new NILCommand(commandPos);   
     }
       break;
+      
       // Eliminada la alternativa BEGIN
       // Eliminada la alternativa LET
       // Eliminada la alternativa IF
-      //ELiminada la alternativa WHILE
+      // Eliminada la alternativa WHILE
 
     /////////////////////////////////////////// tipos de repeat agregados por el equipo ///////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -504,8 +505,7 @@ public class Parser {
         }
         break;
       default: // error tomado del metodo parseSingleCommand
-      syntacticError("\"%\" cannot start a command",
-        currentToken.spelling);
+      syntacticError("\"%\" cannot start a Elsifcommand",currentToken.spelling);
       break;
     }
     return commandAST; //// Lo que se devulve aqui es lo que se toma para procesar el IF de single-command y crear el AST correctamente
@@ -815,8 +815,7 @@ public class Parser {
         }
         break;
       default:
-      syntacticError("\"%\" cannot start a compound declaration",
-        currentToken.spelling);
+      syntacticError("\"%\" cannot start a compound declaration",currentToken.spelling);
       break;
     }
     return declarationAST;
@@ -871,7 +870,7 @@ public class Parser {
                 declarationAST = new VarDeclarationInitialized(iAST,eAST,declarationPos);
             }break;
             default:
-                syntacticError("\"%\" cannot start a VAR declaration",currentToken.spelling);
+                syntacticError("\"%\" cannot start a VARdeclaration",currentToken.spelling);
                 break;     
         }
       }
@@ -959,9 +958,7 @@ public class Parser {
         }
         break;
       default:
-      syntacticError("\"%\" cannot start neither a process nor a function "
-              + "declaration",
-        currentToken.spelling);
+      syntacticError("\"%\" cannot start a process or a function " + "declaration", currentToken.spelling);
       break;
     }
     
@@ -1363,7 +1360,7 @@ public class Parser {
                 typeAST = new ArrayTypeDenoter(ilAST, tAST, typePos);
             }break;
             default:
-                syntacticError("\"%\" cannot start a Array declaration",currentToken.spelling);
+                syntacticError("\"%\" cannot start an Array declaration",currentToken.spelling);
                 break;
             }
     }break;  
