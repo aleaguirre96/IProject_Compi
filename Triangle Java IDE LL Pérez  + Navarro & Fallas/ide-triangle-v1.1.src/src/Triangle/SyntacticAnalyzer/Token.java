@@ -111,14 +111,14 @@ final class Token extends Object {
     RBRACKET            = 41,
     LCURLY		= 42,
     RCURLY		= 43,
+    STICK            = 44,
 
     // special tokens...
-    EOT			= 44,
-    ERROR		= 45,
+    EOT			= 45,
+    ERROR		= 46;
   
   // Alternatives // AGREGADO////////////////////////
-  
-    STICK            = 46;
+
   
          
   
@@ -131,7 +131,6 @@ final class Token extends Object {
     "<identifier>",
     "<operator>",
     "array",
-    "begin",
     "case", // AGREGADO////////////////////////
     "const",
     "do",
@@ -159,6 +158,7 @@ final class Token extends Object {
     "var",
     "while",
     ".",
+    "..", //Agregado
     ":",
     ";",
     ",",
@@ -170,8 +170,7 @@ final class Token extends Object {
     "]",
     "{",
     "}",
-    "..", //Agregado
-    "|",  //Agregado
+    "|",//Agregado
     "",
     "<error>"
   };

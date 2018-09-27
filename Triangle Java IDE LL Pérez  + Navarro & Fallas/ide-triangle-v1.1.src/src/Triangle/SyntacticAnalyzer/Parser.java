@@ -282,10 +282,10 @@ public class Parser {
 
   Command parseSingleCommand() throws SyntaxError {
     Command commandAST = null; // in case there's a syntactic error
-
+    
+    System.out.println("Tipo es Single: "+(currentToken.kind));
     SourcePosition commandPos = new SourcePosition();
     start(commandPos);
-
     switch (currentToken.kind) {
 
 
@@ -307,7 +307,7 @@ public class Parser {
           finish(commandPos);
           commandAST = new AssignCommand(vAST, eAST, commandPos);
         }
-      }
+      }break;
       
       // Aqui se agrega el nuevo comando en este caso el NIL
    
@@ -315,9 +315,8 @@ public class Parser {
     {
       acceptIt();
       finish(commandPos);
-      commandAST = new NILCommand(commandPos);   
-    }
-      break;
+      commandAST = new NILCommand(commandPos);
+    }break;
       
       // Eliminada la alternativa BEGIN
       // Eliminada la alternativa LET
@@ -338,8 +337,7 @@ public class Parser {
                 accept(Token.END);
                 finish(commandPos);
                 commandAST = new RepeatWhile(eAST, cAST, commandPos); // aqui se agrega un metodo para representar el AST***** (PREGUNTAR)
-              }
-              break;
+              }break;
               
         case Token.UNTIL:{ ///////// "repeat" "until" Expression "do" Command "end"
             acceptIt();
@@ -349,8 +347,7 @@ public class Parser {
             accept(Token.END);
             finish(commandPos);
             commandAST = new RepeatUntil(eAST, cAST, commandPos); // aqui se agrega un metodo para representar el AST
-        }
-        break;
+        }break;
         
         case Token.DO:{ /////////"repeat" "do" Command "while" Expression "end"
                  acceptIt();
@@ -362,8 +359,7 @@ public class Parser {
                              accept(Token.END);
                             finish(commandPos);
                              commandAST = new RepeatDoWhile(eAST, cAST, commandPos); // aqui se agrega un metodo para representar el AST
-                        }
-                        break;
+                        }break;
                 
                         case Token.UNTIL:{   ////////////"repeat" "do" Command "until" Expression "end"
                             acceptIt();
@@ -372,8 +368,7 @@ public class Parser {
                             finish(commandPos);
                             commandAST = new RepeatDoUntil(eAST, cAST, commandPos); // aqui se agrega un metodo para representar el AST
                 
-                        }
-                        break;
+                        }break;
                 
                 
                         default:
@@ -397,8 +392,7 @@ public class Parser {
                 accept(Token.END);
                 finish(commandPos);
                 commandAST = new RepeatFor(iAST, e1AST, e2AST, cAST, commandPos);
-            }
-            break;
+            }break;
             }
         }break;
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -463,7 +457,6 @@ public class Parser {
     case Token.ELSE:
     case Token.IN:
     case Token.EOT:
-
       finish(commandPos);
       commandAST = new NILCommand(commandPos); ////////////////////////////////////Cambiado EmptyCommand por NILCommand
       break;
@@ -785,6 +778,7 @@ public class Parser {
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
     
+    System.out.println("Tipo es CompoUd: "+(currentToken.kind));
     switch(currentToken.kind){ 
       //const, var,proc, fun, type => single-Declaration
       case Token.CONST:
@@ -792,9 +786,7 @@ public class Parser {
       case Token.PROC:
       case Token.FUNC:
       case Token.TYPE:
-        {
           declarationAST = parseSingleDeclaration();//parseSingleDeclaration se encarga de acceptarlo
-        }
         break;
         
       case Token.RECURSIVE:
@@ -829,7 +821,8 @@ public class Parser {
 
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
-
+    
+    System.out.println("Tipo es Single: "+(currentToken.kind));
     switch (currentToken.kind) {
     case Token.CONST:
       {

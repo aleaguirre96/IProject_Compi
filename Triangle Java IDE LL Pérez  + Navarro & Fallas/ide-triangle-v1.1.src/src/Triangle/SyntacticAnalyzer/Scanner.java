@@ -129,11 +129,11 @@ public final class Scanner {
         return Token.ERROR;
 
     case '.':
+        takeIt();
         if (currentChar == '.'){
             takeIt();
             return Token.DDOT;
-        }
-        takeIt();
+        }else
         return Token.DOT;
 
     case ':':
