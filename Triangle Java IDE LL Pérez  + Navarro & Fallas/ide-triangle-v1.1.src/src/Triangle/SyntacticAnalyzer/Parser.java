@@ -445,6 +445,7 @@ public class Parser {
         accept(Token.FROM);
         Command cAST = parseCases();
         accept(Token.END);
+        finish(commandPos);
         commandAST = new SelectCommand(eAST,cAST,commandPos);
     }break;
     
@@ -459,6 +460,7 @@ public class Parser {
     case Token.ELSE:
     case Token.IN:
     case Token.EOT:
+        
       finish(commandPos);
       commandAST = new NILCommand(commandPos); ////////////////////////////////////Cambiado EmptyCommand por NILCommand
       break;
