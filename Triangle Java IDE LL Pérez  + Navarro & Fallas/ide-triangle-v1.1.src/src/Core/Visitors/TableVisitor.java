@@ -61,6 +61,7 @@ import Triangle.AbstractSyntaxTrees.RepeatDoWhile;
 import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
+import Triangle.AbstractSyntaxTrees.SelectCommand;
 import Triangle.AbstractSyntaxTrees.SequentialCases;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
@@ -194,6 +195,14 @@ public class TableVisitor implements Visitor {
         ast.E1.visit(this, null);
         ast.E2.visit(this, null);
         ast.I.visit(this, null);
+        return(null);
+    }
+     
+    
+    ////////// Select agregado ///////////
+    public Object visitSelectCommand(SelectCommand ast, Object o) {
+        ast.C.visit(this, null);
+        ast.E.visit(this, null);
         return(null);
     }
     
@@ -776,6 +785,8 @@ public class TableVisitor implements Visitor {
         ast.CasesCom.visit(this, null);
         return(null);
     }
+
+    
 
    
 

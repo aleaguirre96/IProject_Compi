@@ -75,6 +75,7 @@ import Triangle.AbstractSyntaxTrees.RepeatDoWhile;
 import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
+import Triangle.AbstractSyntaxTrees.SelectCommand;
 import Triangle.AbstractSyntaxTrees.SequentialCases;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
@@ -437,15 +438,16 @@ public class Parser {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////// "select" Expression "from" Cases "end"  //////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /*
+    
     case Token.SELECT:{
         acceptIt();
         Expression eAST = parseExpression();
         accept(Token.FROM);
-        //Cases cAST = parseCases();
+        Command cAST = parseCases();
         accept(Token.END);
+        commandAST = new SelectCommand(eAST,cAST,commandPos);
     }break;
-    */
+    
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

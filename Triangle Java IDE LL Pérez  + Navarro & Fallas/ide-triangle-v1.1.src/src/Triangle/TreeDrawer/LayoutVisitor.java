@@ -73,6 +73,7 @@ import Triangle.AbstractSyntaxTrees.RepeatDoWhile;
 import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
+import Triangle.AbstractSyntaxTrees.SelectCommand;
 import Triangle.AbstractSyntaxTrees.SequentialCases;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
@@ -595,6 +596,10 @@ public class LayoutVisitor implements Visitor {
   
   public Object visitNILCommand(NILCommand ast, Object o) {
     return layoutNullary("NIL.");
+  }
+  
+  public Object visitSelectCommand(SelectCommand ast,Object o){ ///// agregado el visitSelect
+      return layoutBinary("Select.", ast.C,ast.E);
   }
   
   
