@@ -16,6 +16,8 @@ import Triangle.AbstractSyntaxTrees.BoolTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CallCommand;
 import Triangle.AbstractSyntaxTrees.CallExpression;
 import Triangle.AbstractSyntaxTrees.CaseCommand;
+import Triangle.AbstractSyntaxTrees.CaseElseCommand;
+import Triangle.AbstractSyntaxTrees.CasesCommand;
 import Triangle.AbstractSyntaxTrees.CharTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
@@ -59,6 +61,7 @@ import Triangle.AbstractSyntaxTrees.RepeatDoWhile;
 import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
+import Triangle.AbstractSyntaxTrees.SequentialCases;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
 import Triangle.AbstractSyntaxTrees.SequentialExpression;
@@ -752,6 +755,25 @@ public class TableVisitor implements Visitor {
     public Object visitSequentialExpression(SequentialExpression ast, Object o) {
         ast.EXPR1.visit(this, null);
         ast.EXPR2.visit(this, null);
+        return(null);
+    }
+
+    @Override
+    public Object visitSequentialCases(SequentialCases ast, Object o) {
+        ast.commandC.visit(this, null);
+        ast.commandCNext.visit(this, null);
+        return(null);
+    }
+
+    @Override
+    public Object visitCaseElseCommand(CaseElseCommand ast, Object o) {
+        ast.commandCaseElse.visit(this, null);
+        return(null);
+    }
+
+    @Override
+    public Object visitCases(CasesCommand ast, Object o) {
+        ast.CasesCom.visit(this, null);
         return(null);
     }
 

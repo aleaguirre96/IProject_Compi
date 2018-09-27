@@ -12,7 +12,7 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
  * @author jose
  */
 public class CasesCommand extends Case{
-    Case CasesCom;
+    public Case CasesCom;
     
     public CasesCommand(Case CasesComand,SourcePosition thePosition) {
         super(thePosition);
@@ -21,7 +21,7 @@ public class CasesCommand extends Case{
 
     @Override
     public Object visit(Visitor v, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         return v.visitCases(this,o);
     }
     
 }

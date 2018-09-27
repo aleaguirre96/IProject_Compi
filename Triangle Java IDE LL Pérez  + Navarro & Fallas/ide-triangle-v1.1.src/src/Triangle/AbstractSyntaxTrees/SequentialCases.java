@@ -12,7 +12,7 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
  * @author jose
  */
 public class SequentialCases extends Case{
-    Case commandC,commandCNext;
+    public Case commandC,commandCNext;
 
     public SequentialCases(Case commandCase,Case commandCaseNext,SourcePosition thePosition) {
         super(thePosition);

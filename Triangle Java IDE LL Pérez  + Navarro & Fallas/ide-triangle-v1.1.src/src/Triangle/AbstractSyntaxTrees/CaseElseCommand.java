@@ -13,7 +13,7 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
  */
 public class CaseElseCommand extends Case{
 
-    Command commandCaseElse;
+    public Command commandCaseElse;
             
     public CaseElseCommand(Command commandElse,SourcePosition thePosition) {
         super(thePosition);
@@ -21,7 +21,7 @@ public class CaseElseCommand extends Case{
     }
 
     public Object visit(Visitor v, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return v.visitCaseElseCommand(this,o);
     }
     
 }

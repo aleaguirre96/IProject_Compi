@@ -16,6 +16,8 @@ import Triangle.AbstractSyntaxTrees.BoolTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CallCommand;
 import Triangle.AbstractSyntaxTrees.CallExpression;
 import Triangle.AbstractSyntaxTrees.CaseCommand;
+import Triangle.AbstractSyntaxTrees.CaseElseCommand;
+import Triangle.AbstractSyntaxTrees.CasesCommand;
 import Triangle.AbstractSyntaxTrees.CharTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
@@ -59,6 +61,7 @@ import Triangle.AbstractSyntaxTrees.RepeatDoWhile;
 import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
+import Triangle.AbstractSyntaxTrees.SequentialCases;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
 import Triangle.AbstractSyntaxTrees.SequentialExpression;
@@ -512,11 +515,26 @@ public class TreeVisitor implements Visitor {
     }
 
     public Object visitCase(CaseCommand ast, Object o) {
-        return(createBinary("Sequential Expression", ast.expCase, ast.comandCase));
+        return(createBinary("Case ", ast.expCase, ast.comandCase));
     }
 
     public Object visitSequentialExpression(SequentialExpression ast, Object o) {
         return(createBinary("Sequential Expression", ast.EXPR1, ast.EXPR2));
+    }
+
+    @Override
+    public Object visitSequentialCases(SequentialCases ast, Object o) {
+        return (createBinary("Sequential Cases",ast.commandC,ast.commandCNext));
+    }
+
+    @Override
+    public Object visitCaseElseCommand(CaseElseCommand ast, Object o) {
+        return(createUnary("Case Else", ast.commandCaseElse));
+    }
+
+    @Override
+    public Object visitCases(CasesCommand ast, Object o) {
+        return (createUnary("Cases ",ast.CasesCom));
     }
 
     
