@@ -714,6 +714,7 @@ public final class Checker implements Visitor {
     return ast.type;
   }
 
+  //Se anade el tipo de Variable inicializada
   public Object visitSimpleVname(SimpleVname ast, Object o) {
     ast.variable = false;
     ast.type = StdEnvironment.errorType;
@@ -733,6 +734,12 @@ public final class Checker implements Visitor {
       } else if (binding instanceof VarFormalParameter) {
         ast.type = ((VarFormalParameter) binding).T;
         ast.variable = true;
+      } else if(binding instanceof VarDeclarationInitialized){
+        //Esto reconoce al identificador de una variable inicializada como variable
+        //sin esto no reconoce que tipo de declaracion sea
+        ast.type = ((VarDeclarationInitialized) binding).E.type;
+        ast.variable = true;
+          
       } else
         reporter.reportError ("\"%\" is not a const or var identifier",
                               ast.I.spelling, ast.I.position);
@@ -977,8 +984,8 @@ public final class Checker implements Visitor {
    
      //Metodo visitor para el caso "var" Identifier ":=" Expression
     public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o) {
-        ast.E = (Expression) ast.E.visit(this, null);
-        idTable.enter (ast.I.spelling, ast);
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+    idTable.enter (ast.I.spelling, ast);
     if (ast.duplicated)
         reporter.reportError ("identifier \"%\" already declared",
                              ast.I.spelling, ast.position);

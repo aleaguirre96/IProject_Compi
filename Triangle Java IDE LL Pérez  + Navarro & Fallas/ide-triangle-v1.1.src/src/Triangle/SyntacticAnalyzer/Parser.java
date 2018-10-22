@@ -284,7 +284,6 @@ public class Parser {
   Command parseSingleCommand() throws SyntaxError {
     Command commandAST = null; // in case there's a syntactic error
     
-    System.out.println("Tipo es Single: "+(currentToken.kind));
     SourcePosition commandPos = new SourcePosition();
     start(commandPos);
     switch (currentToken.kind) {
@@ -782,7 +781,6 @@ public class Parser {
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
     
-    System.out.println("Tipo es CompoUd: "+(currentToken.kind));
     switch(currentToken.kind){ 
       //const, var,proc, fun, type => single-Declaration
       case Token.CONST:
@@ -826,7 +824,6 @@ public class Parser {
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
     
-    System.out.println("Tipo es Single: "+(currentToken.kind));
     switch (currentToken.kind) {
     case Token.CONST:
       {
