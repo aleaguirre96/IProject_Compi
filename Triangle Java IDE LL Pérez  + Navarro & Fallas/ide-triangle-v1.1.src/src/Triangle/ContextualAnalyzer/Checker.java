@@ -979,29 +979,47 @@ public final class Checker implements Visitor {
      
     
 
-  public Object visitRepeatDoWhile(RepeatDoWhile ast, Object o) {         
-    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);                      
+  public Object visitRepeatDoWhile(RepeatDoWhile ast, Object o) {  // Verifica que tipo sea booleano, de lo contrario da error (tipo de error y su posicion)        
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);                     
     if (! eType.equals(StdEnvironment.booleanType))                                 
-      reporter.reportError("Boolean expression expected here", "", ast.E.position); 
+      reporter.reportError("Boolean expression esperada aqui", "", ast.E.position); 
     ast.C.visit(this, null);                                                        
     return null;
   }
 
-  public Object visitRepeatUntil(RepeatUntil ast, Object o) {         
+  public Object visitRepeatUntil(RepeatUntil ast, Object o) { // Verifica que tipo sea booleano, de lo contrario da error (tipo de error y su posicion)         
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);                      
     if (! eType.equals(StdEnvironment.booleanType))                                 
-      reporter.reportError("Boolean expression expected here", "", ast.E.position);  
+      reporter.reportError("Boolean expression esperada aqui", "", ast.E.position);  
     ast.C.visit(this, null);                                                        
     return null;
   }
   
-  public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) {         
+  public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) { // Verifica que tipo sea booleano, de lo contrario da error (tipo de error y su posicion)         
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);                      
     if (! eType.equals(StdEnvironment.booleanType))                                 
-      reporter.reportError("Boolean expression expected here", "", ast.E.position); 
+      reporter.reportError("Boolean expression esperada aqui", "", ast.E.position); 
     ast.C.visit(this, null);                                                        
     return null;
   }
+  
+  
+  
+  public Object visitRepeatFor(RepeatFor ast, Object o) {
+    TypeDenoter e1Type = (TypeDenoter) ast.E1.visit(this, null);
+    TypeDenoter e2Type = (TypeDenoter) ast.E2.visit(this, null);
+    if (! e1Type.equals(StdEnvironment.integerType))  // en esta parte se revisan los tipos, tanto de expresión 1 como la 2 para verificar que ambos sean Integer, de lo contrario brinda mensaje de error
+      reporter.reportError("Se esperaba un Integer Expression aqui", "", ast.E1.position); // Se da el error por el tipo y la posición del error
+    if (! e2Type.equals(StdEnvironment.integerType))
+      reporter.reportError("Se esperaba un Integer Expression aqui", "", ast.E2.position);// Igual que el anterior
+    idTable.openScope(); // Se abre un scope para definir la declaración de la variable de control (id) en un alcance local
+    ConstDeclaration id = new ConstDeclaration(ast.I, ast.E1, ast.getPosition()); // Notar que debe ser ConstDeclaration y no VarDeclaration (no puede pasarse por referencia)
+    id.visit(this, null);
+    ast.C.visit(this, null);
+    idTable.closeScope();// se cierra el scope par aegurar "localidad"
+    return null;
+  }
+
     
     
     
@@ -1052,10 +1070,7 @@ public final class Checker implements Visitor {
 
     
 
-    @Override
-    public Object visitRepeatFor(RepeatFor ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
 
     @Override
