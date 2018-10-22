@@ -976,6 +976,34 @@ public final class Checker implements Visitor {
     ast.C.visit(this, null);
     return null;
     }
+     
+    
+
+  public Object visitRepeatDoWhile(RepeatDoWhile ast, Object o) {         
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);                      
+    if (! eType.equals(StdEnvironment.booleanType))                                 
+      reporter.reportError("Boolean expression expected here", "", ast.E.position); 
+    ast.C.visit(this, null);                                                        
+    return null;
+  }
+
+  public Object visitRepeatUntil(RepeatUntil ast, Object o) {         
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);                      
+    if (! eType.equals(StdEnvironment.booleanType))                                 
+      reporter.reportError("Boolean expression expected here", "", ast.E.position);  
+    ast.C.visit(this, null);                                                        
+    return null;
+  }
+  
+  public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) {         
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);                      
+    if (! eType.equals(StdEnvironment.booleanType))                                 
+      reporter.reportError("Boolean expression expected here", "", ast.E.position); 
+    ast.C.visit(this, null);                                                        
+    return null;
+  }
+    
+    
     
    //Se agrega al checker
     public Object visitNILCommand(NILCommand ast, Object o) {
@@ -1022,20 +1050,7 @@ public final class Checker implements Visitor {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Object visitRepeatUntil(RepeatUntil ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitRepeatDoWhile(RepeatDoWhile ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
     @Override
     public Object visitRepeatFor(RepeatFor ast, Object o) {

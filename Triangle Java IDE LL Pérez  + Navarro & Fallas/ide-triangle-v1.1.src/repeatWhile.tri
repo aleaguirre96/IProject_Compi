@@ -1,0 +1,16 @@
+let
+ var i: Integer;
+ var j: Integer;
+ var k: Integer;
+ var num: Integer
+in
+ getint (var num); 
+ i:= 1;
+ j:= 2;
+ putint(i);
+ put(' ');
+ k:= i+j;
+ i:= j;
+ j:= k;
+ num:= num - 1;
+ end;
