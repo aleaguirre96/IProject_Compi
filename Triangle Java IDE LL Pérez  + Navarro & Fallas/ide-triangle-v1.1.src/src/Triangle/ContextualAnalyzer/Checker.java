@@ -995,9 +995,19 @@ public final class Checker implements Visitor {
     return ast;
     }
 
-    @Override
+    /* 
+        Se define como debe de venir la estructura del LocalDeclaration
+    */
     public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        IdEntry lastD0, lastD1;
+        lastD0 = idTable.getLatest(); //Último valor antes de las declaraciones D1
+        idTable.openLocal();//Protege al las declaraciones D1 del resto del programa
+        ast.D1.visit(this, null);
+        idTable.closeLocal();
+        lastD1 = idTable.getLatest(); //Último valor antes de las declaraciones D2
+        ast.D2.visit(this, null);
+        idTable.afterLocal(lastD0, lastD1);
+        return null;
     }
 
     @Override

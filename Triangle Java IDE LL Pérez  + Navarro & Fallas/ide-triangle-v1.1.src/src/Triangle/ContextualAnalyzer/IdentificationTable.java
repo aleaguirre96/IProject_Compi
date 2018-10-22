@@ -104,5 +104,30 @@ public final class IdentificationTable {
 
     return attr;
   }
-
+  
+  /*
+    Se declara los metodos para poder definir de donde a donde
+    un metodo se considera local
+  */
+  public IdEntry getLatest(){
+    return this.latest;
+  }
+  
+  public void openLocal(){
+    openScope();
+  }
+  
+  public void closeLocal(){
+      this.level--;
+  }
+  
+  public void afterLocal(IdEntry lastD1, IdEntry lastD2){
+    IdEntry entry, local;
+    entry = this.latest;
+    while (entry.previous != lastD2){ //Si no está al inicio de las declaraciones D2
+      local = entry;
+      entry = local.previous;
+    }
+    entry.previous = lastD1; // Apunta al último valor antes de iniciar la evaluación
+  }
 }
