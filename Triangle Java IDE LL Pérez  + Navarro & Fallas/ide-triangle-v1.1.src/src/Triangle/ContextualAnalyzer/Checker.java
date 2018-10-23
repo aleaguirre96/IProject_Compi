@@ -1047,7 +1047,8 @@ public final class Checker implements Visitor {
                           + "have be higher than the first value","", ast.IL1.position);
     return ast;
     }
-
+    
+    //--------------------------------------------------------------------------
     /* 
         Se define como debe de venir la estructura del LocalDeclaration
     */
@@ -1062,16 +1063,80 @@ public final class Checker implements Visitor {
         idTable.afterLocal(lastD0, lastD1);
         return null;
     }
+    //--------------------------------------------------------------------------
 
-    @Override
+    
+    
+    //--------------------------------------------------------------------------
+    /*
+        Se agrega las condiciones para que se pueda declarar algo de manera
+        recursiva.
+    */
     public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        SequentialDeclaration seqAST = (SequentialDeclaration) ast.LRS;
+        visitRecursiveDeclarationAux(seqAST); // Inserta todos los identificadores en idTable
+        idTable.openScope();
+        ast.LRS.visit(this, null);
+        idTable.closeScope();
+        return null;
     }
-
     
-
+    /*
+        Se crea una funcion auxiliar para poder verificar cada uno de los casos
+        que son: En caso de que sean procedimientos
+                 Que venga una funcion
+                 Y en caso de que sea una declaracion compuesta recursive
+    */
     
+    private void visitRecursiveDeclarationAux(SequentialDeclaration seqDeclAST){
+        if(seqDeclAST.D1 instanceof ProcDeclaration){
+            ProcDeclaration procAST = (ProcDeclaration) seqDeclAST.D1;
+            enterProc(procAST);
+        }
+        else if (seqDeclAST.D1 instanceof FuncDeclaration){
+            FuncDeclaration funcAST = (FuncDeclaration) seqDeclAST.D1;
+            enterFunc(funcAST);
+        }
+        else{
+            visitRecursiveDeclarationAux((SequentialDeclaration) seqDeclAST.D1);
+        }
+        if(seqDeclAST.D2 instanceof ProcDeclaration){
+            ProcDeclaration procAST = (ProcDeclaration) seqDeclAST.D2;
+            enterProc(procAST);
+        }
+        else{
+            FuncDeclaration funcAST = (FuncDeclaration) seqDeclAST.D2;      
+            enterFunc(funcAST);
+        }
+    }
+    
+    /*
+        Estas dos funciones son para ejecutar los bloques de las recursion
+        asi sabe donde empieza y termina cada bloque de intrucciones
+    */
+    
+    private void enterProc(ProcDeclaration procAST){
+    idTable.enter (procAST.I.spelling, procAST);
+    if (procAST.duplicated)
+      reporter.reportError ("identifier \"%\" already declared",
+                            procAST.I.spelling, procAST.position);
+    idTable.openScope();
+    procAST.FPS.visit(this, null);
+    idTable.closeScope();
+  }
+  
+  private void enterFunc(FuncDeclaration funcAST){
+    funcAST.T = (TypeDenoter)funcAST.T.visit(this, null);
+    idTable.enter (funcAST.I.spelling, funcAST);
+    if (funcAST.duplicated)
+      reporter.reportError ("identifier \"%\" already declared",
+                            funcAST.I.spelling, funcAST.position);
+    idTable.openScope();
+    funcAST.FPS.visit(this, null);
+    idTable.closeScope();
+  }
 
+  //---------------------------------------------------------------------------
 
     @Override
     public Object visitCase(CaseCommand ast, Object o) {
