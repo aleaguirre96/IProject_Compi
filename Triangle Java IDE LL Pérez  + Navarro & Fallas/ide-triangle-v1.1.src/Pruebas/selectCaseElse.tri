@@ -1,0 +1,12 @@
+let 
+  var exp := 'e'
+in
+
+select exp from
+ case 'g' then
+    j:= j + k;
+ else
+    j:= 7
+ end
+
+end

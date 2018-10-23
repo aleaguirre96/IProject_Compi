@@ -1,0 +1,4 @@
+repeat
+ until (i > 1) do
+  i := i + 1
+ end

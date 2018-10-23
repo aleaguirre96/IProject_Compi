@@ -1,0 +1,6 @@
+let
+   type prueba ~ array 2 .. 5 of Char;
+   type prueba2 ~ array 4 of Integer
+in
+ nil
+end

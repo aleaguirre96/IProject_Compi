@@ -1,0 +1,11 @@
+let 
+var i := 0;
+func prueba(parametro1: Integer, parametro2: Integer):
+    Boolean ~ parametro1 < parametro2
+in
+repeat do
+  putint(i);
+  i := i + 1
+  while prueba(i, 100) end
+end
+

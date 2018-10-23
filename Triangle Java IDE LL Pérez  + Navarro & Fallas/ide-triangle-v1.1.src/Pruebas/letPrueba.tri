@@ -1,0 +1,7 @@
+let
+  var x : Char;
+  const y ~ 7;
+  var xy := 90
+in
+  xy := 78
+end
