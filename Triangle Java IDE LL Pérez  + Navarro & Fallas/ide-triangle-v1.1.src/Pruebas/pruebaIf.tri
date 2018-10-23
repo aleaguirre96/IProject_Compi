@@ -1,0 +1,14 @@
+let 
+  var prueba: Integer
+
+in 
+ getint (var prueba);
+ if(prueba = 0) then
+   put('0')
+ elsif(prueba < 0) then
+   put('N')
+ else
+   put('P')
+ end
+
+end
