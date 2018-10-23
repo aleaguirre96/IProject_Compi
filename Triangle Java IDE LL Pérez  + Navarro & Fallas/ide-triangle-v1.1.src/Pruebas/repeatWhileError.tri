@@ -1,0 +1,9 @@
+let 
+var i := 0
+in
+repeat 
+  while i + 8 do
+   i := i + 1;
+   putint(i * 8) ;
+  end
+end

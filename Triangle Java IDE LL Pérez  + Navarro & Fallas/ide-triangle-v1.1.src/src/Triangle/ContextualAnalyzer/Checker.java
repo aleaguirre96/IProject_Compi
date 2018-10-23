@@ -972,7 +972,7 @@ public final class Checker implements Visitor {
     public Object visitRepeatWhile(RepeatWhile ast, Object o) {
         TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
     if (! eType.equals(StdEnvironment.booleanType))
-      reporter.reportError("Boolean expression expected here", "", ast.E.position);
+      reporter.reportError("Boolean expression esperada aqui", "", ast.E.position);
     ast.C.visit(this, null);
     return null;
     }
@@ -1013,7 +1013,7 @@ public final class Checker implements Visitor {
     if (! e2Type.equals(StdEnvironment.integerType))
       reporter.reportError("Se esperaba un Integer Expression aqui", "", ast.E2.position);// Igual que el anterior
     idTable.openScope(); // Se abre un scope para definir la declaración de la variable de control (id) en un alcance local
-    ConstDeclaration id = new ConstDeclaration(ast.I, ast.E1, ast.getPosition()); // Notar que debe ser ConstDeclaration y no VarDeclaration (no puede pasarse por referencia)
+    ConstDeclaration id = new ConstDeclaration(ast.I, ast.E1, ast.getPosition()); // Notar que debe ser ConstDeclaration y no VarDeclaration (no puede pasarse por referencia), además del comportamiento como constante estipulado en la especificacion
     id.visit(this, null);
     ast.C.visit(this, null);
     idTable.closeScope();// se cierra el scope par aegurar "localidad"
