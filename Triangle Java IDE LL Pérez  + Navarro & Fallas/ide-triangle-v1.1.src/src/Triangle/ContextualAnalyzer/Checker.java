@@ -317,9 +317,13 @@ public final class Checker implements Visitor {
     return null;
   }
 
+  
+  /*
+    Declaracion de funciones
+  */
   public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
     ast.T = (TypeDenoter) ast.T.visit(this, null);
-    idTable.enter (ast.I.spelling, ast); // permits recursion
+    idTable.enter (ast.I.spelling, ast); // realiza el chekeo de si ya esta o no en la tabla, ademas permite la recursion
     if (ast.duplicated)
       reporter.reportError ("identifier \"%\" already declared",
                             ast.I.spelling, ast.position);
@@ -332,7 +336,11 @@ public final class Checker implements Visitor {
                             ast.I.spelling, ast.E.position);
     return null;
   }
-
+//----------------------------------------------------------------------------
+  
+  /*
+    Declaracion de Procedimientos
+  */
   public Object visitProcDeclaration(ProcDeclaration ast, Object o) {
     idTable.enter (ast.I.spelling, ast); // permits recursion
     if (ast.duplicated)
@@ -345,6 +353,9 @@ public final class Checker implements Visitor {
     return null;
   }
 
+  //--------------------------------------------------------------------------
+  
+  
   public Object visitSequentialDeclaration(SequentialDeclaration ast, Object o) {
     ast.D1.visit(this, null);
     ast.D2.visit(this, null);
@@ -1121,32 +1132,35 @@ public final class Checker implements Visitor {
     */
     
     private void enterProc(ProcDeclaration procAST){
-    idTable.enter (procAST.I.spelling, procAST);
-    if (procAST.duplicated)
-      reporter.reportError ("identifier \"%\" already declared",
-                            procAST.I.spelling, procAST.position);
-    idTable.openScope();
-    procAST.FPS.visit(this, null);
-    idTable.closeScope();
-  }
+        idTable.enter (procAST.I.spelling, procAST);
+        if (procAST.duplicated){
+            reporter.reportError ("identifier \"%\" already declared",
+                    procAST.I.spelling, procAST.position);
+            idTable.openScope();
+            procAST.FPS.visit(this, null);
+            idTable.closeScope();
+        }
+    }
   
-  private void enterFunc(FuncDeclaration funcAST){
-    funcAST.T = (TypeDenoter)funcAST.T.visit(this, null);
-    idTable.enter (funcAST.I.spelling, funcAST);
-    if (funcAST.duplicated)
-      reporter.reportError ("identifier \"%\" already declared",
-                            funcAST.I.spelling, funcAST.position);
-    idTable.openScope();
-    funcAST.FPS.visit(this, null);
-    idTable.closeScope();
-  }
+    private void enterFunc(FuncDeclaration funcAST){
+        funcAST.T = (TypeDenoter)funcAST.T.visit(this, null);
+        idTable.enter (funcAST.I.spelling, funcAST);
+        if (funcAST.duplicated){
+            reporter.reportError ("identifier \"%\" already declared",
+                    funcAST.I.spelling, funcAST.position);
+            idTable.openScope();
+            funcAST.FPS.visit(this, null);
+            idTable.closeScope();
+        }
+    }
 
   //---------------------------------------------------------------------------
+  
+  
   //Los siguientes metodos son los encargados de verificar 
   //el comando Selec
   
   //Metodo para verificar la clausula case
-    @Override
     public Object visitCase(CaseCommand ast, Object o) {
      ArrayList<Expression> tmp = new ArrayList<>();
      if(ast.expCase instanceof SequentialExpression){
@@ -1159,7 +1173,6 @@ public final class Checker implements Visitor {
      return tmp;
     }
 
-    @Override
     public Object visitSequentialExpression(SequentialExpression ast, Object o){
      
      ArrayList<Expression> tmp = new ArrayList<>();
@@ -1174,7 +1187,6 @@ public final class Checker implements Visitor {
      return tmp;
     }
 
-    @Override
     public Object visitSequentialCases(SequentialCases ast, Object o) {
      //Se manda un ArrayList con los literales de los cases
      //Por error acomodamos los atributos mal, entonces
@@ -1192,13 +1204,11 @@ public final class Checker implements Visitor {
      return tmp;
     }
 
-    @Override
     public Object visitCaseElseCommand(CaseElseCommand ast, Object o) {
      ast.commandCaseElse.visit(this, null);
      return null;
     }
 
-    @Override
     public Object visitCases(CasesCommand ast, Object o) {
      //Este metodo recorre los nodos de los cases agregados, incluyendo un elseCase si aparece
      ArrayList<Expression> tmp;
@@ -1206,7 +1216,6 @@ public final class Checker implements Visitor {
      return tmp;
     }
 
-    @Override
     public Object visitSelectCommand(SelectCommand ast, Object o) {
         ArrayList<Expression> literales;
         TypeDenoter typeExpresion = (TypeDenoter) ast.E.visit(this, null);
@@ -1245,7 +1254,8 @@ public final class Checker implements Visitor {
                     IntegerExpression num2 = (IntegerExpression)literales.get(j);
                     
                     if(num1.IL.spelling.equals(num2.IL.spelling))
-                        reporter.reportError ("Literal "+num1.IL.spelling+" Repetida en Select", "",literales.get(i).position);
+                        reporter.reportError ("Literal "+num1.IL.spelling+" Repetida en Select", "",
+                                literales.get(i).position);
                 
                 }else if(literales.get(i) instanceof CharacterExpression &&
                    literales.get(j) instanceof CharacterExpression){
@@ -1253,9 +1263,8 @@ public final class Checker implements Visitor {
                     CharacterExpression char2 = (CharacterExpression) literales.get(j);
                     
                     if(char1.CL.spelling.equals(char2.CL.spelling))
-                        reporter.reportError ("Literal "+char1.CL.spelling+" Repetida en Select", "",literales.get(i).position);
-                    
-                   
+                        reporter.reportError ("Literal "+char1.CL.spelling+" Repetida en Select", "",
+                                literales.get(i).position);
                 }  
             }
         }
