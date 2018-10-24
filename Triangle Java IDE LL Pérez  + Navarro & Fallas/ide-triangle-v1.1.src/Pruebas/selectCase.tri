@@ -1,0 +1,23 @@
+let 
+  var exp : Char;
+  var j := 0;
+  var k : Integer;
+  var b := false
+in
+
+select k from
+ case 1 then
+    nil
+ case 5 then
+    nil
+ else
+ 
+    select exp from
+      case 'j'| 'c'|'s' then
+	nil
+      case 'k' then
+        nil
+      end
+ end
+
+end

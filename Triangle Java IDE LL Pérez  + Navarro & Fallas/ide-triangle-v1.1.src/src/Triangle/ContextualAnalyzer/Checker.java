@@ -103,6 +103,10 @@ import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
 import Triangle.SyntacticAnalyzer.SourcePosition;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public final class Checker implements Visitor {
 
@@ -1137,34 +1141,125 @@ public final class Checker implements Visitor {
   }
 
   //---------------------------------------------------------------------------
-
+  //Los siguientes metodos son los encargados de verificar 
+  //el comando Selec
+  
+  //Metodo para verificar la clausula case
     @Override
     public Object visitCase(CaseCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     ArrayList<Expression> tmp = new ArrayList<>();
+     if(ast.expCase instanceof SequentialExpression){
+       tmp = (ArrayList<Expression>) ast.expCase.visit(this, null);
+     }else{
+       tmp.add(ast.expCase);
+     }
+     
+     ast.comandCase.visit(this, null);
+     return tmp;
     }
 
     @Override
-    public Object visitSequentialExpression(SequentialExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitSequentialExpression(SequentialExpression ast, Object o){
+     
+     ArrayList<Expression> tmp = new ArrayList<>();
+     tmp.add(ast.EXPR2);
+     
+     if(ast.EXPR1 instanceof SequentialExpression){ //Si no es una expresion
+        tmp.addAll((Collection<? extends Expression>) ast.EXPR1.visit(this, null));
+     }else{
+        tmp.add(ast.EXPR1);
+     }
+     
+     return tmp;
     }
 
     @Override
     public Object visitSequentialCases(SequentialCases ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     //Se manda un ArrayList con los literales de los cases
+     //Por error acomodamos los atributos mal, entonces
+     //commandNext es el actual y commandC es el/los comandos siguientes
+     ArrayList<Expression> tmp = new ArrayList<>();
+     if(ast.commandCNext instanceof CaseElseCommand){
+       //Es un else
+       ast.commandCNext.visit(this, null);
+     }else if(ast.commandCNext instanceof CaseCommand){
+       tmp = (ArrayList<Expression>) ast.commandCNext.visit(this, null);
+     }
+       
+     tmp.addAll((Collection<? extends Expression>) ast.commandC.visit(this, null));
+     //Retorna los literales de los cases
+     return tmp;
     }
 
     @Override
     public Object visitCaseElseCommand(CaseElseCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     ast.commandCaseElse.visit(this, null);
+     return null;
     }
 
     @Override
     public Object visitCases(CasesCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     //Este metodo recorre los nodos de los cases agregados, incluyendo un elseCase si aparece
+     ArrayList<Expression> tmp;
+     tmp = (ArrayList<Expression>) ast.CasesCom.visit(this, null);
+     return tmp;
     }
 
     @Override
     public Object visitSelectCommand(SelectCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ArrayList<Expression> literales;
+        TypeDenoter typeExpresion = (TypeDenoter) ast.E.visit(this, null);
+        if(!(typeExpresion.equals(StdEnvironment.integerType)
+                || typeExpresion.equals((StdEnvironment.charType)))){
+            reporter.reportError ("Integer or Char expression expected here", "",ast.E.position);
+        }
+        //Hace la visita a los comandos del Select
+        //El visit del comando retorna un arrayList para evaluar
+        literales = (ArrayList<Expression>) ast.C.visit(this, null);
+        verificarLiteralesSelectCase(ast.E, literales);
+        verficarUnicidadLiteralesSelect(literales);
+        return null;
     }
+    
+    public Object verificarLiteralesSelectCase(Expression selectExp ,ArrayList<Expression> literales){
+        TypeDenoter typeExpresion = (TypeDenoter) selectExp.visit(this, null);
+      for (Expression literal : literales) {
+          TypeDenoter typeLiteral = (TypeDenoter)literal.visit(this, null);
+          if(typeExpresion  != typeLiteral){
+              reporter.reportError ("Las literales debe se igual a expresion Select"
+                      , "",literal.position);
+          }
+      }
+        return null;
+    }
+    
+    public Object verficarUnicidadLiteralesSelect(ArrayList<Expression> literales){
+        
+        for(int i = 0;i < literales.size();i++){
+            for (int j= i+1 ; j < literales.size(); j++){
+                
+                if((literales.get(j)instanceof IntegerExpression 
+                    && literales.get(i) instanceof IntegerExpression)){
+                    IntegerExpression num1 = (IntegerExpression)literales.get(i);
+                    IntegerExpression num2 = (IntegerExpression)literales.get(j);
+                    
+                    if(num1.IL.spelling.equals(num2.IL.spelling))
+                        reporter.reportError ("Literal "+num1.IL.spelling+" Repetida en Select", "",literales.get(i).position);
+                
+                }else if(literales.get(i) instanceof CharacterExpression &&
+                   literales.get(j) instanceof CharacterExpression){
+                    CharacterExpression char1 = (CharacterExpression) literales.get(i);
+                    CharacterExpression char2 = (CharacterExpression) literales.get(j);
+                    
+                    if(char1.CL.spelling.equals(char2.CL.spelling))
+                        reporter.reportError ("Literal "+char1.CL.spelling+" Repetida en Select", "",literales.get(i).position);
+                    
+                   
+                }  
+            }
+        }
+ 
+       return null;
+    }
+
 }

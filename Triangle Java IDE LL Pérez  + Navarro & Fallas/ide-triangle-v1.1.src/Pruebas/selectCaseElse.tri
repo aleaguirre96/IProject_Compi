@@ -3,8 +3,10 @@ let
 in
 
 select exp from
- case 'g' then
-    j:= j + k;
+ case '7' then
+    j:= j + k
+ case 9 then
+    j := j + 1
  else
     j:= 7
  end
