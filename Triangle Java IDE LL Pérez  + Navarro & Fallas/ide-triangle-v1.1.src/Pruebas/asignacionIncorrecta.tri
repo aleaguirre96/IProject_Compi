@@ -3,8 +3,12 @@ let
   const y ~ 7;
   var xy := 90
 in
-  xy := 78;
-  xy := xy + y;
-  x := 'c'
+  xy := x;
+  y := xy + y;
+  x := 32
 end
+
+
+
+
 

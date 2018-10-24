@@ -6,5 +6,4 @@ in
   xy := 78;
   xy := xy + y;
   x := 'c'
-end
-
+end
