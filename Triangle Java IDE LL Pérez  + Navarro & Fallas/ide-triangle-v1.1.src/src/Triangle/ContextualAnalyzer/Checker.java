@@ -1068,15 +1068,14 @@ public final class Checker implements Visitor {
         Se define como debe de venir la estructura del LocalDeclaration
     */
     public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
-        //era d0 y d1
-        IdEntry lastD1, lastD2;
-        lastD1 = idTable.getLatest(); //Último valor antes de las declaraciones D2
+        IdEntry lastD0, lastD1;
+        lastD0 = idTable.getLatest(); //Último valor antes de las declaraciones D1
         idTable.openLocal();//Protege al las declaraciones D1 del resto del programa
-        ast.D2.visit(this, null);
+        ast.D1.visit(this, null);
         idTable.closeLocal();
-        lastD2 = idTable.getLatest(); //Último valor antes de las declaraciones D2
+        lastD1 = idTable.getLatest(); //Último valor antes de las declaraciones D2
         ast.D2.visit(this, null);
-        idTable.afterLocal(lastD1, lastD2);
+        idTable.afterLocal(lastD0, lastD1);
         return null;
     }
     //--------------------------------------------------------------------------
