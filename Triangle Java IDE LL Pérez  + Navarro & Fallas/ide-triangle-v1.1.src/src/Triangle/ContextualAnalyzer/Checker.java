@@ -1034,9 +1034,6 @@ public final class Checker implements Visitor {
     idTable.closeScope();// se cierra el scope par aegurar "localidad"
     return null;
   }
-
-    
-    
     
    //Se agrega al checker
     public Object visitNILCommand(NILCommand ast, Object o) {
@@ -1088,10 +1085,10 @@ public final class Checker implements Visitor {
         recursiva.
     */
     public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
-        SequentialDeclaration seqAST = (SequentialDeclaration) ast.LRS;
+        SequentialDeclaration seqAST = (SequentialDeclaration) ast.PFS;
         visitRecursiveDeclarationAux(seqAST); // Inserta todos los identificadores en idTable
         idTable.openScope();
-        ast.LRS.visit(this, null);
+        ast.PFS.visit(this, null);
         idTable.closeScope();
         return null;
     }
@@ -1115,6 +1112,7 @@ public final class Checker implements Visitor {
         else{
             visitRecursiveDeclarationAux((SequentialDeclaration) seqDeclAST.D1);
         }
+    
         if(seqDeclAST.D2 instanceof ProcDeclaration){
             ProcDeclaration procAST = (ProcDeclaration) seqDeclAST.D2;
             enterProc(procAST);

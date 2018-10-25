@@ -17,9 +17,9 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 */
 public class RecursiveDeclaration extends Declaration{
 
-    public RecursiveDeclaration(Declaration lrsAST, SourcePosition thePosition) {
+    public RecursiveDeclaration(Declaration pfsAST, SourcePosition thePosition) {
         super(thePosition);
-        LRS = lrsAST;
+        PFS = pfsAST;
     }
 
     @Override
@@ -27,5 +27,5 @@ public class RecursiveDeclaration extends Declaration{
         return v.visitRecursiveDeclaration(this, o);
     }
     
-    public Declaration LRS;
+    public Declaration PFS;
 }

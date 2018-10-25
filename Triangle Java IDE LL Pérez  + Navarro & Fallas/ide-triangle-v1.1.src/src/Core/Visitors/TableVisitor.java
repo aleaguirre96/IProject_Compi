@@ -363,7 +363,7 @@ public class TableVisitor implements Visitor {
   
   //Se agrega la declaracion recursiva
   public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
-      ast.LRS.visit(this, null);
+      ast.PFS.visit(this, null);
       return null;
   }
   

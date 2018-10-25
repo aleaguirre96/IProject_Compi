@@ -245,7 +245,7 @@ public class TreeVisitor implements Visitor {
     
     //Se agrega en el Tree Visitor
     public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
-       return(createUnary("Recursive Declaration", ast.LRS));
+       return(createUnary("Recursive Declaration", ast.PFS));
     }
     
     public Object visitSequentialDeclaration(SequentialDeclaration ast, Object obj) {

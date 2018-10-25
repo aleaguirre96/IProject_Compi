@@ -359,17 +359,17 @@ public final class Encoder implements Visitor {
     
     // Se evalúa por primera vez la declaración, sin los saltos hacia
     // adelante
-    ast.LRS.visit(this, frame);
+    ast.PFS.visit(this, frame);
     nextInstrAddr  = recAddr;
     
     // Se sobreescribe la instrucción anterior, ahora con las direcciones
     // de los saltos ya procesadas
-    ast.LRS.visit(this, frame);
+    ast.PFS.visit(this, frame);
     nextInstrAddr  = recAddr;
     
     // Se sobreescribe nuevamente la instrucción anterior, ahora con
     // las direcciones de los saltos corregidas
-    ast.LRS.visit(this, frame);
+    ast.PFS.visit(this, frame);
     
     // Retorna 0 porque los procedimientos y las funciones siempre retornan 0
     return new Integer(0);

@@ -208,7 +208,7 @@ public class LayoutVisitor implements Visitor {
 
   //Se agreaga como se va a dibujar RecursiveDeclaration
   public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
-      return layoutUnary("RecursiveDecl.", ast.LRS);
+      return layoutUnary("RecursiveDecl.", ast.PFS);
   }
  
   public Object visitSequentialDeclaration(SequentialDeclaration ast, Object obj) {
