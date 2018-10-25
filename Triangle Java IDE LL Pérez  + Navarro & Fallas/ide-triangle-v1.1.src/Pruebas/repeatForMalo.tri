@@ -6,4 +6,5 @@ in
       i := i * 3;
       putint(i)
    end
-end
+end
+
