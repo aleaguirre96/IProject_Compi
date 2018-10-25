@@ -1,0 +1,7 @@
+let
+  var num := 0
+  
+in
+  var num: Integer;
+end
+

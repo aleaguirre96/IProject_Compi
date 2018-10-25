@@ -1,0 +1,19 @@
+let 
+  var exp1 : Char;
+  var exp2 : Char
+in
+  select exp1 from
+    case 'j' then
+      nil
+    case 7 then
+      nil
+    else
+ 
+       select exp2 from
+        case 1| 2|'h' then
+	  nil
+        case 'k' then
+          nil
+        end
+ end
+end

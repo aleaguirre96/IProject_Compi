@@ -1,0 +1,6 @@
+let
+   type prueba ~ array 5 .. 3 of Char
+in
+ nil
+end
+

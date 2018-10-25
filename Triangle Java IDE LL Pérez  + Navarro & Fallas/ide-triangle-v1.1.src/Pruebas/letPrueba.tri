@@ -1,10 +1,11 @@
 let
-  var x : Char;
-  const y ~ 7;
-  var xy := 90
+  var num := 0
+  
 in
-  xy := 78;
-  xy := xy + y;
-  x := 'c'
+  if(num = 0) then
+    putint(num)
+  else
+    nil
+  end
 end
 

@@ -1,0 +1,10 @@
+let 
+  var exp1 : Integer
+in
+  select exp1 from
+    case 1 |3 | 4 |4 then
+      nil
+    case 2 |1 then
+      nil
+ end
+end
