@@ -1,10 +1,11 @@
 let 
-  var k : Integer
+  var k : Char
 in
   select k from
-    case 1 then
+    case 'h' then
       nil
     case 5 then
       nil
  end
 end
+

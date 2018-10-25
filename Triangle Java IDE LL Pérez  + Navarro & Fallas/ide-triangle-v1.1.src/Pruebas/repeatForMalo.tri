@@ -1,0 +1,9 @@
+let
+ const final ~ 10
+in
+ repeat
+   for i from 0 to final do
+      i := i * 3;
+      putint(i)
+   end
+end

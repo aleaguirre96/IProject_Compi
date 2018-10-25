@@ -1,16 +1,14 @@
 let 
-  var exp := 'e';
-  var j:= 1;
-  var k:= 2
+  var exp := 'e'
 in
 
 select exp from
- case 'i' then
+ case '7' then
     j:= j + k
- case 'e' then
+ case 'e'then
     j := j + 1
  else
     j:= 7
  end
 
-end
+end
