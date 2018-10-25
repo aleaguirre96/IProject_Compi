@@ -1,0 +1,11 @@
+let
+  recursive
+    func bbb(num1: Integer) : Integer ~ 7 + num1
+    |
+    aaa(num1: Integer) : Integer ~ bbb(num1)
+  end;
+  var x: Integer
+in
+ x := aaa(9)
+end
+

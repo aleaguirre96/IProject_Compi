@@ -1,0 +1,14 @@
+let
+ var num1 : Integer;
+ local
+   var num:= 9
+ in
+   var num1 : Integer;
+   var num2 := num;
+   const num3 ~ num2
+ end 
+in
+ num1 := 4;
+ nil
+end
+

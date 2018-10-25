@@ -1,0 +1,12 @@
+let
+    proc procedimiento(parametro1: Integer) ~ putint(parametro1) end;
+    func funEjemplo(parametro1: Integer, parametro2: Integer): 
+         Integer ~ (parametro1 * 2) + (parametro2 * 3);
+    proc procedimiento(parametro1: Integer) ~ putint(parametro1) end;
+    var parametro1: Integer;
+    var result: Integer
+in
+ procedimiento(7);
+ result := funEjemplo(3,4);
+ putint(result)
+end
