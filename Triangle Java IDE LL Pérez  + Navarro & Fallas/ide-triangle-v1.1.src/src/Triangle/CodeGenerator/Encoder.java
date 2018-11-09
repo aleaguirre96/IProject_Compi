@@ -67,7 +67,7 @@ import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
 import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
 import Triangle.AbstractSyntaxTrees.MultipleFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleRecordAggregate;
-import Triangle.AbstractSyntaxTrees.NILCommand;
+import Triangle.AbstractSyntaxTrees.NILCommand;// agregado el NILCommand
 import Triangle.AbstractSyntaxTrees.Operator;
 import Triangle.AbstractSyntaxTrees.ProcActualParameter;
 import Triangle.AbstractSyntaxTrees.ProcDeclaration;
@@ -1056,9 +1056,8 @@ public final class Encoder implements Visitor {
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public Object visitRepeatWhile(RepeatWhile ast, Object o) { // se utilizo como base el codigo de whileCommand
-     Frame frame = (Frame) o;
+    Frame frame = (Frame) o;
     int jumpAddr, loopAddr;
-
     jumpAddr = nextInstrAddr;
     emit(Machine.JUMPop, 0, Machine.CBr, 0);
     loopAddr = nextInstrAddr;
@@ -1067,6 +1066,74 @@ public final class Encoder implements Visitor {
     ast.E.visit(this, frame);
     emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
     return null;
+    }
+    
+    //Implementacion de repeat until E do C end  
+    @Override
+    public Object visitRepeatUntil(RepeatUntil ast, Object o) {
+    Frame frame = (Frame) o;
+    int jumpAddr, loopAddr;
+    jumpAddr = nextInstrAddr;
+    emit(Machine.JUMPop, 0, Machine.CBr, 0);
+    loopAddr = nextInstrAddr;
+    ast.C.visit(this, frame);
+    patch(jumpAddr, nextInstrAddr);
+    ast.E.visit(this, frame);
+    emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, loopAddr);
+    return null;
+
+    }
+    
+    //Implementacion de repeat do C while E end 
+    @Override
+    public Object visitRepeatDoWhile(RepeatDoWhile ast, Object o) {
+        Frame frame = (Frame) o;
+        int loopAddr;
+        loopAddr = nextInstrAddr;
+        ast.C.visit(this, frame);
+        ast.E.visit(this, frame);
+        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+    return null;
+
+    }
+    
+    //Implementacion de repeat do C until E end
+    @Override
+    public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) {
+        Frame frame = (Frame) o;
+        int loopAddr;
+        loopAddr = nextInstrAddr;
+        ast.C.visit(this, frame);
+        ast.E.visit(this, frame);
+        emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, loopAddr);
+    return null;
+
+    }
+    
+    //Implementacion de repeat for Id from Exp1 to Exp2 do Com end
+    //No me pregunten qué hice porque no sé... pero sirve :)
+    @Override
+    public Object visitRepeatFor(RepeatFor ast, Object o) {
+       Frame frame = (Frame) o;
+    int jumpAddr, loopAddr;
+    ast.E2.visit(this, frame);
+    ast.E1.visit(this, frame);
+    jumpAddr = nextInstrAddr;
+    emit(Machine.JUMPop, 0, Machine.CBr, 0);
+    loopAddr = nextInstrAddr;
+    ast.C.visit(this, new Frame(frame, 2));
+    emit(Machine.LOADop, 1, displayRegister(frame.level, frame.level), frame.size + 1);
+    emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.succDisplacement);
+    emit(Machine.STOREop, 1, displayRegister(frame.level, frame.level), frame.size + 1);
+    patch(jumpAddr, nextInstrAddr);
+    emit(Machine.LOADop, 1, displayRegister(frame.level,frame.level), frame.size + 1);
+    emit(Machine.LOADop, 1, displayRegister(frame.level,frame.level), frame.size);
+    emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.leDisplacement);
+    emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+    emit(Machine.POPop, 0, 0, 2);
+
+    return null;
+
     }
         
     //Se agrega al enconder /////////////////////////////
@@ -1105,26 +1172,15 @@ public final class Encoder implements Visitor {
     }
     
     ////////////////////////////////////////////////////
+    
+    
+    
+    
+  
 
-    @Override
-    public Object visitRepeatUntil(RepeatUntil ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
-    @Override
-    public Object visitRepeatDoWhile(RepeatDoWhile ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitRepeatDoUntil(RepeatDoUntil ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitRepeatFor(RepeatFor ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
     @Override
     public Object visitCase(CaseCommand ast, Object o) {

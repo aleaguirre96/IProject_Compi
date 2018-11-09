@@ -983,8 +983,9 @@ public final class Checker implements Visitor {
   
   
   //Annadidas por el equipo ///////////////////////////////////////////////////////////
-    @Override
-    public Object visitRepeatWhile(RepeatWhile ast, Object o) {
+   
+  @Override
+    public Object visitRepeatWhile(RepeatWhile ast, Object o) {  // Verifica que tipo sea booleano, de lo contrario da error (tipo de error y su posicion)
         TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
     if (! eType.equals(StdEnvironment.booleanType))
       reporter.reportError("Boolean expression esperada aqui", "", ast.E.position);
@@ -1045,8 +1046,7 @@ public final class Checker implements Visitor {
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
     idTable.enter (ast.I.spelling, ast);
     if (ast.duplicated)
-        reporter.reportError ("identifier \"%\" already declared",
-                             ast.I.spelling, ast.position);
+        reporter.reportError ("identifier \"%\" already declared",ast.I.spelling, ast.position);
 
     return null;
     }
@@ -1055,8 +1055,7 @@ public final class Checker implements Visitor {
         ast.T = (TypeDenoter) ast.T.visit(this, null);
     if ((Integer.valueOf(ast.IL1.spelling)) <= 0 || 
         (Integer.valueOf(ast.IL1.spelling)) > Integer.valueOf(ast.IL2.spelling)   )
-      reporter.reportError ("arrays must not be empty AND delimiter "
-                          + "have be higher than the first value","", ast.IL1.position);
+      reporter.reportError ("arrays must not be empty AND delimiter " + "have be higher than the first value","", ast.IL1.position);
     return ast;
     }
     

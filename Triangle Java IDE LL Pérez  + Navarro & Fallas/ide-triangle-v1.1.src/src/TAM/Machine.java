@@ -44,6 +44,7 @@ public final class Machine {
     STOREIop = 5,
     CALLop = 6,
     CALLIop = 7,
+    IndexOutOfRange = 9,
     RETURNop = 8,
     PUSHop = 10,
     POPop = 11,

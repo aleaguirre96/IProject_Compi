@@ -1,11 +1,10 @@
 let 
 var i := 0;
 func prueba(parametro1: Integer, parametro2: Integer):
-    Boolean ~ parametro1 < parametro2
+    Integer ~ parametro1 = parametro2
 in
 repeat do
   putint(i);
   i := i + 1
-  while prueba(i, 100) end
-end
-
+  until prueba(i, 9) end
+end

@@ -44,7 +44,7 @@ public class Interpreter {
   final static int
     running = 0, halted = 1, failedDataStoreFull = 2, failedInvalidCodeAddress = 3,
     failedInvalidInstruction = 4, failedOverflow = 5, failedZeroDivide = 6,
-    failedIOError = 7;
+    failedIOError = 7, indexOutOfBound = 8; //  Agregado caso para indexOutOfBound
 
   static long
     accumulator;
@@ -206,6 +206,10 @@ public class Interpreter {
       case failedIOError:
         System.out.println("Program has failed due to an IO error.");
         break;
+        case indexOutOfBound: // Se agrega en caso de que se este por fuera del rango de un array
+        System.out.println("Program has failed due to an index out of bounds error.");
+        break;
+
     }
     if (status != halted)
       dump();
@@ -570,6 +574,10 @@ public class Interpreter {
         case Machine.HALTop:
           status = halted;
           break;
+        // Se agrega el caso en el que el indice se sale del rango
+        case Machine.IndexOutOfRange:
+            status = indexOutOfBound;
+            break;
       }
       if ((CP < CB) || (CP >= CT))
         status = failedInvalidCodeAddress;
