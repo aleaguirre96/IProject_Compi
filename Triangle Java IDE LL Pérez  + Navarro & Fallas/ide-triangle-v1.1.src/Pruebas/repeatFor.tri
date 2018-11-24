@@ -3,7 +3,7 @@ let
 in
  repeat
    for i from 0 to final do
-      putint(i)
+      put('}')
    end
 end
 

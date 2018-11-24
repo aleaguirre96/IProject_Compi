@@ -12,7 +12,11 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
  * @author jose
  */
 public abstract class Case extends Command {
-    public Case(SourcePosition thePosition) {
+    public Command ComandCase;
+    
+    public Case(Command c1AST,SourcePosition thePosition) {
         super(thePosition);
-    }    
+        ComandCase = c1AST;
+    }
+   
 }

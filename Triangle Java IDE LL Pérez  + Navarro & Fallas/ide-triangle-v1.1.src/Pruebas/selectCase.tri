@@ -1,10 +1,12 @@
 let 
-  var k : Integer
+  var k := 1000
 in
-  select k from
-    case 1 then
-      nil
-    case 5 then
-      nil
- end
+  select k  from
+    case 1001|1002|1003 then
+      put('A')
+    case 1004|1005 then
+      put('B')
+    case 1009 then
+      put('C')
+    end
 end

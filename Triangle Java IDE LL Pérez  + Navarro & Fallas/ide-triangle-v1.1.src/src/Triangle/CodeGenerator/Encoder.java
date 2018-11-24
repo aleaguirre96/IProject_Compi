@@ -34,9 +34,10 @@ import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
 import Triangle.AbstractSyntaxTrees.BoolTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CallCommand;
 import Triangle.AbstractSyntaxTrees.CallExpression;
+import Triangle.AbstractSyntaxTrees.Case;
 import Triangle.AbstractSyntaxTrees.CaseCommand;
 import Triangle.AbstractSyntaxTrees.CaseElseCommand;
-import Triangle.AbstractSyntaxTrees.CasesCommand;
+import Triangle.AbstractSyntaxTrees.Cases;
 import Triangle.AbstractSyntaxTrees.CharTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
@@ -82,7 +83,6 @@ import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SelectCommand;
-import Triangle.AbstractSyntaxTrees.SequentialCases;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
 import Triangle.AbstractSyntaxTrees.SequentialExpression;
@@ -105,6 +105,7 @@ import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.Vname;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
+
 
 public final class Encoder implements Visitor {
 
@@ -133,7 +134,6 @@ public final class Encoder implements Visitor {
   public Object visitIfCommand(IfCommand ast, Object o) {
     Frame frame = (Frame) o;
     int jumpifAddr, jumpAddr;
-
     Integer valSize = (Integer) ast.E.visit(this, frame);
     jumpifAddr = nextInstrAddr;
     emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, 0);
@@ -1179,21 +1179,124 @@ public final class Encoder implements Visitor {
   
 
     
+    /*
+    @Override
+    public Object visitCaseElseCommand(CaseElseCommand ast, Object o) {
+       //jumpCase = nextInstrAddr;
+       Frame frame = (Frame)o;
+       int jumpCase, jumpAddr;
+       jumpCase = nextInstrAddr;
+       ast.commandCaseElse.visit(this, frame);
+       jumpAddr= nextInstrAddr;
+       emit(Machine.JUMPop, 0,Machine.CBr, 0);
+       patch(jumpAddr,nextInstrAddr);
+       
+       return null;
+    }*/
 
-    
-
+    /*
     @Override
     public Object visitCase(CaseCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+       int jumpCase, jumpAddr;
+       Frame frame = (Frame)o;
+       if(ast.expCase instanceof SequentialExpression){ //Si hay más de una expresion
+           ast.expCase.visit(this,frame);
+           ast.comandCase.visit(this, frame);
+           jumpAddr= nextInstrAddr;
+           emit(Machine.JUMPop, 0,Machine.CBr, 0);
+           patch(jumpAddr,nextInstrAddr);
+       }else{ //Si es solo una expresion
+            Integer valSize = (Integer) ast.expCase.visit(this, frame);
+            jumpCase = nextInstrAddr;
+            emit(Machine.CASENOTop, 0, Machine.CBr, 0);
+            
+            ast.comandCase.visit(this, frame);
+            patch(jumpCase,nextInstrAddr);
+            jumpAddr= nextInstrAddr;
+            emit(Machine.JUMPIop, 0,Machine.CBr, 0);
+            patch(jumpAddr,nextInstrAddr);
+            
+       }
+
+       return null;
+    }*/
 
     @Override
     public Object visitSequentialExpression(SequentialExpression ast, Object o) {
+     Frame frame = (Frame) o;
+     int jumpActualCase, jumpAddr;
+     Integer valSize;
+
+     
+     
+     if(ast.EXPR1 instanceof SequentialExpression){ //Si no es una expresion
+         ast.EXPR1.visit(this, o);
+     }else{
+         valSize = (Integer) ast.EXPR1.visit(this, frame);
+         jumpActualCase = nextInstrAddr;
+         emit(Machine.CASENOTop, 0, Machine.CBr, 0);
+         patch(jumpActualCase,nextInstrAddr);
+     }
+     
+     valSize = (Integer) ast.EXPR2.visit(this, frame);
+     jumpActualCase = nextInstrAddr;
+     emit(Machine.CASENOTop, 0, Machine.CBr, 0);
+     patch(jumpActualCase,nextInstrAddr);
+     return null;
+    }
+    /*
+    @Override
+    public Object visitSequentialCases(SequentialCases ast, Object o) {
+       
+       Frame frame = (Frame) o;
+       
+       
+       ast.commandC.visit(this, frame); //Visita al siguiente
+
+       //Revisamos el nodo de más al fondo del arbol
+       if(ast.commandCNext instanceof CaseElseCommand){
+           ast.commandCNext.visit(this, frame);
+       }else if(ast.commandCNext instanceof CaseCommand){
+           ast.commandCNext.visit(this, frame);
+           
+       }
+       
+       return null; 
+    }*/
+
+   /*
+    @Override
+    public Object visitCases(CasesCommand ast, Object o) { 
+       ast.CasesCom.visit(this, o);
+       return null;      
+       
+    }*/
+
+    @Override
+    public Object visitSelectCommand(SelectCommand ast, Object o) {
+       /*Frame frame = (Frame) o;
+       int jumpSelectAddr, jumpAddr;
+       Integer valSize = (Integer) ast.E.visit(this, frame);
+   
+       jumpSelectAddr = nextInstrAddr;
+       ast.C.visit(this, frame);
+       jumpAddr= nextInstrAddr;
+       
+       //emit(Machine.JUMPop, 0, Machine.CBr, 0);
+       
+       //patch(jumpAddr,nextInstrAddr);
+       */
+       return null;
+             
+    }
+
+    @Override
+    public Object visitCaseCommand(CaseCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Object visitSequentialCases(SequentialCases ast, Object o) {
+    public Object visitCase(Case ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -1203,12 +1306,7 @@ public final class Encoder implements Visitor {
     }
 
     @Override
-    public Object visitCases(CasesCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSelectCommand(SelectCommand ast, Object o) {
+    public Object visitCasesCommand(Cases ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

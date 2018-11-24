@@ -321,9 +321,17 @@ public class Disassembler {
         writeD(instr.d);
         writeR('[', instr.r, ']');
         break;
-
+      case Machine.CASENOTop:
+        System.out.print("JUMPCASENOT");
+        writeN(instr.n);
+        writeD(instr.d);
+        writeR('[', instr.r, ']');
+        break;
+        
       case Machine.HALTop:
         System.out.print ("HALT  ");
+        
+  
     }
   }
 

@@ -15,9 +15,10 @@ import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
 import Triangle.AbstractSyntaxTrees.BoolTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CallCommand;
 import Triangle.AbstractSyntaxTrees.CallExpression;
+import Triangle.AbstractSyntaxTrees.Case;
 import Triangle.AbstractSyntaxTrees.CaseCommand;
 import Triangle.AbstractSyntaxTrees.CaseElseCommand;
-import Triangle.AbstractSyntaxTrees.CasesCommand;
+import Triangle.AbstractSyntaxTrees.Cases;
 import Triangle.AbstractSyntaxTrees.CharTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
@@ -62,7 +63,6 @@ import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SelectCommand;
-import Triangle.AbstractSyntaxTrees.SequentialCases;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
 import Triangle.AbstractSyntaxTrees.SequentialExpression;
@@ -165,10 +165,7 @@ public class TreeVisitor implements Visitor {
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
     
-    
-    public Object visitSelectCommand(SelectCommand ast, Object o) { ///// Select Agregado//////
-        return (createBinary("Select ",ast.C,ast.E));
-    }
+
     
     
     // </editor-fold>
@@ -519,29 +516,46 @@ public class TreeVisitor implements Visitor {
         return(createTernary("Array Type DDot Denoter", ast.IL1,ast.IL2, ast.T));
     }
 
-    public Object visitCase(CaseCommand ast, Object o) {
-        return(createBinary("Case ", ast.expCase, ast.comandCase));
-    }
+
 
     public Object visitSequentialExpression(SequentialExpression ast, Object o) {
         return(createBinary("Sequential Expression", ast.EXPR1, ast.EXPR2));
     }
 
-   
-    public Object visitSequentialCases(SequentialCases ast, Object o) {
-        return (createBinary("Sequential Cases",ast.commandC,ast.commandCNext));
+ 
+    @Override
+    public Object visitCaseElseCommand(CaseElseCommand ast, Object o) {
+        if(ast != null){
+        return(createUnary("Select_Else ", ast.ComandCase));
+        }else{
+            return(createNullary(""));
+        }
     }
 
  
-    public Object visitCaseElseCommand(CaseElseCommand ast, Object o) {
-        return(createUnary("Case Else", ast.commandCaseElse));
+    @Override
+    public Object visitCaseCommand(CaseCommand ast, Object o) {
+        return (createBinary("Select_Case",ast.expCase,ast.ComandCase));
     }
-
-  
-    public Object visitCases(CasesCommand ast, Object o) {
-        return (createUnary("Cases ",ast.CasesCom));
+    
+    @Override
+    public Object visitCase(Case ast, Object o) {
+        return(createUnary("Case Padre", ast.ComandCase));
     }
+    
+    @Override
+    public Object visitSelectCommand(SelectCommand ast, Object o) { ///// Select Agregado//////
+        return (createBinary("Select Command",ast.expres,ast.casess));
+    } 
 
+    @Override
+    public Object visitCasesCommand(Cases ast, Object o) {
+        if(ast.case2 != null){
+          return (createBinary("Cases ",ast.case1,ast.case2));
+        }else{ 
+          return visitCaseCommand((CaseCommand)ast.case1,o);  
+        }
+    }
  
     
 

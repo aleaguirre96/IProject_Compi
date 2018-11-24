@@ -1,14 +1,17 @@
 let 
-  var prueba: Integer
+  var k:= true
 
 in 
- getint (var prueba);
- if(prueba = 0) then
-   put('0')
- elsif(prueba < 0) then
-   put('N')
- else
+ if(k) then
+   put('O')
+ elsif(k) then
    put('P')
- end
-
+ elsif(k) then
+   put('Q')
+ elsif(k) then
+   put('R')
+ else
+   put('S')
+ end;
+put('}')
 end
