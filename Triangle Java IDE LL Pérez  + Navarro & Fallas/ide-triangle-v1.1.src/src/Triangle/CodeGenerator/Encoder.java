@@ -1172,36 +1172,59 @@ public final class Encoder implements Visitor {
     }
     
     ////////////////////////////////////////////////////
-    
-    
-    
-    
-  
 
-    
-    /*
     @Override
-    public Object visitCaseElseCommand(CaseElseCommand ast, Object o) {
-       //jumpCase = nextInstrAddr;
-       Frame frame = (Frame)o;
-       int jumpCase, jumpAddr;
-       jumpCase = nextInstrAddr;
-       ast.commandCaseElse.visit(this, frame);
+    public Object visitSequentialExpression(SequentialExpression ast, Object o) {
+     Frame frame = (Frame) o;
+     int jumpActualCase, jumpAddr;
+     Integer valSize;
+    
+     valSize = (Integer) ast.EXPR1.visit(this, frame);
+     jumpActualCase = nextInstrAddr;
+     emit(Machine.CASENOTop, 0, Machine.CBr, 0);
+     patch(jumpActualCase,nextInstrAddr);
+     
+     
+     if(ast.EXPR2 instanceof SequentialExpression){ //Si no es una expresion
+         ast.EXPR2.visit(this, o);
+     }else{
+         valSize = (Integer) ast.EXPR2.visit(this, frame);
+         jumpActualCase = nextInstrAddr;
+         emit(Machine.CASENOTop, 0, Machine.CBr, 0);
+         patch(jumpActualCase,nextInstrAddr);
+     }
+     
+
+     return null;
+    }
+
+    @Override
+    public Object visitSelectCommand(SelectCommand ast, Object o) {
+       Frame frame = (Frame) o;
+       int jumpSelectAddr, jumpAddr;
+       Integer valSize = (Integer) ast.expres.visit(this, frame);
+   
+       jumpSelectAddr = nextInstrAddr;
+       ast.casess.visit(this, frame);
        jumpAddr= nextInstrAddr;
-       emit(Machine.JUMPop, 0,Machine.CBr, 0);
-       patch(jumpAddr,nextInstrAddr);
+       
+       //emit(Machine.JUMPop, 0, Machine.CBr, 0);
+       
+       //patch(jumpAddr,nextInstrAddr);
        
        return null;
-    }*/
+             
+    }
 
-    /*
     @Override
-    public Object visitCase(CaseCommand ast, Object o) {
-       int jumpCase, jumpAddr;
+    public Object visitCaseCommand(CaseCommand ast, Object o) {
+               int jumpCase, jumpAddr;
        Frame frame = (Frame)o;
        if(ast.expCase instanceof SequentialExpression){ //Si hay más de una expresion
+
            ast.expCase.visit(this,frame);
-           ast.comandCase.visit(this, frame);
+
+           ast.ComandCase.visit(this, frame);
            jumpAddr= nextInstrAddr;
            emit(Machine.JUMPop, 0,Machine.CBr, 0);
            patch(jumpAddr,nextInstrAddr);
@@ -1209,105 +1232,47 @@ public final class Encoder implements Visitor {
             Integer valSize = (Integer) ast.expCase.visit(this, frame);
             jumpCase = nextInstrAddr;
             emit(Machine.CASENOTop, 0, Machine.CBr, 0);
-            
-            ast.comandCase.visit(this, frame);
             patch(jumpCase,nextInstrAddr);
+            ast.ComandCase.visit(this, frame);
             jumpAddr= nextInstrAddr;
-            emit(Machine.JUMPIop, 0,Machine.CBr, 0);
+            emit(Machine.JUMPop, 0,Machine.CBr, 0);
             patch(jumpAddr,nextInstrAddr);
             
        }
-
-       return null;
-    }*/
-
-    @Override
-    public Object visitSequentialExpression(SequentialExpression ast, Object o) {
-     Frame frame = (Frame) o;
-     int jumpActualCase, jumpAddr;
-     Integer valSize;
-
-     
-     
-     if(ast.EXPR1 instanceof SequentialExpression){ //Si no es una expresion
-         ast.EXPR1.visit(this, o);
-     }else{
-         valSize = (Integer) ast.EXPR1.visit(this, frame);
-         jumpActualCase = nextInstrAddr;
-         emit(Machine.CASENOTop, 0, Machine.CBr, 0);
-         patch(jumpActualCase,nextInstrAddr);
-     }
-     
-     valSize = (Integer) ast.EXPR2.visit(this, frame);
-     jumpActualCase = nextInstrAddr;
-     emit(Machine.CASENOTop, 0, Machine.CBr, 0);
-     patch(jumpActualCase,nextInstrAddr);
-     return null;
-    }
-    /*
-    @Override
-    public Object visitSequentialCases(SequentialCases ast, Object o) {
-       
-       Frame frame = (Frame) o;
-       
-       
-       ast.commandC.visit(this, frame); //Visita al siguiente
-
-       //Revisamos el nodo de más al fondo del arbol
-       if(ast.commandCNext instanceof CaseElseCommand){
-           ast.commandCNext.visit(this, frame);
-       }else if(ast.commandCNext instanceof CaseCommand){
-           ast.commandCNext.visit(this, frame);
-           
-       }
-       
-       return null; 
-    }*/
-
-   /*
-    @Override
-    public Object visitCases(CasesCommand ast, Object o) { 
-       ast.CasesCom.visit(this, o);
-       return null;      
-       
-    }*/
-
-    @Override
-    public Object visitSelectCommand(SelectCommand ast, Object o) {
-       /*Frame frame = (Frame) o;
-       int jumpSelectAddr, jumpAddr;
-       Integer valSize = (Integer) ast.E.visit(this, frame);
-   
-       jumpSelectAddr = nextInstrAddr;
-       ast.C.visit(this, frame);
-       jumpAddr= nextInstrAddr;
-       
-       //emit(Machine.JUMPop, 0, Machine.CBr, 0);
-       
-       //patch(jumpAddr,nextInstrAddr);
-       */
-       return null;
-             
-    }
-
-    @Override
-    public Object visitCaseCommand(CaseCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        return null;
     }
 
     @Override
     public Object visitCase(Case ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
 
     @Override
     public Object visitCaseElseCommand(CaseElseCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+       Frame frame = (Frame)o;
+       int jumpCase, jumpAddr;
+       jumpCase = nextInstrAddr;
+       ast.ComandCase.visit(this, frame);
+       jumpAddr= nextInstrAddr;
+       emit(Machine.JUMPop, 0,Machine.CBr, 0);
+       patch(jumpAddr,nextInstrAddr);
+       
+       return null;
     }
 
     @Override
     public Object visitCasesCommand(Cases ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Frame frame = (Frame) o;
+        int jumpifAddr, jumpAddr;  
+  
+        ast.case1.visit(this, frame);
+
+        if(ast.case2 != null){
+            ast.case2.visit(this, frame);
+        }
+        return null;
     }
 
     

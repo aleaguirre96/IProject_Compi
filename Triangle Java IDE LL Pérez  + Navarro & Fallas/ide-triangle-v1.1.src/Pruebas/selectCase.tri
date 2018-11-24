@@ -2,11 +2,7 @@ let
   var k := 1000
 in
   select k  from
-    case 1001|1002|1003 then
+    case 1001 then
       put('A')
-    case 1004|1005 then
-      put('B')
-    case 1009 then
-      put('C')
     end
 end
