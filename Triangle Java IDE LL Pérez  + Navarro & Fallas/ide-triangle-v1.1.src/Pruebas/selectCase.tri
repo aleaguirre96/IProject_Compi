@@ -4,5 +4,9 @@ in
   select k  from
     case 1001 then
       put('A')
+    case 1002 then
+      put('C')
+    else
+      put('D')
     end
 end

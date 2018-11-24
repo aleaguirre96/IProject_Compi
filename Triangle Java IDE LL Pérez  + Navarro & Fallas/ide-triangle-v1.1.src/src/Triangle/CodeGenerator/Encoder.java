@@ -1217,29 +1217,7 @@ public final class Encoder implements Visitor {
     }
 
     @Override
-    public Object visitCaseCommand(CaseCommand ast, Object o) {
-               int jumpCase, jumpAddr;
-       Frame frame = (Frame)o;
-       if(ast.expCase instanceof SequentialExpression){ //Si hay más de una expresion
-
-           ast.expCase.visit(this,frame);
-
-           ast.ComandCase.visit(this, frame);
-           jumpAddr= nextInstrAddr;
-           emit(Machine.JUMPop, 0,Machine.CBr, 0);
-           patch(jumpAddr,nextInstrAddr);
-       }else{ //Si es solo una expresion
-            Integer valSize = (Integer) ast.expCase.visit(this, frame);
-            jumpCase = nextInstrAddr;
-            emit(Machine.CASENOTop, 0, Machine.CBr, 0);
-            patch(jumpCase,nextInstrAddr);
-            ast.ComandCase.visit(this, frame);
-            jumpAddr= nextInstrAddr;
-            emit(Machine.JUMPop, 0,Machine.CBr, 0);
-            patch(jumpAddr,nextInstrAddr);
-            
-       }
-        
+    public Object visitCaseCommand(CaseCommand ast, Object o) {        
         return null;
     }
 
@@ -1252,12 +1230,7 @@ public final class Encoder implements Visitor {
     public Object visitCaseElseCommand(CaseElseCommand ast, Object o) {
         
        Frame frame = (Frame)o;
-       int jumpCase, jumpAddr;
-       jumpCase = nextInstrAddr;
        ast.ComandCase.visit(this, frame);
-       jumpAddr= nextInstrAddr;
-       emit(Machine.JUMPop, 0,Machine.CBr, 0);
-       patch(jumpAddr,nextInstrAddr);
        
        return null;
     }
@@ -1267,10 +1240,31 @@ public final class Encoder implements Visitor {
         Frame frame = (Frame) o;
         int jumpifAddr, jumpAddr;  
   
-        ast.case1.visit(this, frame);
-
+        if(ast.case1 instanceof CaseCommand){
+            CaseCommand tmp = (CaseCommand) ast.case1;
+            Integer valSize = (Integer)tmp.expCase.visit(this, frame);
+            jumpifAddr = nextInstrAddr;
+            emit(Machine.CASENOTop, Machine.falseRep, Machine.CBr, 0);
+            patch(jumpifAddr,nextInstrAddr);
+            tmp.ComandCase.visit(this, frame);
+            jumpAddr = nextInstrAddr;
+            emit(Machine.JUMPop, 0, Machine.CBr, 0);
+            patch(jumpAddr,nextInstrAddr);
+        }else{
+            jumpifAddr = nextInstrAddr;
+            patch(jumpifAddr,nextInstrAddr);
+            ast.case1.visit(this, frame);
+            jumpAddr = nextInstrAddr;
+            emit(Machine.JUMPop, 0, Machine.CBr, 0);
+            patch(jumpAddr,nextInstrAddr);
+        }
+       
         if(ast.case2 != null){
+            patch(jumpifAddr, nextInstrAddr);
             ast.case2.visit(this, frame);
+            patch(jumpAddr, nextInstrAddr);
+        }else{
+            patch(jumpifAddr, nextInstrAddr);
         }
         return null;
     }
