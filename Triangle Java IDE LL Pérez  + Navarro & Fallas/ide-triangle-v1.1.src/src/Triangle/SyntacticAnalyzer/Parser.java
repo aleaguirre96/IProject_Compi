@@ -28,8 +28,7 @@ import Triangle.AbstractSyntaxTrees.CallExpression;
 import Triangle.AbstractSyntaxTrees.Case;
 import Triangle.AbstractSyntaxTrees.CaseCommand;
 import Triangle.AbstractSyntaxTrees.CaseElseCommand;
-import Triangle.AbstractSyntaxTrees.Cases;
-
+import Triangle.AbstractSyntaxTrees.CasesCommand;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
 import Triangle.AbstractSyntaxTrees.Command;
@@ -77,6 +76,7 @@ import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SelectCommand;
+import Triangle.AbstractSyntaxTrees.SequentialCases;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
 import Triangle.AbstractSyntaxTrees.SequentialExpression;
@@ -442,10 +442,10 @@ public class Parser {
         acceptIt();
         Expression eAST = parseExpression();
         accept(Token.FROM);
-        Cases casesAST = parseCases();
+        Command cAST = parseCases();
         accept(Token.END);
         finish(commandPos);
-        commandAST = new SelectCommand(eAST,casesAST,commandPos);
+        commandAST = new SelectCommand(eAST,cAST,commandPos);
     }break;
     
     
@@ -990,49 +990,33 @@ public class Parser {
     return declarationAST;
   }
   
-  
-  Cases parseCases() throws SyntaxError{
-    Cases commandAST;
-    SourcePosition commandPos = new SourcePosition();
-    start(commandPos);
-    Case c1AST = parseCase();
-    Case c2AST = parseElseCases();
-    finish(commandPos);
-    commandAST = new Cases(c1AST, c2AST, commandPos);
-    return commandAST;
-  }
   /*--------------------------------------------------------------------
  Se agrega la regla:
   Cases::= Case+ [elseCase]
   --------------------------------------------------------------------*/
-  Case parseElseCases() throws SyntaxError{
-    Case commandAST = null;
+  Command parseCases() throws SyntaxError{
+     Command commandAST = null;
+     Case caseCom = null;
      
-     SourcePosition commandPos = new SourcePosition();
-     start(commandPos);
-     switch(currentToken.kind){
-      case Token.CASE:
-        {
-          Case c1AST = parseCase();
-          finish(commandPos);
-          commandAST = new Cases(c1AST, parseElseCases(), commandPos); // Se utiliza parseElsif porque debe llamarse recursivamente a si mismo (y devuelve un command)
-        }
-        break;
-        
-        case Token.ELSE:
-        {
-          Case elseAST = parseElseCase();          
-          finish(commandPos);
-          commandAST = elseAST;
-        }
-        break;
-        
-        case Token.END:
-            break;   
-      default: // error tomado del metodo parseSingleCommand
-      syntacticError("\"%\" cannot start a Elsifcommand",currentToken.spelling);
-      break;
-    }
+     SourcePosition parseCasePos = new SourcePosition();
+     start(parseCasePos);
+     caseCom = parseCase();
+     while(currentToken.kind == Token.CASE){
+         CaseCommand commandCaseNext = parseCase();
+         finish(parseCasePos);
+         caseCom = new SequentialCases(caseCom, commandCaseNext,parseCasePos);
+     }
+     
+     if(currentToken.kind == Token.ELSE) {
+        CaseElseCommand elseCommand = parseElseCase();
+        finish(parseCasePos);
+        caseCom = new SequentialCases(caseCom,elseCommand,parseCasePos);
+        commandAST = new CasesCommand(caseCom,parseCasePos);
+     }else{
+        finish(parseCasePos);
+        commandAST = new CasesCommand(caseCom,parseCasePos);
+     }
+     
      return commandAST; 
   }
   /*--------------------------------------------------------------------
@@ -1081,7 +1065,7 @@ public class Parser {
       acceptIt();
       Expression nextExpressionAST =  parseCaseLiteral();
       finish(expresionPos);
-      expressionAST = new SequentialExpression(nextExpressionAST,expressionAST,expresionPos);
+      expressionAST = new SequentialExpression(expressionAST,nextExpressionAST,expresionPos);
     }
     return expressionAST;
   }

@@ -12,21 +12,17 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
  * @author Luis
  */
 public class SelectCommand extends Command {
-    public Expression expres;
-    public Cases  casess;
+      public SelectCommand (Expression eAST, Command cAST,SourcePosition thePosition) {
+    super (thePosition);
+    E = eAST;
+    C = cAST;
+ 
+  }
 
-    public SelectCommand(Expression expres,Cases casess,SourcePosition thePosition) {
-        super(thePosition);
-        this.expres = expres;
-        this.casess = casess;
-    }
+  public Object visit(Visitor v, Object o) {
+    return v.visitSelectCommand(this, o);
+  }
 
-    @Override
-    public Object visit(Visitor v, Object o) {
-         return v.visitSelectCommand(this, o);
-    }
-    
-    
-
-
+  public Expression E;
+  public Command C;
 }

@@ -17,11 +17,10 @@ package Triangle.AbstractSyntaxTrees;
 public interface Visitor {
     
   //Case
-  public abstract Object visitCaseCommand(CaseCommand ast, Object o);//Visitor para Case
+  public abstract Object visitCase(CaseCommand ast, Object o);//Visitor para Case
+  public abstract Object visitSequentialCases(SequentialCases ast,Object o);//Visitor sequential cases
   public abstract Object visitCaseElseCommand(CaseElseCommand ast,Object o);
-  public abstract Object visitSelectCommand(SelectCommand ast, Object o); // Se agrega el SelectCommand
-  public abstract Object visitCase(Case ast,Object o);
-  public abstract Object visitCasesCommand(Cases ast, Object o);
+  public abstract Object visitCases(CasesCommand ast,Object o);
 
   // Commands
   public abstract Object visitAssignCommand(AssignCommand ast, Object o);
@@ -30,6 +29,7 @@ public interface Visitor {
   public abstract Object visitIfCommand(IfCommand ast, Object o);
   public abstract Object visitLetCommand(LetCommand ast, Object o);
   public abstract Object visitNILCommand(NILCommand ast, Object o); //Se agrega el NILcommand al visitor
+  public abstract Object visitSelectCommand(SelectCommand ast, Object o); // Se agrega el SelectCommand
   public abstract Object visitSequentialCommand(SequentialCommand ast, Object o);
   public abstract Object visitWhileCommand(WhileCommand ast, Object o);
    //Repeats (parte de commands agregados por el equipo)

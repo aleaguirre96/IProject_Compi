@@ -27,10 +27,9 @@ import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
 import Triangle.AbstractSyntaxTrees.BoolTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CallCommand;
 import Triangle.AbstractSyntaxTrees.CallExpression;
-import Triangle.AbstractSyntaxTrees.Case;
 import Triangle.AbstractSyntaxTrees.CaseCommand;
 import Triangle.AbstractSyntaxTrees.CaseElseCommand;
-import Triangle.AbstractSyntaxTrees.Cases;
+import Triangle.AbstractSyntaxTrees.CasesCommand;
 import Triangle.AbstractSyntaxTrees.CharTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
@@ -75,6 +74,7 @@ import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SelectCommand;
+import Triangle.AbstractSyntaxTrees.SequentialCases;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
 import Triangle.AbstractSyntaxTrees.SequentialExpression;
@@ -598,7 +598,14 @@ public class LayoutVisitor implements Visitor {
     return layoutNullary("NIL.");
   }
   
-      
+  public Object visitSelectCommand(SelectCommand ast,Object o){ ///// agregado el visitSelect
+      return layoutBinary("Select.", ast.C,ast.E);
+  }
+  
+  
+    
+    
+  
   //Metodo visitor para el caso "var" Identifier ":=" Expression
   public Object visitVarDeclarationInitialized(VarDeclarationInitialized ast, Object o) { 
        return layoutBinary("VarDecl.", ast.I, ast.E);
@@ -612,8 +619,8 @@ public class LayoutVisitor implements Visitor {
   //////////////////////////////////////////////
 
     @Override
-    public Object visitCaseCommand(CaseCommand ast, Object o) {
-        return layoutBinary("Case.Declaration.",ast.expCase,ast.ComandCase); //To change body of generated methods, choose Tools | Templates.
+    public Object visitCase(CaseCommand ast, Object o) {
+        return layoutBinary("Case.Declaration.",ast.expCase,ast.comandCase); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -622,26 +629,19 @@ public class LayoutVisitor implements Visitor {
     }
 
     @Override
+    public Object visitSequentialCases(SequentialCases ast, Object o) {
+        return layoutBinary("Seq.Cases.", ast.commandC, ast.commandCNext);
+    }
+
+    @Override
     public Object visitCaseElseCommand(CaseElseCommand ast, Object o) {
-         return layoutUnary("Selec.Else", ast.ComandCase);
-    }
-
-    
-  @Override
-    public Object visitSelectCommand(SelectCommand ast,Object o){ ///// agregado el visitSelect
-      return layoutBinary("Select.", ast.expres,ast.casess);
-    }
-    
-    @Override
-    public Object visitCase(Case ast, Object o) {
-        return layoutUnary("Selec.Case.", ast.ComandCase); //To change body of generated methods, choose Tools | Templates.
+         return layoutUnary("Case.Else", ast.commandCaseElse);
     }
 
     @Override
-    public Object visitCasesCommand(Cases ast, Object o) {
-        return layoutBinary("Select.Cases", ast.case1,ast.case2); //To change body of generated methods, choose Tools | Templates.
+    public Object visitCases(CasesCommand ast, Object o) { 
+        return layoutUnary("ArrayExpr.", ast.CasesCom);
     }
-
 
    
 

@@ -34,10 +34,9 @@ import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
 import Triangle.AbstractSyntaxTrees.BoolTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CallCommand;
 import Triangle.AbstractSyntaxTrees.CallExpression;
-import Triangle.AbstractSyntaxTrees.Case;
 import Triangle.AbstractSyntaxTrees.CaseCommand;
 import Triangle.AbstractSyntaxTrees.CaseElseCommand;
-import Triangle.AbstractSyntaxTrees.Cases;
+import Triangle.AbstractSyntaxTrees.CasesCommand;
 import Triangle.AbstractSyntaxTrees.CharTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
@@ -83,6 +82,7 @@ import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SelectCommand;
+import Triangle.AbstractSyntaxTrees.SequentialCases;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
 import Triangle.AbstractSyntaxTrees.SequentialExpression;
@@ -105,7 +105,6 @@ import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.Vname;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
-
 
 public final class Encoder implements Visitor {
 
@@ -134,6 +133,7 @@ public final class Encoder implements Visitor {
   public Object visitIfCommand(IfCommand ast, Object o) {
     Frame frame = (Frame) o;
     int jumpifAddr, jumpAddr;
+
     Integer valSize = (Integer) ast.E.visit(this, frame);
     jumpifAddr = nextInstrAddr;
     emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, 0);
@@ -351,6 +351,10 @@ public final class Encoder implements Visitor {
     return new Integer(0);
   }
   
+  //----------------------------------------------------------------
+  
+  
+  //--Funcion generadora de codigo de Recursive PFS end
   public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
     Frame frame = (Frame) o;
 
@@ -374,6 +378,8 @@ public final class Encoder implements Visitor {
     // Retorna 0 porque los procedimientos y las funciones siempre retornan 0
     return new Integer(0);
   }
+  
+  //-------------------------------------------------------------------
 
   public Object visitSequentialDeclaration(SequentialDeclaration ast, Object o) {
     Frame frame = (Frame) o;
@@ -739,17 +745,64 @@ public final class Encoder implements Visitor {
   }
 
   public Object visitSubscriptVname(SubscriptVname ast, Object o) {
-    Frame frame = (Frame) o;
+      Frame frame = (Frame) o;
     RuntimeEntity baseObject;
-    int elemSize, indexSize;
+    int elemSize, indexSize, errorAddress1, errorAddress2, afterAddress, inf, sup;
 
     baseObject = (RuntimeEntity) ast.V.visit(this, frame);
     ast.offset = ast.V.offset;
     ast.indexed = ast.V.indexed;
     elemSize = ((Integer) ast.type.visit(this, null)).intValue();
+    
+    if (ast.V.type instanceof ArrayTypeDenoter){
+      inf = 0;
+      sup = Integer.parseInt(((ArrayTypeDenoter)ast.V.type).IL.spelling) - 1;
+    }
+    else{
+      inf = Integer.parseInt(((ArrayTypeDenoterDDot)ast.V.type).IL1.spelling);
+      sup = Integer.parseInt(((ArrayTypeDenoterDDot)ast.V.type).IL2.spelling);
+    }
+    
     if (ast.E instanceof IntegerExpression) {
       IntegerLiteral IL = ((IntegerExpression) ast.E).IL;
       ast.offset = ast.offset + Integer.parseInt(IL.spelling) * elemSize;
+      
+      /*
+        Carga el índice, la cota inferior, las compara y si falla, acaba la
+        ejecución
+      */
+      ast.E.visit(this, frame);
+      emit(Machine.LOADLop, 0, 0, inf);
+      emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.ltDisplacement);
+      errorAddress1 = nextInstrAddr;
+      emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, 0);
+      
+      /*
+        Carga el índice, la cota superior, las compara y si falla, acaba la
+        ejecución
+      */
+      ast.E.visit(this, frame);
+      emit(Machine.LOADLop, 0, 0, sup);
+      emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.gtDisplacement);
+      errorAddress2 = nextInstrAddr;
+      emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, 0);
+      
+      afterAddress = nextInstrAddr;
+      emit(Machine.JUMPop, 0, Machine.CBr, 0);
+      
+      /*
+        Parcha las direcciones de error de los comandos anteriores
+      */
+      patch(errorAddress1, nextInstrAddr);
+      patch(errorAddress2, nextInstrAddr);
+      
+      /*
+        Emite el comando de error
+      */
+      emit(Machine.IndexOutOfRange, 0, 0, 0);
+      
+      patch(afterAddress, nextInstrAddr);
+      
     } else {
       // v-name is indexed by a proper expression, not a literal
       if (ast.indexed)
@@ -764,6 +817,42 @@ public final class Encoder implements Visitor {
         emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.addDisplacement);
       else
         ast.indexed = true;
+      
+      /*
+        Carga el índice, la cota inferior, las compara y si falla, acaba la
+        ejecución
+      */
+      emit(Machine.LOADop, 1, Machine.STr, -1);
+      emit(Machine.LOADLop, 0, 0, inf);
+      emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.ltDisplacement);
+      errorAddress1 = nextInstrAddr;
+      emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, 0);
+      
+      /*
+        Carga el índice, la cota superior, las compara y si falla, acaba la
+        ejecución
+      */
+      emit(Machine.LOADop, 1, Machine.STr, -1);
+      emit(Machine.LOADLop, 0, 0, sup);
+      emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.gtDisplacement);
+      errorAddress2 = nextInstrAddr;
+      emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, 0);
+      
+      afterAddress = nextInstrAddr;
+      emit(Machine.JUMPop, 0, Machine.CBr, 0);
+      
+      /*
+        Parcha las direcciones de error de los comandos anteriores
+      */
+      patch(errorAddress1, nextInstrAddr);
+      patch(errorAddress2, nextInstrAddr);
+      
+      /*
+        Emite el comando de error
+      */
+      emit(Machine.IndexOutOfRange, 0, 0, 0);
+      
+      patch(afterAddress, nextInstrAddr);
     }
     return baseObject;
   }
@@ -1148,7 +1237,7 @@ public final class Encoder implements Visitor {
     Frame frame = (Frame) o;
     int extraSize;
 
-    extraSize = ((Integer) ast.E.visit(this, null)).intValue();
+    extraSize = ((Integer) ast.E.visit(this, frame)).intValue();
     emit(Machine.PUSHop, 0, 0, extraSize);
     ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
     writeTableDetails(ast);
@@ -1172,101 +1261,44 @@ public final class Encoder implements Visitor {
     }
     
     ////////////////////////////////////////////////////
+    
+    
+    
+    
+  
+
+    
+
+    
+
+    @Override
+    public Object visitCase(CaseCommand ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     @Override
     public Object visitSequentialExpression(SequentialExpression ast, Object o) {
-     Frame frame = (Frame) o;
-     int jumpActualCase, jumpAddr;
-     Integer valSize;
-    
-     valSize = (Integer) ast.EXPR1.visit(this, frame);
-     jumpActualCase = nextInstrAddr;
-     emit(Machine.CASENOTop, 0, Machine.CBr, 0);
-     patch(jumpActualCase,nextInstrAddr);
-     
-     
-     if(ast.EXPR2 instanceof SequentialExpression){ //Si no es una expresion
-         ast.EXPR2.visit(this, o);
-     }else{
-         valSize = (Integer) ast.EXPR2.visit(this, frame);
-         jumpActualCase = nextInstrAddr;
-         emit(Machine.CASENOTop, 0, Machine.CBr, 0);
-         patch(jumpActualCase,nextInstrAddr);
-     }
-     
-
-     return null;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Object visitSelectCommand(SelectCommand ast, Object o) {
-       Frame frame = (Frame) o;
-       int jumpSelectAddr, jumpAddr;
-       Integer valSize = (Integer) ast.expres.visit(this, frame);
-   
-       jumpSelectAddr = nextInstrAddr;
-       ast.casess.visit(this, frame);
-       jumpAddr= nextInstrAddr;
-       
-       //emit(Machine.JUMPop, 0, Machine.CBr, 0);
-       
-       //patch(jumpAddr,nextInstrAddr);
-       
-       return null;
-             
-    }
-
-    @Override
-    public Object visitCaseCommand(CaseCommand ast, Object o) {        
-        return null;
-    }
-
-    @Override
-    public Object visitCase(Case ast, Object o) {
-        return null;
+    public Object visitSequentialCases(SequentialCases ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Object visitCaseElseCommand(CaseElseCommand ast, Object o) {
-        
-       Frame frame = (Frame)o;
-       ast.ComandCase.visit(this, frame);
-       
-       return null;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Object visitCasesCommand(Cases ast, Object o) {
-        Frame frame = (Frame) o;
-        int jumpifAddr, jumpAddr;  
-  
-        if(ast.case1 instanceof CaseCommand){
-            CaseCommand tmp = (CaseCommand) ast.case1;
-            Integer valSize = (Integer)tmp.expCase.visit(this, frame);
-            jumpifAddr = nextInstrAddr;
-            emit(Machine.CASENOTop, Machine.falseRep, Machine.CBr, 0);
-            patch(jumpifAddr,nextInstrAddr);
-            tmp.ComandCase.visit(this, frame);
-            jumpAddr = nextInstrAddr;
-            emit(Machine.JUMPop, 0, Machine.CBr, 0);
-            patch(jumpAddr,nextInstrAddr);
-        }else{
-            jumpifAddr = nextInstrAddr;
-            patch(jumpifAddr,nextInstrAddr);
-            ast.case1.visit(this, frame);
-            jumpAddr = nextInstrAddr;
-            emit(Machine.JUMPop, 0, Machine.CBr, 0);
-            patch(jumpAddr,nextInstrAddr);
-        }
-       
-        if(ast.case2 != null){
-            patch(jumpifAddr, nextInstrAddr);
-            ast.case2.visit(this, frame);
-            patch(jumpAddr, nextInstrAddr);
-        }else{
-            patch(jumpifAddr, nextInstrAddr);
-        }
-        return null;
+    public Object visitCases(CasesCommand ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitSelectCommand(SelectCommand ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     

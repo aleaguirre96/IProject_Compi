@@ -44,15 +44,14 @@ public final class Machine {
     STOREIop = 5,
     CALLop = 6,
     CALLIop = 7,
-    IndexOutOfRange = 9,
     RETURNop = 8,
+    IndexOutOfRange = 9,
     PUSHop = 10,
     POPop = 11,
     JUMPop = 12,
     JUMPIop = 13,
     JUMPIFop = 14,
-    HALTop = 15,
-    CASENOTop = 16;
+    HALTop = 15;
 
 
 

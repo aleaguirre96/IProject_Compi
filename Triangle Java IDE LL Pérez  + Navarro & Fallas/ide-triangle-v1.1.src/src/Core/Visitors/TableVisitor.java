@@ -15,10 +15,9 @@ import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
 import Triangle.AbstractSyntaxTrees.BoolTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CallCommand;
 import Triangle.AbstractSyntaxTrees.CallExpression;
-import Triangle.AbstractSyntaxTrees.Case;
 import Triangle.AbstractSyntaxTrees.CaseCommand;
 import Triangle.AbstractSyntaxTrees.CaseElseCommand;
-import Triangle.AbstractSyntaxTrees.Cases;
+import Triangle.AbstractSyntaxTrees.CasesCommand;
 import Triangle.AbstractSyntaxTrees.CharTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
@@ -63,6 +62,7 @@ import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SelectCommand;
+import Triangle.AbstractSyntaxTrees.SequentialCases;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
 import Triangle.AbstractSyntaxTrees.SequentialExpression;
@@ -199,7 +199,12 @@ public class TableVisitor implements Visitor {
     }
      
     
-
+    ////////// Select agregado ///////////
+    public Object visitSelectCommand(SelectCommand ast, Object o) {
+        ast.C.visit(this, null);
+        ast.E.visit(this, null);
+        return(null);
+    }
     
     
     
@@ -749,6 +754,13 @@ public class TableVisitor implements Visitor {
     }
 
     @Override
+    public Object visitCase(CaseCommand ast, Object o) {
+        ast.expCase.visit(this, null);
+        ast.comandCase.visit(this, null);
+        return(null);
+    }
+
+    @Override
     public Object visitSequentialExpression(SequentialExpression ast, Object o) {
         ast.EXPR1.visit(this, null);
         ast.EXPR2.visit(this, null);
@@ -756,40 +768,21 @@ public class TableVisitor implements Visitor {
     }
 
     @Override
+    public Object visitSequentialCases(SequentialCases ast, Object o) {
+        ast.commandC.visit(this, null);
+        ast.commandCNext.visit(this, null);
+        return(null);
+    }
+
+    @Override
     public Object visitCaseElseCommand(CaseElseCommand ast, Object o) {
-        ast.ComandCase.visit(this, null);
+        ast.commandCaseElse.visit(this, null);
         return(null);
     }
 
     @Override
-    public Object visitCaseCommand(CaseCommand ast, Object o) {
-        ast.expCase.visit(this, null);
-        ast.ComandCase.visit(this, null);
-        return(null);
-    }
-
-    @Override
-    public Object visitCase(Case ast, Object o) {
-        ast.ComandCase.visit(this, o);
-        return(null);
-    }
-    
-    ////////// Select agregado ///////////
-    @Override
-    public Object visitSelectCommand(SelectCommand ast, Object o) {
-        ast.expres.visit(this, null);
-        ast.casess.visit(this, null);
-        return(null);
-    }
-
-    @Override
-    public Object visitCasesCommand(Cases ast, Object o) {
-        if(ast.case2 != null){
-          ast.case1.visit(this, null);
-          ast.case2.visit(this, null);
-        }else{ 
-          ast.case1.visit(this, null); 
-        }
+    public Object visitCases(CasesCommand ast, Object o) {
+        ast.CasesCom.visit(this, null);
         return(null);
     }
 
