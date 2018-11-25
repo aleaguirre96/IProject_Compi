@@ -10,7 +10,7 @@ in
     else
  
        select exp2 from
-        case 'j'| 'c'|'s' then
+        case 'j' then
 	  nil
         case 'k' then
           nil
