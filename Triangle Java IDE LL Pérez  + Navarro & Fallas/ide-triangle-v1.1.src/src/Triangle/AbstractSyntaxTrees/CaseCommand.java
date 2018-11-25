@@ -13,18 +13,16 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
  */
 public class CaseCommand extends Case{
     public Expression expCase;
-    public Command comandCase;
 
     public CaseCommand(Expression expresion, Command comando,SourcePosition thePosition) {
-        super(thePosition);
+        super(comando,thePosition);
         expCase = expresion;
-        comandCase = comando;
     }
     
 
     @Override
     public Object visit(Visitor v, Object o) {
-        return v.visitCase(this,o);
+      return v.visitCaseCommand(this, o);
     }
     
 }

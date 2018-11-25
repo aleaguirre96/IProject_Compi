@@ -1,17 +1,10 @@
 let 
-  var k : Integer
+  var k := 1000
 in
-<<<<<<< Updated upstream
   select k  from
-    case 1001|1002 then
+    case 1001|1002|1004 then
       put('A')
+    case 1003|1005 then
+      put('B')
     end
-=======
-  select k from
-    case 1 then
-      nil
-    case 5 then
-      nil
- end
->>>>>>> Stashed changes
 end

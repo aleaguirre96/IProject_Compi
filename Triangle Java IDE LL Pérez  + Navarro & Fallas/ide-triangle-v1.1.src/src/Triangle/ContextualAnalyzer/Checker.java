@@ -26,9 +26,10 @@ import Triangle.AbstractSyntaxTrees.BinaryOperatorDeclaration;
 import Triangle.AbstractSyntaxTrees.BoolTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CallCommand;
 import Triangle.AbstractSyntaxTrees.CallExpression;
+import Triangle.AbstractSyntaxTrees.Case;
 import Triangle.AbstractSyntaxTrees.CaseCommand;
 import Triangle.AbstractSyntaxTrees.CaseElseCommand;
-import Triangle.AbstractSyntaxTrees.CasesCommand;
+import Triangle.AbstractSyntaxTrees.Cases;
 import Triangle.AbstractSyntaxTrees.CharTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
@@ -78,7 +79,6 @@ import Triangle.AbstractSyntaxTrees.RepeatFor;
 import Triangle.AbstractSyntaxTrees.RepeatUntil;
 import Triangle.AbstractSyntaxTrees.RepeatWhile;
 import Triangle.AbstractSyntaxTrees.SelectCommand;
-import Triangle.AbstractSyntaxTrees.SequentialCases;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
 import Triangle.AbstractSyntaxTrees.SequentialExpression;
@@ -1157,7 +1157,9 @@ public final class Checker implements Visitor {
   //el comando Selec
   
   //Metodo para verificar la clausula case
-    public Object visitCase(CaseCommand ast, Object o) {
+  @Override
+    public Object visitCaseCommand(CaseCommand ast, Object o) {
+     
      ArrayList<Expression> tmp = new ArrayList<>();
      if(ast.expCase instanceof SequentialExpression){
        tmp = (ArrayList<Expression>) ast.expCase.visit(this, null);
@@ -1165,64 +1167,76 @@ public final class Checker implements Visitor {
        tmp.add(ast.expCase);
      }
      
-     ast.comandCase.visit(this, null);
+     ast.ComandCase.visit(this, null);
+     
      return tmp;
     }
 
+  @Override
     public Object visitSequentialExpression(SequentialExpression ast, Object o){
      
      ArrayList<Expression> tmp = new ArrayList<>();
-     tmp.add(ast.EXPR2);
+     tmp.add(ast.EXPR1);
      
-     if(ast.EXPR1 instanceof SequentialExpression){ //Si no es una expresion
-        tmp.addAll((Collection<? extends Expression>) ast.EXPR1.visit(this, null));
+     if(ast.EXPR2 instanceof SequentialExpression){ //Si no es una expresion
+        tmp.addAll((Collection<? extends Expression>) ast.EXPR2.visit(this, null));
      }else{
-        tmp.add(ast.EXPR1);
+        tmp.add(ast.EXPR2);
      }
      
      return tmp;
     }
+    
 
-    public Object visitSequentialCases(SequentialCases ast, Object o) {
+  @Override
+    public Object visitCasesCommand(Cases ast, Object o) {
      //Se manda un ArrayList con los literales de los cases
      //Por error acomodamos los atributos mal, entonces
      //commandNext es el actual y commandC es el/los comandos siguientes
      ArrayList<Expression> tmp = new ArrayList<>();
-     if(ast.commandCNext instanceof CaseElseCommand){
+     
+     if(ast.case1 instanceof CaseElseCommand){
        //Es un else
-       ast.commandCNext.visit(this, null);
-     }else if(ast.commandCNext instanceof CaseCommand){
-       tmp = (ArrayList<Expression>) ast.commandCNext.visit(this, null);
+       ast.case1.visit(this, null);
+     }else if(ast.case1 instanceof CaseCommand){
+       tmp = (ArrayList<Expression>) ast.case1.visit(this, null);
+     } 
+     
+     if(ast.case2 != null){
+        if(!(ast.case2 instanceof CaseElseCommand)){
+            tmp.addAll((Collection<? extends Expression>) ast.case2.visit(this, null));
+        }else{
+            ast.case2.visit(this, null);
+        }
      }
-       
-     tmp.addAll((Collection<? extends Expression>) ast.commandC.visit(this, null));
      //Retorna los literales de los cases
      return tmp;
     }
 
+    @Override
     public Object visitCaseElseCommand(CaseElseCommand ast, Object o) {
-     ast.commandCaseElse.visit(this, null);
-     return null;
+        ast.ComandCase.visit(this, null);
+        return null;
     }
 
-    public Object visitCases(CasesCommand ast, Object o) {
-     //Este metodo recorre los nodos de los cases agregados, incluyendo un elseCase si aparece
-     ArrayList<Expression> tmp;
-     tmp = (ArrayList<Expression>) ast.CasesCom.visit(this, null);
-     return tmp;
+    @Override
+    public Object visitCase(Case ast, Object o) {
+       ast.ComandCase.visit(this, null);
+       return null;
     }
 
+  @Override
     public Object visitSelectCommand(SelectCommand ast, Object o) {
         ArrayList<Expression> literales;
-        TypeDenoter typeExpresion = (TypeDenoter) ast.E.visit(this, null);
+        TypeDenoter typeExpresion = (TypeDenoter) ast.expres.visit(this, null);
         if(!(typeExpresion.equals(StdEnvironment.integerType)
                 || typeExpresion.equals((StdEnvironment.charType)))){
-            reporter.reportError ("Integer or Char expression expected here", "",ast.E.position);
+            reporter.reportError ("Integer or Char expression expected here", "",ast.expres.position);
         }
         //Hace la visita a los comandos del Select
         //El visit del comando retorna un arrayList para evaluar
-        literales = (ArrayList<Expression>) ast.C.visit(this, null);
-        verificarLiteralesSelectCase(ast.E, literales);
+        literales = (ArrayList<Expression>) ast.casess.visit(this, null);
+        verificarLiteralesSelectCase(ast.expres, literales);
         verficarUnicidadLiteralesSelect(literales);
         return null;
     }
@@ -1267,5 +1281,9 @@ public final class Checker implements Visitor {
  
        return null;
     }
+
+
+
+
 
 }

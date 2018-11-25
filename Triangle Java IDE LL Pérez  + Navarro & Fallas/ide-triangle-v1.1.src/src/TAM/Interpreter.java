@@ -574,6 +574,21 @@ public class Interpreter {
         case Machine.HALTop:
           status = halted;
           break;
+        //Se agrega el caso del caso not //Ejemplo tomado de clases
+        case Machine.CASENOTop:
+          // ST = ST - 1;
+          if (data[ST - 1] != n){
+            ST = ST - 1;
+            CP = d + content(r);
+          }else{
+            ST = ST - 2; //Limpiamos la pila del que se agrega y el literal del select 
+            CP = CP + 1;
+          }
+          break;
+        case Machine.ELSECASE:
+            ST = ST - 1; //Limpia el literal del select
+            CP = CP + 1; //Pasa a la siguiente instruccion
+          break;
         // Se agrega el caso en el que el indice se sale del rango
         case Machine.IndexOutOfRange:
             status = indexOutOfBound;
